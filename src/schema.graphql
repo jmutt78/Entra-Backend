@@ -4,10 +4,10 @@ type Mutation {
   createItem(tag: String, title: String, description: String): Item!
   createPost(tag: String, title: String, description: String): Post!
   signup(
-    email: String!,
-    password: String!,
-    name: String!,
-    displayName: String!,
+    email: String!
+    password: String!
+    name: String!
+    displayName: String!
   ): User!
 }
 
