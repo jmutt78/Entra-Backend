@@ -5,6 +5,7 @@ const { promisify } = require("util");
 const { transport, makeANiceEmail } = require("../mail");
 
 const Mutations = {
+  //--------------------Signup Mutation--------------------//
   async signup(parent, args, ctx, info) {
     // lowercase their email
     args.email = args.email.toLowerCase();
@@ -31,6 +32,7 @@ const Mutations = {
     // Finalllllly we return the user to the browser
     return user;
   },
+  //--------------------Signin Mutation--------------------//
   async signin(parent, { email, password }, ctx, info) {
     // 1. check if there is a user with that email
     const user = await ctx.db.query.user({ where: { email } });
@@ -52,10 +54,12 @@ const Mutations = {
     // 5. Return the user
     return user;
   },
+  //--------------------Signout Mutation--------------------//
   signout(parent, args, ctx, info) {
     ctx.response.clearCookie("token");
     return { message: "Goodbye!" };
   },
+  //--------------------Reset Password--------------------//
   async requestReset(parent, args, ctx, info) {
     // 1. Check if this is a real user
     const user = await ctx.db.query.user({ where: { email: args.email } });
@@ -86,6 +90,7 @@ const Mutations = {
     return { message: "Thanks!" };
     // 3. Email them that reset token
   },
+  //--------------------Reset Password input Mutation--------------------//
   async resetPassword(parent, args, ctx, info) {
     // 1. check if the passwords match
     if (args.password !== args.confirmPassword) {

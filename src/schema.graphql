@@ -5,7 +5,6 @@ type SuccessMessage {
 }
 
 type Mutation {
-  createItem(tag: String, title: String, description: String): Item!
   createPost(tag: String, title: String, description: String): Post!
   signup(
     email: String!
