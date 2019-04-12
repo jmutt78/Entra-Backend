@@ -15,8 +15,22 @@ type Mutation {
   ): User!
   signin(email: String!, password: String!): User!
   signout: SuccessMessage
+  requestReset(email: String!): SuccessMessage
+  resetPassword(
+    resetToken: String!
+    password: String!
+    confirmPassword: String!
+  ): User!
 }
 
 type Query {
   me: User
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  displayName: String!
+  permissions: [Permission!]!
 }
