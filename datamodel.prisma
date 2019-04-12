@@ -10,10 +10,8 @@ COMMENTDELETE
 PERMISSIONUPDATE
 }
 
-
-
 type User {
-  id: ID! @id
+  id: ID! @id @unique
   name: String!
   email: String! @unique
   displayName: String! @unique
@@ -27,20 +25,12 @@ type User {
   permissions: [Permission]
 }
 
-type Item {
-id: ID! @id
-tag: String!
-title: String!
-description: String!
-createAt: DateTime!
-updatedAt: DateTime!
-}
-
 type Post {
-id: ID! @id
+id: ID! @id @unique
 tag: String!
 title: String!
 description: String!
 createAt: DateTime!
 updatedAt: DateTime!
+user: [User!]! @relation(link: INLINE)
 }
