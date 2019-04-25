@@ -10,7 +10,7 @@ type Mutation {
     email: String!
     password: String!
     name: String!
-    displayName: String!
+    display: String!
   ): User!
   signin(email: String!, password: String!): User!
   signout: SuccessMessage
@@ -20,16 +20,35 @@ type Mutation {
     password: String!
     confirmPassword: String!
   ): User!
+  updateUser(
+    id: ID!
+    email: String!
+    name: String!
+    display: String!
+    image: String
+    location: String
+    about: String
+    industry: String
+    categories: String
+  ): User!
 }
 
 type Query {
   me: User
+  user(where: UserWhereUniqueInput!): User
 }
 
 type User {
   id: ID!
   name: String!
   email: String!
-  displayName: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  display: String!
+  image: String
+  location: String
+  about: String
+  industry: String
+  categories: String
   permissions: [Permission!]!
 }
