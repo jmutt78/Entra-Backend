@@ -1,3 +1,5 @@
+const { forwardTo } = require("prisma-binding");
+
 const Query = {
   me(parent, args, ctx, info) {
     // check if there is a current user ID
@@ -22,7 +24,9 @@ const Query = {
       },
       info
     );
-  }
+  },
+
+  tags: forwardTo("db")
 };
 
 module.exports = Query;
