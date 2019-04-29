@@ -21,18 +21,35 @@ type User {
   location: String
   about: String
   industry: String
-  categories: String
   password: String!
   resetToken: String
   resetTokenExpiry: Float
   permissions: [Permission]
+  myQuestions: [Question!]! @relation(link: INLINE)
+  myAnswers: [Answer!]! @relation(link: INLINE)
 }
 
-type Post {
+type Question {
 id: ID! @id @unique
-tag: String!
+tags: [Tag!]! @relation(link: INLINE)
 title: String!
 description: String!
-createAt: DateTime!
-user: [User!]! @relation(link: INLINE)
+createdAt: DateTime! @createdAt
+updatedAt: DateTime! @updatedAt
+askedBy: [User!]!
+answers: [Answer!]! @relation(link: INLINE)
+}
+
+type Tag {
+  id: ID! @id @unique
+  name: String! @unique
+}
+
+type Answer {
+  id: ID! @id @unique
+  body: String!
+  answeredBy: User!
+  answeredTo: Question! 
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }

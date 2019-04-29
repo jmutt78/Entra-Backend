@@ -144,6 +144,48 @@ const Mutations = {
       },
       info
     );
+  },
+  //--------------------Questions--------------------//
+
+  async createQuestion(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    const question = await ctx.db.mutation.createQuestion(
+      {
+        data: {
+          // This is how to create a relationship between the Item and the User
+          askedBy: {
+            connect: {
+              id: ctx.request.userId
+            }
+          },
+          tags: { connect: args.tags },
+          ...args
+        }
+      },
+      info
+    );
+
+    console.log(question);
+    return question;
+  },
+
+  createTag: async (parent, args, ctx, info) => {
+    const name = args.name.trim().toLowerCase();
+    const exists = await ctx.db.query.tags({ name });
+    console.log(exists);
+    if (exists !== name && name.length >= 2) {
+      console.log(name);
+      const newTag = await ctx.db.mutation.createTag({
+        data: {
+          name: name
+        }
+      });
+      console.log(newTag);
+      return newTag;
+    }
   }
 };
 
