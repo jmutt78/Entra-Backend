@@ -36,6 +36,15 @@ type Mutation {
     about: String
     industry: String
   ): User!
+  updateQuestion(
+    id: ID!
+    title: String!
+    description: String
+    tags: [TagInput!]!
+  ): Question!
+  deleteQuestion(
+    id: ID!
+  ): Question!
 }
 
 type Query {

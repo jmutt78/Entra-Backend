@@ -82,8 +82,8 @@ const Mutations = {
       html: makeANiceEmail(`Your Password Reset Token is here!
           \n\n
           <a href="${
-            process.env.FRONTEND_URL
-          }/reset?resetToken=${resetToken}">Click Here to Reset</a>`)
+        process.env.FRONTEND_URL
+        }/reset?resetToken=${resetToken}">Click Here to Reset</a>`)
     });
 
     // 4. Return the message
@@ -146,11 +146,13 @@ const Mutations = {
     );
   },
   //--------------------Questions--------------------//
-
   async createQuestion(parent, args, ctx, info) {
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
     }
+
+    let tags = args.tags;
+    delete args.tags;
 
     const question = await ctx.db.mutation.createQuestion(
       {
@@ -161,7 +163,7 @@ const Mutations = {
               id: ctx.request.userId
             }
           },
-          tags: { connect: args.tags },
+          tags: { connect: tags },
           ...args
         }
       },
@@ -171,10 +173,52 @@ const Mutations = {
     console.log(question);
     return question;
   },
+  async updateQuestion(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    const updates = { ...args };
+    let tags = updates.tags;
+
+    delete updates.id;
+    delete updates.tags;
+
+    const question = await ctx.db.mutation.updateQuestion(
+      {
+        data: {
+          ...updates,
+          tags: { connect: tags }
+        },
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+
+    console.log(question);
+    return question;
+  },
+  async deleteQuestion(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    return ctx.db.mutation.deleteQuestion(
+      {
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
 
   createTag: async (parent, args, ctx, info) => {
     const name = args.name.trim().toLowerCase();
     const exists = await ctx.db.query.tags({ name });
+    console.log("ADDING NEW TAG");
     console.log(exists);
     if (exists !== name && name.length >= 2) {
       console.log(name);
