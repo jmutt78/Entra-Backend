@@ -151,7 +151,6 @@ const Mutations = {
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
     }
-    console.log(args, "!!args");
 
     const question = await ctx.db.mutation.createQuestion(
       {
