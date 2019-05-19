@@ -161,8 +161,8 @@ const Mutations = {
               id: ctx.request.userId
             }
           },
-          tags: { connect: args.tags },
-          ...args
+          ...args,
+          tags: { connect: args.tags }
         }
       },
       info
