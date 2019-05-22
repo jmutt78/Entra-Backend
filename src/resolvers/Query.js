@@ -26,7 +26,25 @@ const Query = {
     );
   },
 
-  tags: forwardTo("db")
+  async questions(parent, args, ctx, info) {
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error("you must be signed in!");
+    }
+
+    return ctx.db.query.questions(
+      {
+        where: {
+          askedBy_some: { id: userId }
+        }
+      },
+      info
+    );
+  },
+
+  tags: forwardTo("db"),
+  questionsConnection: forwardTo("db"),
+  question: forwardTo("db")
 };
 
 module.exports = Query;

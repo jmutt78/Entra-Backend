@@ -42,6 +42,25 @@ type Query {
   me: User
   user(where: UserWhereUniqueInput!): User
   tags(first: Int, where: TagWhereInput): [Tag!]!
+  questions(
+    where: QuestionWhereInput
+    orderBy: QuestionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Question]!
+  questionsConnection(
+    where: QuestionWhereInput
+    orderBy: QuestionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): QuestionConnection!
+  question(where: QuestionWhereUniqueInput!): Question
 }
 
 input TagInput {
