@@ -48,8 +48,8 @@ type Tag {
 type Answer {
   id: ID! @id @unique
   body: String!
-  answeredBy: User!
-  answeredTo: Question! 
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  answeredBy: [User!]!
+  answeredTo: [Question!]!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }

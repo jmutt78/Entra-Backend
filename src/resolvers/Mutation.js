@@ -175,17 +175,32 @@ const Mutations = {
   createTag: async (parent, args, ctx, info) => {
     const name = args.name.trim().toLowerCase();
     const exists = await ctx.db.query.tags({ name });
-    console.log(exists);
+
     if (exists !== name && name.length >= 2) {
-      console.log(name);
       const newTag = await ctx.db.mutation.createTag({
         data: {
           name: name
         }
       });
-      console.log(newTag);
+
       return newTag;
     }
+  },
+
+  createAnswer: async (parent, args, ctx, info) => {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    const newAnswer = await ctx.db.mutation.createAnswer({
+      data: {
+        ...args,
+        answeredBy: { connect: { id: ctx.request.userId } },
+        answeredTo: { connect: { id: args.id } }
+      }
+    });
+
+    return newAnswer;
   }
 };
 

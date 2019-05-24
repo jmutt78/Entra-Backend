@@ -10,7 +10,7 @@ type Mutation {
     description: String
     tags: [TagInput!]!
   ): Question!
-  createAnswer(questionId: ID!, body: String!): Answer!
+  createAnswer(body: String!, id: ID!): Answer!
   createTag(name: String!): Tag!
   signup(
     email: String!
