@@ -43,7 +43,22 @@ const Query = {
   },
 
   tags: forwardTo("db"),
-  questionsConnection: forwardTo("db"),
+  async questionsConnection(parent, args, ctx, info) {
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error("you must be signed in!");
+    }
+
+    return ctx.db.query.questionsConnection(
+      {
+        where: {
+          askedBy_some: { id: userId }
+        }
+      },
+      info
+    );
+  },
+
   question: forwardTo("db")
 };
 
