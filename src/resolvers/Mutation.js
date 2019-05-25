@@ -191,12 +191,12 @@ const Mutations = {
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
     }
-
+    console.log(args.id);
     const newAnswer = await ctx.db.mutation.createAnswer({
       data: {
-        ...args,
+        body: args.body,
         answeredBy: { connect: { id: ctx.request.userId } },
-        answeredTo: { connect: { id: args.id } }
+        answeredTo: { connect: { id: args.questionId } }
       }
     });
 

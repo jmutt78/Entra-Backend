@@ -10,7 +10,7 @@ type Mutation {
     description: String
     tags: [TagInput!]!
   ): Question!
-  createAnswer(body: String!, id: ID!): Answer!
+  createAnswer(body: String!, questionId: ID!): Answer!
   createTag(name: String!): Tag!
   signup(
     email: String!
@@ -81,4 +81,13 @@ type User {
   permissions: [Permission!]!
   myQuestions: [Question!]!
   myAnswers: [Answer!]!
+}
+
+type Answer {
+  id: ID!
+  body: String!
+  answeredBy: User!
+  answeredTo: Question!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
