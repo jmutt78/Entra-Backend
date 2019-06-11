@@ -53,3 +53,10 @@ type Answer {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
+
+type QuestionView {
+  id: ID! @id @unique
+  viewedBy: User! @relation(link: INLINE)
+  viewedQuestion: Question! @relation(link: INLINE)
+}
+

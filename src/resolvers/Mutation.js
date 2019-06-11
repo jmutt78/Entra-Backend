@@ -172,6 +172,38 @@ const Mutations = {
     return question;
   },
 
+  async createQuestionView(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+    const views = await ctx.db.query.questionViews({
+      where: {
+        viewedBy: { id: ctx.request.userId },
+        viewedQuestion: { id: args.questionId }
+      }
+    });
+
+    if (views.length === 0) {
+      const question = await ctx.db.mutation.createQuestionView({
+        data: {
+          // This is how to create a relationship between the Item and the User
+          viewedBy: {
+            connect: {
+              id: ctx.request.userId
+            }
+          },
+          viewedQuestion: {
+            connect: {
+              id: args.questionId
+            }
+          }
+        }
+      });
+    }
+
+    return true;
+  },
+
   createTag: async (parent, args, ctx, info) => {
     const name = args.name.trim().toLowerCase();
     const exists = await ctx.db.query.tags({ name });
