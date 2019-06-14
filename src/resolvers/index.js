@@ -1,6 +1,6 @@
 const Query = require("./Query");
 const Mutation = require("./Mutation");
-// import Question from "./Question";
+const Question = require("./Question");
 
 const resolvers = {
   Query,
@@ -9,8 +9,8 @@ const resolvers = {
     __resolveType() {
       return null;
     }
-  }
-  // Question
+  },
+  Question
 };
 
 module.exports = resolvers;

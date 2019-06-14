@@ -39,7 +39,6 @@ updatedAt: DateTime! @updatedAt
 askedBy: [User!]!
 answers: [Answer!]! @relation(link: INLINE)
 views: [QuestionView!]! @relation(link: INLINE)
-votes: [QuestionVote!]! @relation(link: INLINE)
 }
 
 type Tag {
@@ -65,6 +64,6 @@ type QuestionView {
 type QuestionVote {
   id: ID! @id @unique
   votedBy: User! @relation(link: INLINE)
-  question: Question!
+  votedQuestion: Question! @relation(link: INLINE)
   vote: String
 }

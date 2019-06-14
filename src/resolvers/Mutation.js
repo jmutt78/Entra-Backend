@@ -211,7 +211,7 @@ const Mutations = {
     const votes = await ctx.db.query.questionVotes({
       where: {
         votedBy: { id: ctx.request.userId },
-        question: { id: args.questionId }
+        votedQuestion: { id: args.questionId }
       }
     });
     if (votes.length === 0) {
@@ -224,7 +224,7 @@ const Mutations = {
               id: ctx.request.userId
             }
           },
-          question: {
+          votedQuestion: {
             connect: {
               id: args.questionId
             }
