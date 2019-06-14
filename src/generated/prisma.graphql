@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Wed Jun 12 2019 01:54:44 GMT+0530 (IST)
+# timestamp: Fri Jun 14 2019 12:51:20 GMT+0530 (IST)
 
 type AggregateAnswer {
   count: Int!
@@ -488,33 +488,33 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
+  createQuestion(data: QuestionCreateInput!): Question!
   createAnswer(data: AnswerCreateInput!): Answer!
   createQuestionView(data: QuestionViewCreateInput!): QuestionView!
-  createQuestion(data: QuestionCreateInput!): Question!
   createUser(data: UserCreateInput!): User!
   createTag(data: TagCreateInput!): Tag!
+  updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateQuestionView(data: QuestionViewUpdateInput!, where: QuestionViewWhereUniqueInput!): QuestionView
-  updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
+  deleteQuestion(where: QuestionWhereUniqueInput!): Question
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteQuestionView(where: QuestionViewWhereUniqueInput!): QuestionView
-  deleteQuestion(where: QuestionWhereUniqueInput!): Question
   deleteUser(where: UserWhereUniqueInput!): User
   deleteTag(where: TagWhereUniqueInput!): Tag
+  upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
   upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
   upsertQuestionView(where: QuestionViewWhereUniqueInput!, create: QuestionViewCreateInput!, update: QuestionViewUpdateInput!): QuestionView!
-  upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
-  updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
   updateManyQuestions(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): BatchPayload!
+  updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyTags(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload!
+  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
   deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   deleteManyQuestionViews(where: QuestionViewWhereInput): BatchPayload!
-  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyTags(where: TagWhereInput): BatchPayload!
 }
@@ -559,19 +559,19 @@ enum Permission {
 }
 
 type Query {
+  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
   answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
   questionViews(where: QuestionViewWhereInput, orderBy: QuestionViewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionView]!
-  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
+  question(where: QuestionWhereUniqueInput!): Question
   answer(where: AnswerWhereUniqueInput!): Answer
   questionView(where: QuestionViewWhereUniqueInput!): QuestionView
-  question(where: QuestionWhereUniqueInput!): Question
   user(where: UserWhereUniqueInput!): User
   tag(where: TagWhereUniqueInput!): Tag
+  questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
   answersConnection(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerConnection!
   questionViewsConnection(where: QuestionViewWhereInput, orderBy: QuestionViewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionViewConnection!
-  questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
 
@@ -591,6 +591,7 @@ type Question implements Node {
   updatedAt: DateTime!
   askedBy(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer!]
+  views(where: QuestionViewWhereInput, orderBy: QuestionViewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionView!]
 }
 
 """A connection to a list of items."""
@@ -610,6 +611,7 @@ input QuestionCreateInput {
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
+  views: QuestionViewCreateManyWithoutViewedQuestionInput
 }
 
 input QuestionCreateManyWithoutAnswersInput {
@@ -622,8 +624,8 @@ input QuestionCreateManyWithoutAskedByInput {
   connect: [QuestionWhereUniqueInput!]
 }
 
-input QuestionCreateOneInput {
-  create: QuestionCreateInput
+input QuestionCreateOneWithoutViewsInput {
+  create: QuestionCreateWithoutViewsInput
   connect: QuestionWhereUniqueInput
 }
 
@@ -633,6 +635,7 @@ input QuestionCreateWithoutAnswersInput {
   description: String!
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
+  views: QuestionViewCreateManyWithoutViewedQuestionInput
 }
 
 input QuestionCreateWithoutAskedByInput {
@@ -640,6 +643,16 @@ input QuestionCreateWithoutAskedByInput {
   title: String!
   description: String!
   tags: TagCreateManyInput
+  answers: AnswerCreateManyWithoutAnsweredToInput
+  views: QuestionViewCreateManyWithoutViewedQuestionInput
+}
+
+input QuestionCreateWithoutViewsInput {
+  id: ID
+  title: String!
+  description: String!
+  tags: TagCreateManyInput
+  askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
 }
 
@@ -881,20 +894,13 @@ input QuestionSubscriptionWhereInput {
   node: QuestionWhereInput
 }
 
-input QuestionUpdateDataInput {
-  title: String
-  description: String
-  tags: TagUpdateManyInput
-  askedBy: UserUpdateManyWithoutMyQuestionsInput
-  answers: AnswerUpdateManyWithoutAnsweredToInput
-}
-
 input QuestionUpdateInput {
   title: String
   description: String
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
+  views: QuestionViewUpdateManyWithoutViewedQuestionInput
 }
 
 input QuestionUpdateManyDataInput {
@@ -936,11 +942,11 @@ input QuestionUpdateManyWithWhereNestedInput {
   data: QuestionUpdateManyDataInput!
 }
 
-input QuestionUpdateOneRequiredInput {
-  create: QuestionCreateInput
+input QuestionUpdateOneRequiredWithoutViewsInput {
+  create: QuestionCreateWithoutViewsInput
   connect: QuestionWhereUniqueInput
-  update: QuestionUpdateDataInput
-  upsert: QuestionUpsertNestedInput
+  update: QuestionUpdateWithoutViewsDataInput
+  upsert: QuestionUpsertWithoutViewsInput
 }
 
 input QuestionUpdateWithoutAnswersDataInput {
@@ -948,12 +954,22 @@ input QuestionUpdateWithoutAnswersDataInput {
   description: String
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
+  views: QuestionViewUpdateManyWithoutViewedQuestionInput
 }
 
 input QuestionUpdateWithoutAskedByDataInput {
   title: String
   description: String
   tags: TagUpdateManyInput
+  answers: AnswerUpdateManyWithoutAnsweredToInput
+  views: QuestionViewUpdateManyWithoutViewedQuestionInput
+}
+
+input QuestionUpdateWithoutViewsDataInput {
+  title: String
+  description: String
+  tags: TagUpdateManyInput
+  askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
 }
 
@@ -967,9 +983,9 @@ input QuestionUpdateWithWhereUniqueWithoutAskedByInput {
   data: QuestionUpdateWithoutAskedByDataInput!
 }
 
-input QuestionUpsertNestedInput {
-  update: QuestionUpdateDataInput!
-  create: QuestionCreateInput!
+input QuestionUpsertWithoutViewsInput {
+  update: QuestionUpdateWithoutViewsDataInput!
+  create: QuestionCreateWithoutViewsInput!
 }
 
 input QuestionUpsertWithWhereUniqueWithoutAnswersInput {
@@ -1003,7 +1019,17 @@ type QuestionViewConnection {
 input QuestionViewCreateInput {
   id: ID
   viewedBy: UserCreateOneInput!
-  viewedQuestion: QuestionCreateOneInput!
+  viewedQuestion: QuestionCreateOneWithoutViewsInput!
+}
+
+input QuestionViewCreateManyWithoutViewedQuestionInput {
+  create: [QuestionViewCreateWithoutViewedQuestionInput!]
+  connect: [QuestionViewWhereUniqueInput!]
+}
+
+input QuestionViewCreateWithoutViewedQuestionInput {
+  id: ID
+  viewedBy: UserCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -1022,6 +1048,57 @@ enum QuestionViewOrderByInput {
 
 type QuestionViewPreviousValues {
   id: ID!
+}
+
+input QuestionViewScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [QuestionViewScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [QuestionViewScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [QuestionViewScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
 }
 
 type QuestionViewSubscriptionPayload {
@@ -1059,7 +1136,33 @@ input QuestionViewSubscriptionWhereInput {
 
 input QuestionViewUpdateInput {
   viewedBy: UserUpdateOneRequiredInput
-  viewedQuestion: QuestionUpdateOneRequiredInput
+  viewedQuestion: QuestionUpdateOneRequiredWithoutViewsInput
+}
+
+input QuestionViewUpdateManyWithoutViewedQuestionInput {
+  create: [QuestionViewCreateWithoutViewedQuestionInput!]
+  connect: [QuestionViewWhereUniqueInput!]
+  set: [QuestionViewWhereUniqueInput!]
+  disconnect: [QuestionViewWhereUniqueInput!]
+  delete: [QuestionViewWhereUniqueInput!]
+  update: [QuestionViewUpdateWithWhereUniqueWithoutViewedQuestionInput!]
+  deleteMany: [QuestionViewScalarWhereInput!]
+  upsert: [QuestionViewUpsertWithWhereUniqueWithoutViewedQuestionInput!]
+}
+
+input QuestionViewUpdateWithoutViewedQuestionDataInput {
+  viewedBy: UserUpdateOneRequiredInput
+}
+
+input QuestionViewUpdateWithWhereUniqueWithoutViewedQuestionInput {
+  where: QuestionViewWhereUniqueInput!
+  data: QuestionViewUpdateWithoutViewedQuestionDataInput!
+}
+
+input QuestionViewUpsertWithWhereUniqueWithoutViewedQuestionInput {
+  where: QuestionViewWhereUniqueInput!
+  update: QuestionViewUpdateWithoutViewedQuestionDataInput!
+  create: QuestionViewCreateWithoutViewedQuestionInput!
 }
 
 input QuestionViewWhereInput {
@@ -1283,6 +1386,7 @@ input QuestionWhereInput {
   tags_some: TagWhereInput
   askedBy_some: UserWhereInput
   answers_some: AnswerWhereInput
+  views_some: QuestionViewWhereInput
 }
 
 input QuestionWhereUniqueInput {
@@ -1290,9 +1394,9 @@ input QuestionWhereUniqueInput {
 }
 
 type Subscription {
+  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   questionView(where: QuestionViewSubscriptionWhereInput): QuestionViewSubscriptionPayload
-  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
 }
