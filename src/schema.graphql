@@ -37,6 +37,7 @@ type Mutation {
     industry: String
   ): User!
   createQuestionView(questionId: ID!): Boolean
+  createQuestionVote(questionId: ID!, vote: String): Boolean
 }
 
 type Query {
