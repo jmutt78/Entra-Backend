@@ -1,4 +1,15 @@
 const Question = {
+  async views(parent, args, ctx, info) {
+    const result = await ctx.db.query.questionViewsConnection(
+      {
+        where: {
+          viewedQuestion: { id: parent.id }
+        }
+      },
+      "{ aggregate { count }}"
+    );
+    return result.aggregate.count;
+  },
   async upVotes(parent, args, ctx, info) {
     const result = await ctx.db.query.questionVotesConnection(
       {

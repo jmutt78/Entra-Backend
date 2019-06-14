@@ -127,15 +127,7 @@ type Question implements Node {
     first: Int
     last: Int
   ): [Answer!]
-  views(
-    where: QuestionViewWhereInput
-    orderBy: QuestionViewOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [QuestionView!]
+  views: Int
   upVotes: Int
   downVotes: Int
 }
