@@ -5,23 +5,14 @@ const jwt = require("jsonwebtoken");
 const express = require("express");
 const { ApolloServer, gql } = require("apollo-server-express");
 const { importSchema } = require("graphql-import");
-const Mutation = require("./resolvers/Mutation");
-const Query = require("./resolvers/Query");
+const resolvers = require("./resolvers");
 const db = require("./db");
 
 const PORT = process.env.PORT || 8000;
 
 const server = new ApolloServer({
   typeDefs: importSchema("src/schema.graphql"),
-  resolvers: {
-    Mutation,
-    Query,
-    Node: {
-      __resolveType() {
-        return null;
-      }
-    }
-  },
+  resolvers: resolvers,
   context: ({ req, res }) => ({ request: req, response: res, db }),
   playground: {
     settings: {

@@ -1,11 +1,16 @@
-import Query from "./queries";
-import Mutation from "./mutations";
-import Question from "./Question";
+const Query = require("./Query");
+const Mutation = require("./Mutation");
+// import Question from "./Question";
 
 const resolvers = {
   Query,
   Mutation,
-  Question
+  Node: {
+    __resolveType() {
+      return null;
+    }
+  }
+  // Question
 };
 
-export default resolvers;
+module.exports = resolvers;
