@@ -36,6 +36,8 @@ type Mutation {
     about: String
     industry: String
   ): User!
+  createQuestionView(questionId: ID!): Boolean
+  createQuestionVote(questionId: ID!, vote: String): Boolean
 }
 
 type Query {
@@ -90,4 +92,42 @@ type Answer {
   answeredTo: Question!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type Question implements Node {
+  id: ID!
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag!]
+  title: String!
+  description: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  askedBy(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [User!]
+  answers(
+    where: AnswerWhereInput
+    orderBy: AnswerOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Answer!]
+  views: Int
+  upVotes: Int
+  downVotes: Int
 }

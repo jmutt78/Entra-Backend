@@ -53,3 +53,16 @@ type Answer {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
+
+type QuestionView {
+  id: ID! @id @unique
+  viewedBy: User! @relation(link: INLINE)
+  viewedQuestion: Question! @relation(link: INLINE)
+}
+
+type QuestionVote {
+  id: ID! @id @unique
+  votedBy: User! @relation(link: INLINE)
+  votedQuestion: Question! @relation(link: INLINE)
+  vote: String
+}

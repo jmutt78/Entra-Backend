@@ -1,15 +1,29 @@
+require("dotenv").config({ path: ".env" });
+
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-
-require("dotenv").config({ path: ".env" });
-const createServer = require("./createServer");
+const express = require("express");
+const { ApolloServer, gql } = require("apollo-server-express");
+const { importSchema } = require("graphql-import");
+const resolvers = require("./resolvers");
 const db = require("./db");
 
-const server = createServer();
+const PORT = process.env.PORT || 8000;
 
-server.express.use(cookieParser());
+const server = new ApolloServer({
+  typeDefs: importSchema("src/schema.graphql"),
+  resolvers: resolvers,
+  context: ({ req, res }) => ({ request: req, response: res, db }),
+  playground: {
+    settings: {
+      "request.credentials": "include"
+    }
+  }
+});
 
-server.express.use((req, res, next) => {
+const app = express();
+app.use(cookieParser());
+app.use((req, res, next) => {
   const { token } = req.cookies;
   if (token) {
     const { userId } = jwt.verify(token, process.env.APP_SECRET);
@@ -18,14 +32,15 @@ server.express.use((req, res, next) => {
   next();
 });
 
-server.start(
-  {
-    cors: {
-      credentials: true,
-      origin: process.env.FRONTEND_URL
-    }
-  },
-  deets => {
-    console.log(`Server is now running on port http://localhost:${deets.port}`);
+server.applyMiddleware({
+  app,
+  path: "/",
+  cors: {
+    credentials: true,
+    origin: process.env.FRONTEND_URL
   }
+});
+
+app.listen({ port: PORT }, () =>
+  console.log(`🚀 Server ready at http://localhost:${PORT}`)
 );
