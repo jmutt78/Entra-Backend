@@ -47,6 +47,7 @@ type Query {
   questions(
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
+    filter: String!
     skip: Int
     after: String
     before: String
