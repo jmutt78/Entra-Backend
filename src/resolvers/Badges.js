@@ -54,6 +54,17 @@ const Badges = {
       "{ aggregate { count }}"
     );
     return result.aggregate.count > 10;
+  },
+  async analyst(parent, args, ctx, info) {
+    const result = await ctx.db.query.questionVotesConnection(
+      {
+        where: {
+          votedBy: { id: ctx.request.userId }
+        }
+      },
+      "{ aggregate { count }}"
+    );
+    return result.aggregate.count > 20;
   }
 };
 

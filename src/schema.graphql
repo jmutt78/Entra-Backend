@@ -92,6 +92,7 @@ type Badges {
   critic: Boolean
   patron: Boolean
   reviewer: Boolean
+  analyst: Boolean
 }
 
 type Answer {
