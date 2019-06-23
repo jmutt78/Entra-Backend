@@ -31,6 +31,18 @@ const Badges = {
       "{ aggregate { count }}"
     );
     return result.aggregate.count > 0;
+  },
+  async patron(parent, args, ctx, info) {
+    const result = await ctx.db.query.questionVotesConnection(
+      {
+        where: {
+          vote: "up",
+          votedBy: { id: ctx.request.userId }
+        }
+      },
+      "{ aggregate { count }}"
+    );
+    return result.aggregate.count > 0;
   }
 };
 
