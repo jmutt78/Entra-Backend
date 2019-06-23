@@ -94,6 +94,7 @@ type Badges {
   reviewer: Boolean
   analyst: Boolean
   commentor: Boolean
+  frequentFlyer: Boolean
 }
 
 type Answer {

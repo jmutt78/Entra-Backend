@@ -30,7 +30,7 @@ const Badges = {
       },
       "{ aggregate { count }}"
     );
-    return result.aggregate.count > 0;
+    return result.aggregate.count >= 1;
   },
   async patron(parent, args, ctx, info) {
     const result = await ctx.db.query.questionVotesConnection(
@@ -42,7 +42,7 @@ const Badges = {
       },
       "{ aggregate { count }}"
     );
-    return result.aggregate.count > 0;
+    return result.aggregate.count >= 1;
   },
   async reviewer(parent, args, ctx, info) {
     const result = await ctx.db.query.questionVotesConnection(
@@ -53,7 +53,7 @@ const Badges = {
       },
       "{ aggregate { count }}"
     );
-    return result.aggregate.count > 10;
+    return result.aggregate.count >= 10;
   },
   async analyst(parent, args, ctx, info) {
     const result = await ctx.db.query.questionVotesConnection(
@@ -64,7 +64,7 @@ const Badges = {
       },
       "{ aggregate { count }}"
     );
-    return result.aggregate.count > 20;
+    return result.aggregate.count >= 20;
   },
   async commentor(parent, args, ctx, info) {
     const result = await ctx.db.query.answersConnection(
@@ -75,7 +75,18 @@ const Badges = {
       },
       "{ aggregate { count }}"
     );
-    return result.aggregate.count > 10;
+    return result.aggregate.count >= 10;
+  },
+  async frequentFlyer(parent, args, ctx, info) {
+    const result = await ctx.db.query.answersConnection(
+      {
+        where: {
+          answeredBy: { id: ctx.request.userId }
+        }
+      },
+      "{ aggregate { count }}"
+    );
+    return result.aggregate.count >= 20;
   }
 };
 
