@@ -84,6 +84,11 @@ type User {
   permissions: [Permission!]!
   myQuestions: [Question!]!
   myAnswers: [Answer!]!
+  badges: Badges
+}
+
+type Badges {
+  autobiographer: Boolean
 }
 
 type Answer {

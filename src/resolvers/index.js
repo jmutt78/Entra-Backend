@@ -1,6 +1,8 @@
 const Query = require("./Query");
 const Mutation = require("./Mutation");
 const Question = require("./Question");
+const User = require("./User");
+const Badges = require("./Badges");
 
 const resolvers = {
   Query,
@@ -10,7 +12,9 @@ const resolvers = {
       return null;
     }
   },
-  Question
+  Question,
+  User,
+  Badges
 };
 
 module.exports = resolvers;
