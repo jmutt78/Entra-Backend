@@ -89,6 +89,7 @@ type User {
 
 type Badges {
   autobiographer: Boolean
+  critic: Boolean
 }
 
 type Answer {

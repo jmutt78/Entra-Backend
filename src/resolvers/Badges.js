@@ -19,6 +19,18 @@ const Badges = {
     const profileValues = _.values(profile);
     const isAutobiographer = _.every(profileValues, value => Boolean(value));
     return isAutobiographer;
+  },
+  async critic(parent, args, ctx, info) {
+    const result = await ctx.db.query.questionVotesConnection(
+      {
+        where: {
+          vote: "down",
+          votedBy: { id: ctx.request.userId }
+        }
+      },
+      "{ aggregate { count }}"
+    );
+    return result.aggregate.count > 0;
   }
 };
 
