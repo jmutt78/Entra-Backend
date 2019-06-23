@@ -93,6 +93,7 @@ type Badges {
   patron: Boolean
   reviewer: Boolean
   analyst: Boolean
+  commentor: Boolean
 }
 
 type Answer {

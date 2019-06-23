@@ -65,6 +65,17 @@ const Badges = {
       "{ aggregate { count }}"
     );
     return result.aggregate.count > 20;
+  },
+  async commentor(parent, args, ctx, info) {
+    const result = await ctx.db.query.answersConnection(
+      {
+        where: {
+          answeredBy: { id: ctx.request.userId }
+        }
+      },
+      "{ aggregate { count }}"
+    );
+    return result.aggregate.count > 10;
   }
 };
 
