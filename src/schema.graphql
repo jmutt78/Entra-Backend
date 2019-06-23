@@ -91,6 +91,7 @@ type Badges {
   autobiographer: Boolean
   critic: Boolean
   patron: Boolean
+  reviewer: Boolean
 }
 
 type Answer {
