@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sat Jun 15 2019 01:12:34 GMT+0530 (IST)
+# timestamp: Thu Jun 27 2019 11:36:49 GMT-0700 (PDT)
 
 type AggregateAnswer {
   count: Int!
@@ -559,12 +559,7 @@ type PageInfo {
 enum Permission {
   ADMIN
   USER
-  QUESTIONUPDATE
-  QUESTIONCREATE
-  QUESTIONDELETE
-  COMMENTCREATE
-  COMMENTUPDATE
-  COMMENTDELETE
+  MODERATOR
   PERMISSIONUPDATE
 }
 

@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { randomBytes } = require("crypto");
 const { promisify } = require("util");
 const { transport, makeANiceEmail } = require("../mail");
+const { hasPermission } = require("../utils");
 
 const Mutations = {
   //--------------------Signup Mutation--------------------//
@@ -168,7 +169,6 @@ const Mutations = {
       info
     );
 
-    console.log(question);
     return question;
   },
 
@@ -264,7 +264,7 @@ const Mutations = {
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
     }
-    console.log(args.id);
+
     const newAnswer = await ctx.db.mutation.createAnswer({
       data: {
         body: args.body,
@@ -303,6 +303,36 @@ const Mutations = {
         data: updates,
         where: {
           id: args.id
+        }
+      },
+      info
+    );
+  },
+  async updatePermissions(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    const currentUser = await ctx.db.query.user(
+      {
+        where: {
+          id: ctx.request.userId
+        }
+      },
+      info
+    );
+
+    hasPermission(currentUser, ["ADMIN", "PERMISSIONUPDATE"]);
+
+    return ctx.db.mutation.updateUser(
+      {
+        data: {
+          permissions: {
+            set: args.permissions
+          }
+        },
+        where: {
+          id: args.userId
         }
       },
       info

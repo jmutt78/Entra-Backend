@@ -45,11 +45,13 @@ type Mutation {
     description: String
     tags: [TagInput!]!
   ): Question!
+  updatePermissions(permissions: [Permission], userId: ID!): User
 }
 
 type Query {
   me: User
   user(where: UserWhereUniqueInput!): User
+  users: [User]!
   tags(first: Int, where: TagWhereInput): [Tag!]!
   questions(
     where: QuestionWhereInput
