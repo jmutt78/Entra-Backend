@@ -20,6 +20,7 @@ const Question = {
       },
       "{ aggregate { count }}"
     );
+    console.log(parent);
     return result.aggregate.count;
   },
   async downVotes(parent, args, ctx, info) {

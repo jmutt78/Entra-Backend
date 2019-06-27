@@ -64,7 +64,7 @@ const Query = {
       info
     );
   },
-
+  answer: forwardTo("db"),
   question: forwardTo("db")
 };
 
