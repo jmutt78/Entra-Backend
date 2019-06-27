@@ -92,6 +92,17 @@ type User {
   permissions: [Permission!]!
   myQuestions: [Question!]!
   myAnswers: [Answer!]!
+  badges: Badges
+}
+
+type Badges {
+  autobiographer: Boolean
+  critic: Boolean
+  patron: Boolean
+  reviewer: Boolean
+  analyst: Boolean
+  commentor: Boolean
+  frequentFlyer: Boolean
 }
 
 type Answer {
