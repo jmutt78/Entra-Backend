@@ -40,11 +40,6 @@ const Query = {
   },
 
   async questions(parent, args, ctx, info) {
-    const { userId } = ctx.request;
-    if (!userId) {
-      throw new Error("you must be signed in!");
-    }
-
     if (args.filter === "all") {
       return ctx.db.query.questions(
         {
@@ -66,7 +61,10 @@ const Query = {
         info
       );
     }
-
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error("you must be signed in!");
+    }
     if (args.filter === "my") {
       return ctx.db.query.questions(
         {

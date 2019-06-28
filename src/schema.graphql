@@ -26,7 +26,7 @@ type Mutation {
     password: String!
     confirmPassword: String!
   ): User!
-  updateAnswer(id: ID!, body: String!): Answer!
+  updateAnswer(id: ID!, body: String!, approval: Boolean): Answer!
   createQuestionView(questionId: ID!): Boolean
   createQuestionVote(questionId: ID!, vote: String): Boolean
   updateUser(
@@ -43,6 +43,7 @@ type Mutation {
     id: ID!
     title: String!
     description: String
+    approval: Boolean
     tags: [TagInput!]!
   ): Question!
   updatePermissions(permissions: [Permission], userId: ID!): User

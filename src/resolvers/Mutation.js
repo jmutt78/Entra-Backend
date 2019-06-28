@@ -301,6 +301,7 @@ const Mutations = {
     return ctx.db.mutation.updateQuestion(
       {
         data: updates,
+
         where: {
           id: args.id
         }
