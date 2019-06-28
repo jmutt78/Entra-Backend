@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Thu Jun 27 2019 11:36:49 GMT-0700 (PDT)
+# timestamp: Fri Jun 28 2019 11:07:29 GMT-0700 (PDT)
 
 type AggregateAnswer {
   count: Int!
@@ -30,6 +30,7 @@ type Answer implements Node {
   body: String!
   answeredBy: User!
   answeredTo(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question!]
+  approval: Boolean
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -47,6 +48,7 @@ type AnswerConnection {
 input AnswerCreateInput {
   id: ID
   body: String!
+  approval: Boolean
   answeredBy: UserCreateOneWithoutMyAnswersInput!
   answeredTo: QuestionCreateManyWithoutAnswersInput
 }
@@ -64,12 +66,14 @@ input AnswerCreateManyWithoutAnsweredToInput {
 input AnswerCreateWithoutAnsweredByInput {
   id: ID
   body: String!
+  approval: Boolean
   answeredTo: QuestionCreateManyWithoutAnswersInput
 }
 
 input AnswerCreateWithoutAnsweredToInput {
   id: ID
   body: String!
+  approval: Boolean
   answeredBy: UserCreateOneWithoutMyAnswersInput!
 }
 
@@ -87,6 +91,8 @@ enum AnswerOrderByInput {
   id_DESC
   body_ASC
   body_DESC
+  approval_ASC
+  approval_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -96,6 +102,7 @@ enum AnswerOrderByInput {
 type AnswerPreviousValues {
   id: ID!
   body: String!
+  approval: Boolean
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -189,6 +196,10 @@ input AnswerScalarWhereInput {
 
   """All values not ending with the given string."""
   body_not_ends_with: String
+  approval: Boolean
+
+  """All values that are not equal to given value."""
+  approval_not: Boolean
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -270,16 +281,19 @@ input AnswerSubscriptionWhereInput {
 
 input AnswerUpdateInput {
   body: String
+  approval: Boolean
   answeredBy: UserUpdateOneRequiredWithoutMyAnswersInput
   answeredTo: QuestionUpdateManyWithoutAnswersInput
 }
 
 input AnswerUpdateManyDataInput {
   body: String
+  approval: Boolean
 }
 
 input AnswerUpdateManyMutationInput {
   body: String
+  approval: Boolean
 }
 
 input AnswerUpdateManyWithoutAnsweredByInput {
@@ -313,11 +327,13 @@ input AnswerUpdateManyWithWhereNestedInput {
 
 input AnswerUpdateWithoutAnsweredByDataInput {
   body: String
+  approval: Boolean
   answeredTo: QuestionUpdateManyWithoutAnswersInput
 }
 
 input AnswerUpdateWithoutAnsweredToDataInput {
   body: String
+  approval: Boolean
   answeredBy: UserUpdateOneRequiredWithoutMyAnswersInput
 }
 
@@ -426,6 +442,10 @@ input AnswerWhereInput {
 
   """All values not ending with the given string."""
   body_not_ends_with: String
+  approval: Boolean
+
+  """All values that are not equal to given value."""
+  approval_not: Boolean
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -598,6 +618,7 @@ type Question implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   askedBy(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  approval: Boolean
   answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer!]
 }
 
@@ -615,6 +636,7 @@ input QuestionCreateInput {
   id: ID
   title: String!
   description: String!
+  approval: Boolean
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
@@ -639,6 +661,7 @@ input QuestionCreateWithoutAnswersInput {
   id: ID
   title: String!
   description: String!
+  approval: Boolean
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
 }
@@ -647,6 +670,7 @@ input QuestionCreateWithoutAskedByInput {
   id: ID
   title: String!
   description: String!
+  approval: Boolean
   tags: TagCreateManyInput
   answers: AnswerCreateManyWithoutAnsweredToInput
 }
@@ -671,6 +695,8 @@ enum QuestionOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  approval_ASC
+  approval_DESC
 }
 
 type QuestionPreviousValues {
@@ -679,6 +705,7 @@ type QuestionPreviousValues {
   description: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  approval: Boolean
 }
 
 input QuestionScalarWhereInput {
@@ -854,6 +881,10 @@ input QuestionScalarWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
+  approval: Boolean
+
+  """All values that are not equal to given value."""
+  approval_not: Boolean
 }
 
 type QuestionSubscriptionPayload {
@@ -892,6 +923,7 @@ input QuestionSubscriptionWhereInput {
 input QuestionUpdateDataInput {
   title: String
   description: String
+  approval: Boolean
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
@@ -900,6 +932,7 @@ input QuestionUpdateDataInput {
 input QuestionUpdateInput {
   title: String
   description: String
+  approval: Boolean
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
@@ -908,11 +941,13 @@ input QuestionUpdateInput {
 input QuestionUpdateManyDataInput {
   title: String
   description: String
+  approval: Boolean
 }
 
 input QuestionUpdateManyMutationInput {
   title: String
   description: String
+  approval: Boolean
 }
 
 input QuestionUpdateManyWithoutAnswersInput {
@@ -954,6 +989,7 @@ input QuestionUpdateOneRequiredInput {
 input QuestionUpdateWithoutAnswersDataInput {
   title: String
   description: String
+  approval: Boolean
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
 }
@@ -961,6 +997,7 @@ input QuestionUpdateWithoutAnswersDataInput {
 input QuestionUpdateWithoutAskedByDataInput {
   title: String
   description: String
+  approval: Boolean
   tags: TagUpdateManyInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
 }
@@ -1467,6 +1504,10 @@ input QuestionWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
+  approval: Boolean
+
+  """All values that are not equal to given value."""
+  approval_not: Boolean
   tags_some: TagWhereInput
   askedBy_some: UserWhereInput
   answers_some: AnswerWhereInput

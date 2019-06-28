@@ -63,6 +63,16 @@ type Query {
     first: Int
     last: Int
   ): [Question]!
+  answers(
+    where: AnswerWhereInput
+    orderBy: AnswerOrderByInput
+    filter: String!
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Answer]!
   questionsConnection(
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
@@ -111,6 +121,7 @@ type Answer {
   id: ID!
   body: String!
   answeredBy: User!
+  approval: Boolean
   answeredTo(
     where: AnswerWhereInput
     orderBy: AnswerOrderByInput
@@ -139,6 +150,7 @@ type Question implements Node {
   description: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  approval: Boolean
   askedBy(
     where: UserWhereInput
     orderBy: UserOrderByInput

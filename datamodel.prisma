@@ -5,6 +5,9 @@ MODERATOR
 PERMISSIONUPDATE
 }
 
+
+
+
 type User {
   id: ID! @id @unique
   name: String!
@@ -32,6 +35,7 @@ description: String!
 createdAt: DateTime! @createdAt
 updatedAt: DateTime! @updatedAt
 askedBy: [User!]!
+approval: Boolean
 answers: [Answer!]! @relation(link: INLINE)
 }
 
@@ -45,6 +49,7 @@ type Answer {
   body: String!
   answeredBy: User!
   answeredTo: [Question!]
+  approval: Boolean
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

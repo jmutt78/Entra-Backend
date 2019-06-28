@@ -40,19 +40,68 @@ const Query = {
   },
 
   async questions(parent, args, ctx, info) {
-    if (args.filter === "all") {
-      return ctx.db.query.questions({}, info);
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error("you must be signed in!");
     }
-    if (args.filter === "my") {
-      const { userId } = ctx.request;
-      if (!userId) {
-        throw new Error("you must be signed in!");
-      }
 
+    if (args.filter === "all") {
+      return ctx.db.query.questions(
+        {
+          where: {
+            approval: true
+          }
+        },
+        info
+      );
+    }
+
+    if (args.filter === "approval") {
+      return ctx.db.query.questions(
+        {
+          where: {
+            approval: null
+          }
+        },
+        info
+      );
+    }
+
+    if (args.filter === "my") {
       return ctx.db.query.questions(
         {
           where: {
             askedBy_some: { id: userId }
+          }
+        },
+        info
+      );
+    }
+    return null;
+  },
+
+  async answers(parent, args, ctx, info) {
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error("you must be signed in!");
+    }
+
+    if (args.filter === "approval") {
+      return ctx.db.query.answers(
+        {
+          where: {
+            approval: null
+          }
+        },
+        info
+      );
+    }
+
+    if (args.filter === "my") {
+      return ctx.db.query.answers(
+        {
+          where: {
+            answeredBy: { id: userId }
           }
         },
         info
