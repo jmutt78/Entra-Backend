@@ -124,8 +124,28 @@ const Query = {
       info
     );
   },
-  answer: forwardTo("db"),
-  question: forwardTo("db")
+
+  async answer(parent, args, ctx, info) {
+    const answer = await ctx.db.query.answer(
+      {
+        where: { id: args.id }
+      },
+      info
+    );
+
+    return answer;
+  },
+
+  async question(parent, args, ctx, info) {
+    const question = await ctx.db.query.question(
+      {
+        where: { id: args.id }
+      },
+      info
+    );
+
+    return question;
+  }
 };
 
 module.exports = Query;

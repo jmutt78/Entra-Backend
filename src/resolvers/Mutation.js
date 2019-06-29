@@ -276,7 +276,28 @@ const Mutations = {
     return newAnswer;
   },
 
-  updateAnswer(parent, args, ctx, info) {
+  async updateAnswer(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    const answer = await ctx.db.query.answer(
+      {
+        where: { id: args.id }
+      },
+      `{ id body answeredBy { id }}`
+    );
+
+    const ownsAnswer = answer.answeredBy.id === ctx.request.userId;
+
+    const hasPermissions = ctx.request.user.permissions.some(permission =>
+      ["ADMIN", "MODERATOR"].includes(permission)
+    );
+
+    if (!ownsAnswer && !hasPermissions) {
+      throw new Error("You don't have permission to do that!");
+    }
+
     // first take a copy of the updates
     const updates = { ...args };
     // remove the ID from the updates
@@ -292,7 +313,28 @@ const Mutations = {
       info
     );
   },
-  updateQuestion(parent, args, ctx, info) {
+  async updateQuestion(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    const question = await ctx.db.query.question(
+      {
+        where: { id: args.id }
+      },
+      `{ id askedBy { id }}`
+    );
+
+    const ownsQuestion = question.askedBy.id === ctx.request.userId;
+
+    const hasPermissions = ctx.request.user.permissions.some(permission =>
+      ["ADMIN", "MODERATOR"].includes(permission)
+    );
+
+    if (!ownsQuestion && !hasPermissions) {
+      throw new Error("You don't have permission to do that!");
+    }
+
     // first take a copy of the updates
     const updates = { ...args };
     // remove the ID from the updates

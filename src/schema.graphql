@@ -26,7 +26,7 @@ type Mutation {
     password: String!
     confirmPassword: String!
   ): User!
-  updateAnswer(id: ID!, body: String!, approval: Boolean): Answer!
+  updateAnswer(id: ID!, body: String, approval: Boolean): Answer!
   createQuestionView(questionId: ID!): Boolean
   createQuestionVote(questionId: ID!, vote: String): Boolean
   updateUser(
@@ -41,10 +41,10 @@ type Mutation {
   ): User!
   updateQuestion(
     id: ID!
-    title: String!
+    title: String
     description: String
     approval: Boolean
-    tags: [TagInput!]!
+    tags: [TagInput!]
   ): Question!
   updatePermissions(permissions: [Permission], userId: ID!): User
 }
@@ -83,8 +83,8 @@ type Query {
     first: Int
     last: Int
   ): QuestionConnection!
-  question(where: QuestionWhereUniqueInput!): Question
-  answer(where: AnswerWhereUniqueInput!): Answer
+  question(id: ID!): Question
+  answer(id: ID!): Answer
 }
 
 input TagInput {
