@@ -135,6 +135,8 @@ type Answer {
   ): [Question!]
   createdAt: DateTime!
   updatedAt: DateTime!
+  upVotes: Int
+  downVotes: Int
 }
 
 type Question implements Node {
