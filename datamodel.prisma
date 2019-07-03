@@ -66,3 +66,10 @@ type QuestionVote {
   votedQuestion: Question! @relation(link: INLINE)
   vote: String
 }
+
+type AnswerVote {
+  id: ID! @id @unique
+  votedBy: User! @relation(link: INLINE)
+  votedAnswer: Answer! @relation(link: INLINE)
+  vote: String
+}

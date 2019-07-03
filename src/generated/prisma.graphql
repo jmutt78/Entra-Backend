@@ -1,7 +1,11 @@
 # source: http://localhost:4466
-# timestamp: Fri Jun 28 2019 11:07:29 GMT-0700 (PDT)
+# timestamp: Thu Jul 04 2019 00:02:45 GMT+0530 (IST)
 
 type AggregateAnswer {
+  count: Int!
+}
+
+type AggregateAnswerVote {
   count: Int!
 }
 
@@ -61,6 +65,11 @@ input AnswerCreateManyWithoutAnsweredByInput {
 input AnswerCreateManyWithoutAnsweredToInput {
   create: [AnswerCreateWithoutAnsweredToInput!]
   connect: [AnswerWhereUniqueInput!]
+}
+
+input AnswerCreateOneInput {
+  create: AnswerCreateInput
+  connect: AnswerWhereUniqueInput
 }
 
 input AnswerCreateWithoutAnsweredByInput {
@@ -279,6 +288,13 @@ input AnswerSubscriptionWhereInput {
   node: AnswerWhereInput
 }
 
+input AnswerUpdateDataInput {
+  body: String
+  approval: Boolean
+  answeredBy: UserUpdateOneRequiredWithoutMyAnswersInput
+  answeredTo: QuestionUpdateManyWithoutAnswersInput
+}
+
 input AnswerUpdateInput {
   body: String
   approval: Boolean
@@ -325,6 +341,13 @@ input AnswerUpdateManyWithWhereNestedInput {
   data: AnswerUpdateManyDataInput!
 }
 
+input AnswerUpdateOneRequiredInput {
+  create: AnswerCreateInput
+  connect: AnswerWhereUniqueInput
+  update: AnswerUpdateDataInput
+  upsert: AnswerUpsertNestedInput
+}
+
 input AnswerUpdateWithoutAnsweredByDataInput {
   body: String
   approval: Boolean
@@ -347,6 +370,11 @@ input AnswerUpdateWithWhereUniqueWithoutAnsweredToInput {
   data: AnswerUpdateWithoutAnsweredToDataInput!
 }
 
+input AnswerUpsertNestedInput {
+  update: AnswerUpdateDataInput!
+  create: AnswerCreateInput!
+}
+
 input AnswerUpsertWithWhereUniqueWithoutAnsweredByInput {
   where: AnswerWhereUniqueInput!
   update: AnswerUpdateWithoutAnsweredByDataInput!
@@ -357,6 +385,185 @@ input AnswerUpsertWithWhereUniqueWithoutAnsweredToInput {
   where: AnswerWhereUniqueInput!
   update: AnswerUpdateWithoutAnsweredToDataInput!
   create: AnswerCreateWithoutAnsweredToInput!
+}
+
+type AnswerVote implements Node {
+  id: ID!
+  votedBy: User!
+  votedAnswer: Answer!
+  vote: String
+}
+
+"""A connection to a list of items."""
+type AnswerVoteConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AnswerVoteEdge]!
+  aggregate: AggregateAnswerVote!
+}
+
+input AnswerVoteCreateInput {
+  id: ID
+  vote: String
+  votedBy: UserCreateOneInput!
+  votedAnswer: AnswerCreateOneInput!
+}
+
+"""An edge in a connection."""
+type AnswerVoteEdge {
+  """The item at the end of the edge."""
+  node: AnswerVote!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum AnswerVoteOrderByInput {
+  id_ASC
+  id_DESC
+  vote_ASC
+  vote_DESC
+}
+
+type AnswerVotePreviousValues {
+  id: ID!
+  vote: String
+}
+
+type AnswerVoteSubscriptionPayload {
+  mutation: MutationType!
+  node: AnswerVote
+  updatedFields: [String!]
+  previousValues: AnswerVotePreviousValues
+}
+
+input AnswerVoteSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AnswerVoteSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: AnswerVoteWhereInput
+}
+
+input AnswerVoteUpdateInput {
+  vote: String
+  votedBy: UserUpdateOneRequiredInput
+  votedAnswer: AnswerUpdateOneRequiredInput
+}
+
+input AnswerVoteUpdateManyMutationInput {
+  vote: String
+}
+
+input AnswerVoteWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AnswerVoteWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  vote: String
+
+  """All values that are not equal to given value."""
+  vote_not: String
+
+  """All values that are contained in given list."""
+  vote_in: [String!]
+
+  """All values that are not contained in given list."""
+  vote_not_in: [String!]
+
+  """All values less than the given value."""
+  vote_lt: String
+
+  """All values less than or equal the given value."""
+  vote_lte: String
+
+  """All values greater than the given value."""
+  vote_gt: String
+
+  """All values greater than or equal the given value."""
+  vote_gte: String
+
+  """All values containing the given string."""
+  vote_contains: String
+
+  """All values not containing the given string."""
+  vote_not_contains: String
+
+  """All values starting with the given string."""
+  vote_starts_with: String
+
+  """All values not starting with the given string."""
+  vote_not_starts_with: String
+
+  """All values ending with the given string."""
+  vote_ends_with: String
+
+  """All values not ending with the given string."""
+  vote_not_ends_with: String
+  votedBy: UserWhereInput
+  votedAnswer: AnswerWhereInput
+}
+
+input AnswerVoteWhereUniqueInput {
+  id: ID
 }
 
 input AnswerWhereInput {
@@ -512,38 +719,44 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createAnswer(data: AnswerCreateInput!): Answer!
   createQuestionView(data: QuestionViewCreateInput!): QuestionView!
   createQuestionVote(data: QuestionVoteCreateInput!): QuestionVote!
+  createAnswerVote(data: AnswerVoteCreateInput!): AnswerVote!
+  createAnswer(data: AnswerCreateInput!): Answer!
   createTag(data: TagCreateInput!): Tag!
   createUser(data: UserCreateInput!): User!
   createQuestion(data: QuestionCreateInput!): Question!
-  updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateQuestionView(data: QuestionViewUpdateInput!, where: QuestionViewWhereUniqueInput!): QuestionView
   updateQuestionVote(data: QuestionVoteUpdateInput!, where: QuestionVoteWhereUniqueInput!): QuestionVote
+  updateAnswerVote(data: AnswerVoteUpdateInput!, where: AnswerVoteWhereUniqueInput!): AnswerVote
+  updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
-  deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteQuestionView(where: QuestionViewWhereUniqueInput!): QuestionView
   deleteQuestionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
+  deleteAnswerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
+  deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteUser(where: UserWhereUniqueInput!): User
   deleteQuestion(where: QuestionWhereUniqueInput!): Question
-  upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
   upsertQuestionView(where: QuestionViewWhereUniqueInput!, create: QuestionViewCreateInput!, update: QuestionViewUpdateInput!): QuestionView!
   upsertQuestionVote(where: QuestionVoteWhereUniqueInput!, create: QuestionVoteCreateInput!, update: QuestionVoteUpdateInput!): QuestionVote!
+  upsertAnswerVote(where: AnswerVoteWhereUniqueInput!, create: AnswerVoteCreateInput!, update: AnswerVoteUpdateInput!): AnswerVote!
+  upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
   upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
-  updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
   updateManyQuestionVotes(data: QuestionVoteUpdateManyMutationInput!, where: QuestionVoteWhereInput): BatchPayload!
+  updateManyAnswerVotes(data: AnswerVoteUpdateManyMutationInput!, where: AnswerVoteWhereInput): BatchPayload!
+  updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
   updateManyTags(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyQuestions(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): BatchPayload!
-  deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   deleteManyQuestionViews(where: QuestionViewWhereInput): BatchPayload!
   deleteManyQuestionVotes(where: QuestionVoteWhereInput): BatchPayload!
+  deleteManyAnswerVotes(where: AnswerVoteWhereInput): BatchPayload!
+  deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   deleteManyTags(where: TagWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
@@ -584,21 +797,24 @@ enum Permission {
 }
 
 type Query {
-  answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
   questionViews(where: QuestionViewWhereInput, orderBy: QuestionViewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionView]!
   questionVotes(where: QuestionVoteWhereInput, orderBy: QuestionVoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionVote]!
+  answerVotes(where: AnswerVoteWhereInput, orderBy: AnswerVoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AnswerVote]!
+  answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
   tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
-  answer(where: AnswerWhereUniqueInput!): Answer
   questionView(where: QuestionViewWhereUniqueInput!): QuestionView
   questionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
+  answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
+  answer(where: AnswerWhereUniqueInput!): Answer
   tag(where: TagWhereUniqueInput!): Tag
   user(where: UserWhereUniqueInput!): User
   question(where: QuestionWhereUniqueInput!): Question
-  answersConnection(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerConnection!
   questionViewsConnection(where: QuestionViewWhereInput, orderBy: QuestionViewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionViewConnection!
   questionVotesConnection(where: QuestionVoteWhereInput, orderBy: QuestionVoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionVoteConnection!
+  answerVotesConnection(where: AnswerVoteWhereInput, orderBy: AnswerVoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerVoteConnection!
+  answersConnection(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerConnection!
   tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
@@ -1518,9 +1734,10 @@ input QuestionWhereUniqueInput {
 }
 
 type Subscription {
-  answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   questionView(where: QuestionViewSubscriptionWhereInput): QuestionViewSubscriptionPayload
   questionVote(where: QuestionVoteSubscriptionWhereInput): QuestionVoteSubscriptionPayload
+  answerVote(where: AnswerVoteSubscriptionWhereInput): AnswerVoteSubscriptionPayload
+  answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
