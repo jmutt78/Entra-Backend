@@ -244,6 +244,47 @@ const Mutations = {
 
     return true;
   },
+  async createAnswerVote(parent, args, ctx, info) {
+    let answerVote;
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+    const votes = await ctx.db.query.answerVotes({
+      where: {
+        votedBy: { id: ctx.request.userId },
+        votedAnswer: { id: args.answerId }
+      }
+    });
+    if (votes.length === 0) {
+      answerVote = await ctx.db.mutation.createAnswerVote({
+        data: {
+          vote: args.vote,
+          // This is how to create a relationship between the Item and the User
+          votedBy: {
+            connect: {
+              id: ctx.request.userId
+            }
+          },
+          votedAnswer: {
+            connect: {
+              id: args.answerId
+            }
+          }
+        }
+      });
+    } else {
+      answerVote = await ctx.db.mutation.updateAnswerVote({
+        where: {
+          id: votes[0].id
+        },
+        data: {
+          vote: args.vote
+        }
+      });
+    }
+
+    return answerVote;
+  },
 
   createTag: async (parent, args, ctx, info) => {
     const name = args.name.trim().toLowerCase();

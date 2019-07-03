@@ -29,6 +29,7 @@ type Mutation {
   updateAnswer(id: ID!, body: String, approval: Boolean): Answer!
   createQuestionView(questionId: ID!): Boolean
   createQuestionVote(questionId: ID!, vote: String): Boolean
+  createAnswerVote(answerId: ID!, vote: String): AnswerVote
   updateUser(
     id: ID!
     email: String!
