@@ -75,7 +75,8 @@ const Query = {
         info
       );
     }
-    return null;
+
+    return ctx.db.query.questions({}, info);
   },
 
   async answers(parent, args, ctx, info) {
