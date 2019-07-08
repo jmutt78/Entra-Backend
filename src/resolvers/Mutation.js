@@ -367,10 +367,39 @@ const Mutations = {
     const updates = { ...args };
     // remove the ID from the updates
     delete updates.id;
+    // remove approval as it has additional checks implemented in updateAnswerApproval resolver
+    delete updates.approval;
     // run the update method
     return ctx.db.mutation.updateAnswer(
       {
         data: updates,
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
+  async updateAnswerApproval(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+    const answer = await ctx.db.query.answer(
+      {
+        where: {
+          id: args.id
+        }
+      },
+      `{ id body answeredBy { id } answeredTo { askedBy { id }}}`
+    );
+    if (answer.answeredTo[0].askedBy[0].id !== ctx.request.userId) {
+      throw new Error("Answer can be approved only by question author");
+    }
+    return ctx.db.mutation.updateAnswer(
+      {
+        data: {
+          approval: args.approval
+        },
         where: {
           id: args.id
         }
