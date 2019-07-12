@@ -367,8 +367,6 @@ const Mutations = {
     const updates = { ...args };
     // remove the ID from the updates
     delete updates.id;
-    // remove approval as it has additional checks implemented in updateAnswerApproval resolver
-    delete updates.approval;
     // run the update method
     return ctx.db.mutation.updateAnswer(
       {
@@ -380,7 +378,7 @@ const Mutations = {
       info
     );
   },
-  async updateAnswerApproval(parent, args, ctx, info) {
+  async selectAnswer(parent, args, ctx, info) {
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
     }
@@ -398,7 +396,7 @@ const Mutations = {
     return ctx.db.mutation.updateAnswer(
       {
         data: {
-          approval: args.approval
+          selected: true
         },
         where: {
           id: args.id
