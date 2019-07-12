@@ -126,6 +126,7 @@ type Answer {
   body: String!
   answeredBy: User!
   approval: Boolean
+  selected: Boolean
   answeredTo(
     where: AnswerWhereInput
     orderBy: AnswerOrderByInput
