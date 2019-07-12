@@ -388,11 +388,19 @@ const Mutations = {
           id: args.id
         }
       },
-      `{ id body answeredBy { id } answeredTo { askedBy { id }}}`
+      `{ id body answeredBy { id } answeredTo { id askedBy { id }}}`
     );
     if (answer.answeredTo[0].askedBy[0].id !== ctx.request.userId) {
       throw new Error("Answer can be approved only by question author");
     }
+    // Clear previously selected answers
+    await ctx.db.mutation.updateManyAnswers({
+      data: { selected: false },
+      where: {
+        answeredTo_some: { id: answer.answeredTo[0].id },
+        selected: true
+      }
+    });
     return ctx.db.mutation.updateAnswer(
       {
         data: {
