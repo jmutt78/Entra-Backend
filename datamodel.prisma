@@ -50,6 +50,7 @@ type Answer {
   answeredBy: User!
   answeredTo: [Question!]
   approval: Boolean
+  selected: Boolean
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

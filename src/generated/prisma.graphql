@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sat Jul 06 2019 10:22:00 GMT-0700 (PDT)
+# timestamp: Fri Jul 12 2019 23:17:29 GMT+0530 (IST)
 
 type AggregateAnswer {
   count: Int!
@@ -35,6 +35,7 @@ type Answer implements Node {
   answeredBy: User!
   answeredTo(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question!]
   approval: Boolean
+  selected: Boolean
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -53,6 +54,7 @@ input AnswerCreateInput {
   id: ID
   body: String!
   approval: Boolean
+  selected: Boolean
   answeredBy: UserCreateOneWithoutMyAnswersInput!
   answeredTo: QuestionCreateManyWithoutAnswersInput
 }
@@ -76,6 +78,7 @@ input AnswerCreateWithoutAnsweredByInput {
   id: ID
   body: String!
   approval: Boolean
+  selected: Boolean
   answeredTo: QuestionCreateManyWithoutAnswersInput
 }
 
@@ -83,6 +86,7 @@ input AnswerCreateWithoutAnsweredToInput {
   id: ID
   body: String!
   approval: Boolean
+  selected: Boolean
   answeredBy: UserCreateOneWithoutMyAnswersInput!
 }
 
@@ -102,6 +106,8 @@ enum AnswerOrderByInput {
   body_DESC
   approval_ASC
   approval_DESC
+  selected_ASC
+  selected_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -112,6 +118,7 @@ type AnswerPreviousValues {
   id: ID!
   body: String!
   approval: Boolean
+  selected: Boolean
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -209,6 +216,10 @@ input AnswerScalarWhereInput {
 
   """All values that are not equal to given value."""
   approval_not: Boolean
+  selected: Boolean
+
+  """All values that are not equal to given value."""
+  selected_not: Boolean
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -291,6 +302,7 @@ input AnswerSubscriptionWhereInput {
 input AnswerUpdateDataInput {
   body: String
   approval: Boolean
+  selected: Boolean
   answeredBy: UserUpdateOneRequiredWithoutMyAnswersInput
   answeredTo: QuestionUpdateManyWithoutAnswersInput
 }
@@ -298,6 +310,7 @@ input AnswerUpdateDataInput {
 input AnswerUpdateInput {
   body: String
   approval: Boolean
+  selected: Boolean
   answeredBy: UserUpdateOneRequiredWithoutMyAnswersInput
   answeredTo: QuestionUpdateManyWithoutAnswersInput
 }
@@ -305,11 +318,13 @@ input AnswerUpdateInput {
 input AnswerUpdateManyDataInput {
   body: String
   approval: Boolean
+  selected: Boolean
 }
 
 input AnswerUpdateManyMutationInput {
   body: String
   approval: Boolean
+  selected: Boolean
 }
 
 input AnswerUpdateManyWithoutAnsweredByInput {
@@ -351,12 +366,14 @@ input AnswerUpdateOneRequiredInput {
 input AnswerUpdateWithoutAnsweredByDataInput {
   body: String
   approval: Boolean
+  selected: Boolean
   answeredTo: QuestionUpdateManyWithoutAnswersInput
 }
 
 input AnswerUpdateWithoutAnsweredToDataInput {
   body: String
   approval: Boolean
+  selected: Boolean
   answeredBy: UserUpdateOneRequiredWithoutMyAnswersInput
 }
 
@@ -653,6 +670,10 @@ input AnswerWhereInput {
 
   """All values that are not equal to given value."""
   approval_not: Boolean
+  selected: Boolean
+
+  """All values that are not equal to given value."""
+  selected_not: Boolean
   createdAt: DateTime
 
   """All values that are not equal to given value."""
