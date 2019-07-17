@@ -116,6 +116,17 @@ const Query = {
       throw new Error("you must be signed in!");
     }
 
+    if (args.filter === "all") {
+      return ctx.db.query.questionsConnection(
+        {
+          where: {
+            approval: true
+          }
+        },
+        info
+      );
+    }
+
     return ctx.db.query.questionsConnection(
       {
         where: {

@@ -80,6 +80,7 @@ type Query {
   questionsConnection(
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
+    filter: String
     skip: Int
     after: String
     before: String
