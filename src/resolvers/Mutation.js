@@ -268,6 +268,47 @@ const Mutations = {
 
     return true;
   },
+
+  async updateQuestion(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    const question = await ctx.db.query.question(
+      {
+        where: { id: args.id }
+      },
+      `{ id askedBy { id }}`
+    );
+
+    const ownsQuestion = question.askedBy.id === ctx.request.userId;
+
+    const hasPermissions = ctx.request.user.permissions.some(permission =>
+      ["ADMIN", "MODERATOR"].includes(permission)
+    );
+
+    if (!ownsQuestion && !hasPermissions) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    // first take a copy of the updates
+    const updates = { ...args };
+    // remove the ID from the updates
+    delete updates.id;
+    // run the update method
+    return ctx.db.mutation.updateQuestion(
+      {
+        data: updates,
+
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
+
+  //--------------------Answers--------------------//
   async createAnswerVote(parent, args, ctx, info) {
     let answerVote;
     if (!ctx.request.userId) {
@@ -333,6 +374,7 @@ const Mutations = {
     const newAnswer = await ctx.db.mutation.createAnswer({
       data: {
         body: args.body,
+
         answeredBy: { connect: { id: ctx.request.userId } },
         answeredTo: { connect: { id: args.questionId } }
       }
@@ -413,44 +455,8 @@ const Mutations = {
       info
     );
   },
-  async updateQuestion(parent, args, ctx, info) {
-    if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
-    }
 
-    const question = await ctx.db.query.question(
-      {
-        where: { id: args.id }
-      },
-      `{ id askedBy { id }}`
-    );
-
-    const ownsQuestion = question.askedBy.id === ctx.request.userId;
-
-    const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ["ADMIN", "MODERATOR"].includes(permission)
-    );
-
-    if (!ownsQuestion && !hasPermissions) {
-      throw new Error("You don't have permission to do that!");
-    }
-
-    // first take a copy of the updates
-    const updates = { ...args };
-    // remove the ID from the updates
-    delete updates.id;
-    // run the update method
-    return ctx.db.mutation.updateQuestion(
-      {
-        data: updates,
-
-        where: {
-          id: args.id
-        }
-      },
-      info
-    );
-  },
+  //--------------------Permissions--------------------//
   async updatePermissions(parent, args, ctx, info) {
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
@@ -480,6 +486,30 @@ const Mutations = {
       },
       info
     );
+  },
+
+  //--------------------Blog--------------------//
+
+  async createBlog(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    const newBlog = await ctx.db.mutation.createBlog(
+      {
+        data: {
+          blocks: {
+            connect: {
+              id: args.key,
+              ...args
+            }
+          }
+        }
+      },
+      info
+    );
+
+    return newBlog;
   }
 };
 

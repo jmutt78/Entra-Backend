@@ -74,3 +74,15 @@ type AnswerVote {
   votedAnswer: Answer! @relation(link: INLINE)
   vote: String
 }
+
+type Blog {
+id: ID! @id
+blocks: [Blocks!] @relation(link: INLINE)
+}
+
+type Blocks {
+id: ID! @id
+text: String
+type: String
+depth: Int
+}

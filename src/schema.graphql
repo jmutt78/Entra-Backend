@@ -12,6 +12,7 @@ type Mutation {
   ): Question!
   deleteQuestion(id: ID!): Question
   createAnswer(body: String!, questionId: ID!): Answer!
+  createBlog(blocks: [BlocksWhereInput]): Blog!
   createTag(name: String!): Tag!
   signup(
     email: String!
@@ -179,4 +180,24 @@ type Question implements Node {
   views: Int
   upVotes: Int
   downVotes: Int
+}
+
+type Blog implements Node {
+  id: ID!
+  blocks(
+    where: BlocksWhereInput
+    orderBy: BlocksOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Blocks!]
+}
+
+type Blocks implements Node {
+  id: ID!
+  text: String
+  type: String
+  depth: Int
 }
