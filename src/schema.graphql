@@ -55,7 +55,7 @@ type Mutation {
 
 type Query {
   me: User
-  user(where: UserWhereUniqueInput!): User
+  user(id: ID!): User
   users: [User]!
   tags(first: Int, where: TagWhereInput): [Tag!]!
   questions(

@@ -15,13 +15,9 @@ const Query = {
     );
   },
   user(parent, args, ctx, info) {
-    // check if there is a current user ID
-    if (!ctx.request.userId) {
-      return null;
-    }
     return ctx.db.query.user(
       {
-        where: { id: ctx.request.userId }
+        where: { id: args.id }
       },
       info
     );
@@ -89,7 +85,7 @@ const Query = {
       return ctx.db.query.answers(
         {
           where: {
-            approval: !true
+            approval: null
           }
         },
         info
