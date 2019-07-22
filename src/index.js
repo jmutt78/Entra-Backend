@@ -3,7 +3,8 @@ require("dotenv").config({ path: ".env" });
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const express = require("express");
-const { ApolloServer, gql } = require("apollo-server-express");
+const morgan = require("morgan");
+const { ApolloServer } = require("apollo-server-express");
 const { importSchema } = require("graphql-import");
 const resolvers = require("./resolvers");
 const db = require("./db");
@@ -23,6 +24,20 @@ const server = new ApolloServer({
 
 const app = express();
 app.use(cookieParser());
+app.use(
+  morgan(function(tokens, req, res) {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, "content-length"),
+      "-",
+      tokens["response-time"](req, res),
+      "ms",
+      JSON.stringify(req.body, null, 2)
+    ].join(" ");
+  })
+);
 app.use((req, res, next) => {
   const { token } = req.cookies;
 
