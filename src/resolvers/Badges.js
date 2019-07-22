@@ -4,7 +4,7 @@ const Badges = {
   async autobiographer(parent, args, ctx, info) {
     const [user] = await ctx.db.query.users({
       where: {
-        id: ctx.request.userId
+        id: parent.id
       }
     });
     const profile = _.pick(user, [
@@ -25,7 +25,7 @@ const Badges = {
       {
         where: {
           vote: "down",
-          votedBy: { id: ctx.request.userId }
+          votedBy: { id: parent.id }
         }
       },
       "{ aggregate { count }}"
@@ -37,7 +37,7 @@ const Badges = {
       {
         where: {
           vote: "up",
-          votedBy: { id: ctx.request.userId }
+          votedBy: { id: parent.id }
         }
       },
       "{ aggregate { count }}"
@@ -48,7 +48,7 @@ const Badges = {
     const result = await ctx.db.query.questionVotesConnection(
       {
         where: {
-          votedBy: { id: ctx.request.userId }
+          votedBy: { id: parent.id }
         }
       },
       "{ aggregate { count }}"
@@ -59,7 +59,7 @@ const Badges = {
     const result = await ctx.db.query.questionVotesConnection(
       {
         where: {
-          votedBy: { id: ctx.request.userId }
+          votedBy: { id: parent.id }
         }
       },
       "{ aggregate { count }}"
@@ -70,7 +70,7 @@ const Badges = {
     const result = await ctx.db.query.answersConnection(
       {
         where: {
-          answeredBy: { id: ctx.request.userId }
+          answeredBy: { id: parent.id }
         }
       },
       "{ aggregate { count }}"
@@ -81,7 +81,7 @@ const Badges = {
     const result = await ctx.db.query.answersConnection(
       {
         where: {
-          answeredBy: { id: ctx.request.userId }
+          answeredBy: { id: parent.id }
         }
       },
       "{ aggregate { count }}"

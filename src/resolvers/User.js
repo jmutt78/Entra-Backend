@@ -1,6 +1,6 @@
 const User = {
   badges(parent, args, ctx, info) {
-    return {};
+    return parent;
   }
 };
 
