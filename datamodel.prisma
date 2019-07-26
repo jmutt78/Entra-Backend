@@ -37,6 +37,7 @@ updatedAt: DateTime! @updatedAt
 askedBy: [User!]!
 approval: Boolean
 answers: [Answer!]! @relation(link: INLINE)
+questionVote: [QuestionVote]
 }
 
 type Tag {
@@ -53,6 +54,7 @@ type Answer {
   selected: Boolean
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+  answerVote: [AnswerVote]
 }
 
 type QuestionView {

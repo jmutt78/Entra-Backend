@@ -203,30 +203,6 @@ const Mutations = {
 
     return true;
   },
-  async deleteQuestion(parent, args, ctx, info) {
-    const where = { id: args.id };
-    // 1. find the item
-
-    const question = await ctx.db.query.question(
-      {
-        where: { id: args.id }
-      },
-      `{ id title askedBy { id }}`
-    );
-    // 2. Check if they own that item, or have the permissions
-    const ownsQuestion = question.askedBy.id === ctx.request.userId;
-
-    const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ["ADMIN"].includes(permission)
-    );
-
-    if (!ownsQuestion && !hasPermissions) {
-      throw new Error("You don't have permission to do that!");
-    }
-
-    // 3. Delete it!
-    return ctx.db.mutation.deleteQuestion({ where }, info);
-  },
 
   async createQuestionVote(parent, args, ctx, info) {
     if (!ctx.request.userId) {
@@ -454,6 +430,36 @@ const Mutations = {
       },
       info
     );
+  },
+
+  async deleteAnswer(parent, args, ctx, info) {
+    const where = { id: args.id };
+
+    const answer = await ctx.db.query.answer(
+      {
+        where: { id: args.id }
+      },
+      `{ id body
+        answerVote { id }
+        answeredBy { id }}`
+    );
+
+    const ownsAnswer = answer.answeredBy.id === ctx.request.userId;
+
+    if (!ownsAnswer) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    // 3. Delete it!
+
+    return ctx.db.mutation.deleteAnswerVote(
+      {
+        where: { id: answer.answerVote.id }
+      },
+      info
+    );
+
+    return ctx.db.mutation.deleteAnswer({ where }, info);
   },
 
   //--------------------Permissions--------------------//

@@ -108,9 +108,6 @@ const Query = {
   tags: forwardTo("db"),
   async questionsConnection(parent, args, ctx, info) {
     const { userId } = ctx.request;
-    if (!userId) {
-      throw new Error("you must be signed in!");
-    }
 
     if (args.filter === "all") {
       return ctx.db.query.questionsConnection(
@@ -143,6 +140,8 @@ const Query = {
 
     return answer;
   },
+
+  answerVote: forwardTo("db"),
 
   async question(parent, args, ctx, info) {
     const question = await ctx.db.query.question(

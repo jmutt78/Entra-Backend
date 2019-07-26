@@ -10,7 +10,8 @@ type Mutation {
     description: String
     tags: [TagInput!]!
   ): Question!
-  deleteQuestion(id: ID!): Question
+  deleteAnswer(id: ID!): Answer
+  deleteAnswerVote(id: ID!): AnswerVote
   createAnswer(body: String!, questionId: ID!): Answer!
   createBlog(blocks: [BlocksWhereInput]): Blog!
   createTag(name: String!): Tag!
@@ -90,6 +91,7 @@ type Query {
   ): QuestionConnection!
   question(id: ID!): Question
   answer(id: ID!): Answer
+  answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
 }
 
 input TagInput {
@@ -142,6 +144,7 @@ type Answer {
   updatedAt: DateTime!
   upVotes: Int
   downVotes: Int
+  answerVote: [AnswerVote]
 }
 
 type Question implements Node {
@@ -181,6 +184,7 @@ type Question implements Node {
   views: Int
   upVotes: Int
   downVotes: Int
+  questionVote: [QuestionVote]
 }
 
 type Blog implements Node {
