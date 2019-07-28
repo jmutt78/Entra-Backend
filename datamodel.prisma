@@ -25,6 +25,7 @@ type User {
   permissions: [Permission]
   myQuestions: [Question!]! @relation(link: INLINE)
   myAnswers: [Answer!]! @relation(link: INLINE)
+  myBookMarks: [BookMark!]
 }
 
 type Question {
@@ -55,6 +56,12 @@ type Answer {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   answerVote: [AnswerVote]
+}
+
+type BookMark {
+id: ID! @id @unique
+questions: [Question!]! @relation(link: INLINE)
+markedBy: User! @relation(link: INLINE)
 }
 
 type QuestionView {

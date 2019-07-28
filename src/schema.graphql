@@ -12,6 +12,7 @@ type Mutation {
   ): Question!
   deleteAnswer(id: ID!): Answer
   deleteAnswerVote(id: ID!): AnswerVote
+  createBookMark(questionId: ID!): BookMark!
   createAnswer(body: String!, questionId: ID!): Answer!
   createBlog(blocks: [BlocksWhereInput]): Blog!
   createTag(name: String!): Tag!
@@ -113,6 +114,7 @@ type User {
   myQuestions: [Question!]!
   myAnswers: [Answer!]!
   badges: Badges
+  myBookMarks: [BookMark!]
 }
 
 type Badges {
@@ -185,6 +187,20 @@ type Question implements Node {
   upVotes: Int
   downVotes: Int
   questionVote: [QuestionVote]
+}
+
+type BookMark implements Node {
+  id: ID!
+  questions(
+    where: QuestionWhereInput
+    orderBy: QuestionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Question!]
+  markedBy: User!
 }
 
 type Blog implements Node {

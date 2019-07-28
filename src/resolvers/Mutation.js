@@ -516,6 +516,21 @@ const Mutations = {
     );
 
     return newBlog;
+  },
+
+  createBookMark: async (parent, args, ctx, info) => {
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    const newBookMark = await ctx.db.mutation.createBookMark({
+      data: {
+        markedBy: { connect: { id: ctx.request.userId } },
+        questions: { connect: { id: args.questionId } }
+      }
+    });
+
+    return newBookMark;
   }
 };
 
