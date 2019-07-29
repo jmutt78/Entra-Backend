@@ -127,6 +127,7 @@ type Badges {
   frequentFlyer: Boolean
   niceAnswer: Boolean
   expert: Boolean
+  teacher: Boolean
 }
 
 type Answer {

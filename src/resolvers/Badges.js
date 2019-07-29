@@ -139,6 +139,27 @@ const Badges = {
       }
     }
     return isExpert;
+  },
+  async teacher(parent, args, ctx, info) {
+    const tags = await ctx.db.query.tags(null, "{ name }");
+    let isTeacher = false;
+    for (const tag of tags) {
+      const result = await ctx.db.query.answersConnection(
+        {
+          where: {
+            answeredBy: { id: parent.id },
+            selected: true,
+            answeredTo_some: { tags_some: { name: tag.name } }
+          }
+        },
+        "{ aggregate { count }}"
+      );
+      if (result.aggregate.count >= 7) {
+        isTeacher = true;
+        break;
+      }
+    }
+    return isTeacher;
   }
 };
 
