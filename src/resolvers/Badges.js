@@ -87,6 +87,32 @@ const Badges = {
       "{ aggregate { count }}"
     );
     return result.aggregate.count >= 20;
+  },
+  async niceAnswer(parent, args, ctx, info) {
+    const answers = await ctx.db.query.answers(
+      {
+        where: {
+          answeredBy: { id: parent.id }
+        }
+      },
+      "{ id }"
+    );
+    let hasNiceAnswer = false;
+    for (const answer of answers) {
+      const result = await ctx.db.query.answerVotesConnection(
+        {
+          where: {
+            votedAnswer: { id: answer.id }
+          }
+        },
+        "{ aggregate { count }}"
+      );
+      if (result.aggregate.count >= 1) {
+        hasNiceAnswer = true;
+        break;
+      }
+    }
+    return hasNiceAnswer;
   }
 };
 
