@@ -107,12 +107,38 @@ const Badges = {
         },
         "{ aggregate { count }}"
       );
-      if (result.aggregate.count >= 1) {
+      if (result.aggregate.count >= 10) {
         hasNiceAnswer = true;
         break;
       }
     }
     return hasNiceAnswer;
+  },
+  async expert(parent, args, ctx, info) {
+    const answers = await ctx.db.query.answers(
+      {
+        where: {
+          answeredBy: { id: parent.id }
+        }
+      },
+      "{ id }"
+    );
+    let isExpert = false;
+    for (const answer of answers) {
+      const result = await ctx.db.query.answerVotesConnection(
+        {
+          where: {
+            votedAnswer: { id: answer.id }
+          }
+        },
+        "{ aggregate { count }}"
+      );
+      if (result.aggregate.count >= 25) {
+        isExpert = true;
+        break;
+      }
+    }
+    return isExpert;
   }
 };
 

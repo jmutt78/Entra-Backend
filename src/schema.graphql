@@ -126,6 +126,7 @@ type Badges {
   commentor: Boolean
   frequentFlyer: Boolean
   niceAnswer: Boolean
+  expert: Boolean
 }
 
 type Answer {
