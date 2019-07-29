@@ -181,6 +181,30 @@ const Badges = {
       }
     }
     return isPundit;
+  },
+  async powerVoter(parent, args, ctx, info) {
+    const questions = await ctx.db.query.questions(
+      {
+        askedBy: { id: parent.id }
+      },
+      "{ id }"
+    );
+    let isPoverVoter = false;
+    for (const question of questions) {
+      const result = await ctx.db.query.questionVotesConnection(
+        {
+          where: {
+            votedQuestion: { id: question.id }
+          }
+        },
+        "{ aggregate { count }}"
+      );
+      if (result.aggregate.count >= 10) {
+        isPoverVoter = true;
+        break;
+      }
+    }
+    return isPoverVoter;
   }
 };
 

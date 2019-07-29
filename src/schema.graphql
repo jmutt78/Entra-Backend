@@ -129,6 +129,7 @@ type Badges {
   expert: Boolean
   teacher: Boolean
   pundit: Boolean
+  powerVoter: Boolean
 }
 
 type Answer {
