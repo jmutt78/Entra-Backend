@@ -130,6 +130,7 @@ type Badges {
   teacher: Boolean
   pundit: Boolean
   powerVoter: Boolean
+  provoker: Boolean
 }
 
 type Answer {

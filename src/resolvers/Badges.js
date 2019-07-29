@@ -205,6 +205,31 @@ const Badges = {
       }
     }
     return isPoverVoter;
+  },
+  async provoker(parent, args, ctx, info) {
+    const questions = await ctx.db.query.questions(
+      {
+        askedBy: { id: parent.id }
+      },
+      "{ id }"
+    );
+    let isProvoker = false;
+    for (const question of questions) {
+      const answers = await ctx.db.query.answers(
+        {
+          where: {
+            answeredTo_some: { id: question.id }
+          }
+        },
+        "{ answeredBy {id}}"
+      );
+      const answersByDifferentUsers = _.uniqBy(answers, a => a.answeredBy.id);
+      if (answersByDifferentUsers.length >= 5) {
+        isProvoker = true;
+        break;
+      }
+    }
+    return isProvoker;
   }
 };
 
