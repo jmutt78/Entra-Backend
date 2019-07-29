@@ -160,6 +160,27 @@ const Badges = {
       }
     }
     return isTeacher;
+  },
+  async pundit(parent, args, ctx, info) {
+    const tags = await ctx.db.query.tags(null, "{ name }");
+    let isPundit = false;
+    for (const tag of tags) {
+      const result = await ctx.db.query.answersConnection(
+        {
+          where: {
+            answeredBy: { id: parent.id },
+            selected: true,
+            answeredTo_some: { tags_some: { name: tag.name } }
+          }
+        },
+        "{ aggregate { count }}"
+      );
+      if (result.aggregate.count >= 10) {
+        isPundit = true;
+        break;
+      }
+    }
+    return isPundit;
   }
 };
 
