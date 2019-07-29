@@ -125,6 +125,12 @@ type Badges {
   analyst: Boolean
   commentor: Boolean
   frequentFlyer: Boolean
+  niceAnswer: Boolean
+  expert: Boolean
+  teacher: Boolean
+  pundit: Boolean
+  powerVoter: Boolean
+  provoker: Boolean
 }
 
 type Answer {
