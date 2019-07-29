@@ -199,7 +199,7 @@ const Badges = {
         },
         "{ aggregate { count }}"
       );
-      if (result.aggregate.count >= 10) {
+      if (result.aggregate.count >= 15) {
         isPoverVoter = true;
         break;
       }
