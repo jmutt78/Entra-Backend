@@ -72,6 +72,17 @@ const Query = {
       );
     }
 
+    if (args.filter === "My BookMarked") {
+      return ctx.db.query.questions(
+        {
+          where: {
+            bookMark_some: { markedBy: { id: userId } }
+          }
+        },
+        info
+      );
+    }
+
     return ctx.db.query.questions({}, info);
   },
 
@@ -139,6 +150,16 @@ const Query = {
     );
 
     return answer;
+  },
+  async bookMark(parent, args, ctx, info) {
+    const bookmark = await ctx.db.query.bookMark(
+      {
+        where: { id: args.id }
+      },
+      info
+    );
+
+    return bookmark;
   },
 
   answerVote: forwardTo("db"),

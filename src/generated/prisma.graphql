@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sat Jul 27 2019 06:55:10 GMT-0600 (MDT)
+# timestamp: Tue Jul 30 2019 10:25:19 GMT-0600 (MDT)
 
 type AggregateAnswer {
   count: Int!
@@ -1487,7 +1487,7 @@ type BookMarkConnection {
 
 input BookMarkCreateInput {
   id: ID
-  questions: QuestionCreateManyInput
+  questions: QuestionCreateManyWithoutBookMarkInput
   markedBy: UserCreateOneWithoutMyBookMarksInput!
 }
 
@@ -1496,9 +1496,19 @@ input BookMarkCreateManyWithoutMarkedByInput {
   connect: [BookMarkWhereUniqueInput!]
 }
 
+input BookMarkCreateManyWithoutQuestionsInput {
+  create: [BookMarkCreateWithoutQuestionsInput!]
+  connect: [BookMarkWhereUniqueInput!]
+}
+
 input BookMarkCreateWithoutMarkedByInput {
   id: ID
-  questions: QuestionCreateManyInput
+  questions: QuestionCreateManyWithoutBookMarkInput
+}
+
+input BookMarkCreateWithoutQuestionsInput {
+  id: ID
+  markedBy: UserCreateOneWithoutMyBookMarksInput!
 }
 
 """An edge in a connection."""
@@ -1604,7 +1614,7 @@ input BookMarkSubscriptionWhereInput {
 }
 
 input BookMarkUpdateInput {
-  questions: QuestionUpdateManyInput
+  questions: QuestionUpdateManyWithoutBookMarkInput
   markedBy: UserUpdateOneRequiredWithoutMyBookMarksInput
 }
 
@@ -1619,8 +1629,23 @@ input BookMarkUpdateManyWithoutMarkedByInput {
   upsert: [BookMarkUpsertWithWhereUniqueWithoutMarkedByInput!]
 }
 
+input BookMarkUpdateManyWithoutQuestionsInput {
+  create: [BookMarkCreateWithoutQuestionsInput!]
+  connect: [BookMarkWhereUniqueInput!]
+  set: [BookMarkWhereUniqueInput!]
+  disconnect: [BookMarkWhereUniqueInput!]
+  delete: [BookMarkWhereUniqueInput!]
+  update: [BookMarkUpdateWithWhereUniqueWithoutQuestionsInput!]
+  deleteMany: [BookMarkScalarWhereInput!]
+  upsert: [BookMarkUpsertWithWhereUniqueWithoutQuestionsInput!]
+}
+
 input BookMarkUpdateWithoutMarkedByDataInput {
-  questions: QuestionUpdateManyInput
+  questions: QuestionUpdateManyWithoutBookMarkInput
+}
+
+input BookMarkUpdateWithoutQuestionsDataInput {
+  markedBy: UserUpdateOneRequiredWithoutMyBookMarksInput
 }
 
 input BookMarkUpdateWithWhereUniqueWithoutMarkedByInput {
@@ -1628,10 +1653,21 @@ input BookMarkUpdateWithWhereUniqueWithoutMarkedByInput {
   data: BookMarkUpdateWithoutMarkedByDataInput!
 }
 
+input BookMarkUpdateWithWhereUniqueWithoutQuestionsInput {
+  where: BookMarkWhereUniqueInput!
+  data: BookMarkUpdateWithoutQuestionsDataInput!
+}
+
 input BookMarkUpsertWithWhereUniqueWithoutMarkedByInput {
   where: BookMarkWhereUniqueInput!
   update: BookMarkUpdateWithoutMarkedByDataInput!
   create: BookMarkCreateWithoutMarkedByInput!
+}
+
+input BookMarkUpsertWithWhereUniqueWithoutQuestionsInput {
+  where: BookMarkWhereUniqueInput!
+  update: BookMarkUpdateWithoutQuestionsDataInput!
+  create: BookMarkCreateWithoutQuestionsInput!
 }
 
 input BookMarkWhereInput {
@@ -1837,6 +1873,7 @@ type Question implements Node {
   approval: Boolean
   answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer!]
   questionVote(where: QuestionVoteWhereInput, orderBy: QuestionVoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionVote!]
+  bookMark(where: BookMarkWhereInput, orderBy: BookMarkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookMark!]
 }
 
 """A connection to a list of items."""
@@ -1858,11 +1895,7 @@ input QuestionCreateInput {
   askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
-}
-
-input QuestionCreateManyInput {
-  create: [QuestionCreateInput!]
-  connect: [QuestionWhereUniqueInput!]
+  bookMark: BookMarkCreateManyWithoutQuestionsInput
 }
 
 input QuestionCreateManyWithoutAnswersInput {
@@ -1872,6 +1905,11 @@ input QuestionCreateManyWithoutAnswersInput {
 
 input QuestionCreateManyWithoutAskedByInput {
   create: [QuestionCreateWithoutAskedByInput!]
+  connect: [QuestionWhereUniqueInput!]
+}
+
+input QuestionCreateManyWithoutBookMarkInput {
+  create: [QuestionCreateWithoutBookMarkInput!]
   connect: [QuestionWhereUniqueInput!]
 }
 
@@ -1893,6 +1931,7 @@ input QuestionCreateWithoutAnswersInput {
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
+  bookMark: BookMarkCreateManyWithoutQuestionsInput
 }
 
 input QuestionCreateWithoutAskedByInput {
@@ -1901,6 +1940,18 @@ input QuestionCreateWithoutAskedByInput {
   description: String!
   approval: Boolean
   tags: TagCreateManyInput
+  answers: AnswerCreateManyWithoutAnsweredToInput
+  questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
+  bookMark: BookMarkCreateManyWithoutQuestionsInput
+}
+
+input QuestionCreateWithoutBookMarkInput {
+  id: ID
+  title: String!
+  description: String!
+  approval: Boolean
+  tags: TagCreateManyInput
+  askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
 }
@@ -1913,6 +1964,7 @@ input QuestionCreateWithoutQuestionVoteInput {
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
+  bookMark: BookMarkCreateManyWithoutQuestionsInput
 }
 
 """An edge in a connection."""
@@ -2168,6 +2220,7 @@ input QuestionUpdateDataInput {
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
+  bookMark: BookMarkUpdateManyWithoutQuestionsInput
 }
 
 input QuestionUpdateInput {
@@ -2178,24 +2231,13 @@ input QuestionUpdateInput {
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
+  bookMark: BookMarkUpdateManyWithoutQuestionsInput
 }
 
 input QuestionUpdateManyDataInput {
   title: String
   description: String
   approval: Boolean
-}
-
-input QuestionUpdateManyInput {
-  create: [QuestionCreateInput!]
-  connect: [QuestionWhereUniqueInput!]
-  set: [QuestionWhereUniqueInput!]
-  disconnect: [QuestionWhereUniqueInput!]
-  delete: [QuestionWhereUniqueInput!]
-  update: [QuestionUpdateWithWhereUniqueNestedInput!]
-  updateMany: [QuestionUpdateManyWithWhereNestedInput!]
-  deleteMany: [QuestionScalarWhereInput!]
-  upsert: [QuestionUpsertWithWhereUniqueNestedInput!]
 }
 
 input QuestionUpdateManyMutationInput {
@@ -2228,6 +2270,18 @@ input QuestionUpdateManyWithoutAskedByInput {
   upsert: [QuestionUpsertWithWhereUniqueWithoutAskedByInput!]
 }
 
+input QuestionUpdateManyWithoutBookMarkInput {
+  create: [QuestionCreateWithoutBookMarkInput!]
+  connect: [QuestionWhereUniqueInput!]
+  set: [QuestionWhereUniqueInput!]
+  disconnect: [QuestionWhereUniqueInput!]
+  delete: [QuestionWhereUniqueInput!]
+  update: [QuestionUpdateWithWhereUniqueWithoutBookMarkInput!]
+  updateMany: [QuestionUpdateManyWithWhereNestedInput!]
+  deleteMany: [QuestionScalarWhereInput!]
+  upsert: [QuestionUpsertWithWhereUniqueWithoutBookMarkInput!]
+}
+
 input QuestionUpdateManyWithWhereNestedInput {
   where: QuestionScalarWhereInput!
   data: QuestionUpdateManyDataInput!
@@ -2254,6 +2308,7 @@ input QuestionUpdateWithoutAnswersDataInput {
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
+  bookMark: BookMarkUpdateManyWithoutQuestionsInput
 }
 
 input QuestionUpdateWithoutAskedByDataInput {
@@ -2261,6 +2316,17 @@ input QuestionUpdateWithoutAskedByDataInput {
   description: String
   approval: Boolean
   tags: TagUpdateManyInput
+  answers: AnswerUpdateManyWithoutAnsweredToInput
+  questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
+  bookMark: BookMarkUpdateManyWithoutQuestionsInput
+}
+
+input QuestionUpdateWithoutBookMarkDataInput {
+  title: String
+  description: String
+  approval: Boolean
+  tags: TagUpdateManyInput
+  askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
 }
@@ -2272,11 +2338,7 @@ input QuestionUpdateWithoutQuestionVoteDataInput {
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
-}
-
-input QuestionUpdateWithWhereUniqueNestedInput {
-  where: QuestionWhereUniqueInput!
-  data: QuestionUpdateDataInput!
+  bookMark: BookMarkUpdateManyWithoutQuestionsInput
 }
 
 input QuestionUpdateWithWhereUniqueWithoutAnswersInput {
@@ -2289,6 +2351,11 @@ input QuestionUpdateWithWhereUniqueWithoutAskedByInput {
   data: QuestionUpdateWithoutAskedByDataInput!
 }
 
+input QuestionUpdateWithWhereUniqueWithoutBookMarkInput {
+  where: QuestionWhereUniqueInput!
+  data: QuestionUpdateWithoutBookMarkDataInput!
+}
+
 input QuestionUpsertNestedInput {
   update: QuestionUpdateDataInput!
   create: QuestionCreateInput!
@@ -2297,12 +2364,6 @@ input QuestionUpsertNestedInput {
 input QuestionUpsertWithoutQuestionVoteInput {
   update: QuestionUpdateWithoutQuestionVoteDataInput!
   create: QuestionCreateWithoutQuestionVoteInput!
-}
-
-input QuestionUpsertWithWhereUniqueNestedInput {
-  where: QuestionWhereUniqueInput!
-  update: QuestionUpdateDataInput!
-  create: QuestionCreateInput!
 }
 
 input QuestionUpsertWithWhereUniqueWithoutAnswersInput {
@@ -2315,6 +2376,12 @@ input QuestionUpsertWithWhereUniqueWithoutAskedByInput {
   where: QuestionWhereUniqueInput!
   update: QuestionUpdateWithoutAskedByDataInput!
   create: QuestionCreateWithoutAskedByInput!
+}
+
+input QuestionUpsertWithWhereUniqueWithoutBookMarkInput {
+  where: QuestionWhereUniqueInput!
+  update: QuestionUpdateWithoutBookMarkDataInput!
+  create: QuestionCreateWithoutBookMarkInput!
 }
 
 type QuestionView implements Node {
@@ -2939,6 +3006,7 @@ input QuestionWhereInput {
   askedBy_some: UserWhereInput
   answers_some: AnswerWhereInput
   questionVote_some: QuestionVoteWhereInput
+  bookMark_some: BookMarkWhereInput
 }
 
 input QuestionWhereUniqueInput {

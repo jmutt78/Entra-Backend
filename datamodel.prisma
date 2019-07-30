@@ -39,6 +39,7 @@ askedBy: [User!]!
 approval: Boolean
 answers: [Answer!]! @relation(link: INLINE)
 questionVote: [QuestionVote]
+bookMark: [BookMark]
 }
 
 type Tag {

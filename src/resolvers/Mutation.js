@@ -257,13 +257,9 @@ const Mutations = {
       `{ id askedBy { id }}`
     );
 
-    const ownsQuestion = question.askedBy.id === ctx.request.userId;
+    const ownsQuestion = question.askedBy[0].id === ctx.request.userId;
 
-    const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ["ADMIN", "MODERATOR"].includes(permission)
-    );
-
-    if (!ownsQuestion && !hasPermissions) {
+    if (!ownsQuestion) {
       throw new Error("You don't have permission to do that!");
     }
 
@@ -531,6 +527,26 @@ const Mutations = {
     });
 
     return newBookMark;
+  },
+
+  async deleteBookMark(parent, args, ctx, info) {
+    const where = { id: args.id };
+
+    const bookmark = await ctx.db.query.bookMark(
+      {
+        where: { id: args.id }
+      },
+      `{ id markedBy { id } }`
+    );
+
+    const ownsBookMark = bookmark.markedBy.id === ctx.request.userId;
+
+    if (!ownsBookMark) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    // 3. Delete it!
+    return ctx.db.mutation.deleteBookMark({ where }, info);
   }
 };
 

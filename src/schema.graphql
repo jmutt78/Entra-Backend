@@ -10,6 +10,7 @@ type Mutation {
     description: String
     tags: [TagInput!]!
   ): Question!
+  deleteBookMark(id: ID!): BookMark
   deleteAnswer(id: ID!): Answer
   deleteAnswerVote(id: ID!): AnswerVote
   createBookMark(questionId: ID!): BookMark!
@@ -90,6 +91,7 @@ type Query {
     first: Int
     last: Int
   ): QuestionConnection!
+  bookMark(id: ID!): BookMark
   question(id: ID!): Question
   answer(id: ID!): Answer
   answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
@@ -193,6 +195,7 @@ type Question implements Node {
   upVotes: Int
   downVotes: Int
   questionVote: [QuestionVote]
+  bookMark: [BookMark]
 }
 
 type BookMark implements Node {
