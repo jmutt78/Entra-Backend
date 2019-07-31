@@ -4,6 +4,7 @@ const { randomBytes } = require("crypto");
 const { promisify } = require("util");
 const { transport, makeANiceEmail } = require("../mail");
 const { hasPermission } = require("../utils");
+const { differenceInCalendarDays } = require("date-fns");
 
 const Mutations = {
   //--------------------Signup Mutation--------------------//
@@ -440,6 +441,8 @@ const Mutations = {
         where: { id: args.id }
       },
       `{ id body
+        selected
+        createdAt
         answerVote { id }
         answeredBy { id }}`
     );
@@ -450,13 +453,22 @@ const Mutations = {
       throw new Error("You don't have permission to do that!");
     }
 
+    if (answer.selected) {
+      throw new Error("Can't delete selected answer");
+    }
+
+    const days = differenceInCalendarDays(new Date(), answer.createdAt);
+    if (days >= 2) {
+      throw new Error("Can't delete answers older than 2 days");
+    }
+
     // 3. Delete it!
 
-    return ctx.db.mutation.deleteAnswerVote(
+    await ctx.db.mutation.deleteManyAnswerVotes(
       {
-        where: { id: answer.answerVote.id }
+        where: { votedAnswer: { id: args.id } }
       },
-      info
+      null
     );
 
     return ctx.db.mutation.deleteAnswer({ where }, info);
