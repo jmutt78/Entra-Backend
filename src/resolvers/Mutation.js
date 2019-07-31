@@ -4,7 +4,7 @@ const { randomBytes } = require("crypto");
 const { promisify } = require("util");
 const { transport, makeANiceEmail } = require("../mail");
 const { hasPermission } = require("../utils");
-const { differenceInCalendarDays } = require("date-fns");
+const { differenceInDays } = require("date-fns");
 
 const Mutations = {
   //--------------------Signup Mutation--------------------//
@@ -447,6 +447,10 @@ const Mutations = {
         answeredBy { id }}`
     );
 
+    if (!answer) {
+      throw new Error("Answer already deleted");
+    }
+
     const ownsAnswer = answer.answeredBy.id === ctx.request.userId;
 
     if (!ownsAnswer) {
@@ -457,7 +461,7 @@ const Mutations = {
       throw new Error("Can't delete selected answer");
     }
 
-    const days = differenceInCalendarDays(new Date(), answer.createdAt);
+    const days = differenceInDays(new Date(), answer.createdAt);
     if (days >= 2) {
       throw new Error("Can't delete answers older than 2 days");
     }
@@ -472,6 +476,61 @@ const Mutations = {
     );
 
     return ctx.db.mutation.deleteAnswer({ where }, info);
+  },
+
+  async deleteQuestion(parent, args, ctx, info) {
+    const where = { id: args.id };
+
+    const question = await ctx.db.query.question(
+      {
+        where: { id: args.id }
+      },
+      `{ id
+        createdAt
+        askedBy { id }}`
+    );
+    if (!question) {
+      throw new Error("Question already deleted");
+    }
+
+    const ownsQuestion = question.askedBy[0].id === ctx.request.userId;
+
+    if (!ownsQuestion) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    const answersResult = await ctx.db.query.answersConnection(
+      {
+        where: {
+          answeredTo_some: { id: args.id }
+        }
+      },
+      "{ aggregate { count }}"
+    );
+    if (answersResult.aggregate.count > 0) {
+      throw new Error("Can't delete question with answers");
+    }
+
+    const days = differenceInDays(new Date(), question.createdAt);
+    if (days >= 1) {
+      throw new Error("Can't delete question older than 1 day");
+    }
+
+    // 3. Delete it!
+
+    await ctx.db.mutation.deleteManyQuestionVotes(
+      {
+        where: { votedQuestion: { id: args.id } }
+      },
+      null
+    );
+    await ctx.db.mutation.deleteManyQuestionViews(
+      {
+        where: { viewedQuestion: { id: args.id } }
+      },
+      null
+    );
+    return ctx.db.mutation.deleteQuestion({ where }, info);
   },
 
   //--------------------Permissions--------------------//
