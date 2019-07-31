@@ -13,6 +13,7 @@ type Mutation {
   deleteBookMark(id: ID!): BookMark
   deleteAnswer(id: ID!): Answer
   deleteAnswerVote(id: ID!): AnswerVote
+  deleteQuestion(id: ID!): Question
   createBookMark(questionId: ID!): BookMark!
   createAnswer(body: String!, questionId: ID!): Answer!
   createBlog(blocks: [BlocksWhereInput]): Blog!
