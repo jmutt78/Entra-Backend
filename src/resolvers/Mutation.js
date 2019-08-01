@@ -258,9 +258,13 @@ const Mutations = {
       `{ id askedBy { id }}`
     );
 
+    const hasPermissions = ctx.request.user.permissions.some(permission =>
+      ["ADMIN", "MODERATOR"].includes(permission)
+    );
+
     const ownsQuestion = question.askedBy[0].id === ctx.request.userId;
 
-    if (!ownsQuestion) {
+    if (!ownsQuestion && !hasPermissions) {
       throw new Error("You don't have permission to do that!");
     }
 
