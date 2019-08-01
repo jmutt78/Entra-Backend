@@ -265,7 +265,7 @@ const Mutations = {
     }
 
     // first take a copy of the updates
-    const updates = { ...args };
+    const updates = { ...args, tags: { connect: args.tags } };
     // remove the ID from the updates
     delete updates.id;
     // run the update method
