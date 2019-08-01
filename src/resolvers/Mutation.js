@@ -269,7 +269,7 @@ const Mutations = {
     }
 
     // first take a copy of the updates
-    const updates = { ...args };
+    const updates = { ...args, tags: { connect: args.tags } };
     // remove the ID from the updates
     delete updates.id;
     // run the update method
@@ -330,17 +330,24 @@ const Mutations = {
 
   createTag: async (parent, args, ctx, info) => {
     const name = args.name.trim().toLowerCase();
-    const exists = await ctx.db.query.tags({ name });
+    const exists = await ctx.db.query.tag({ where: { name } });
 
-    if (exists !== name && name.length >= 2) {
-      const newTag = await ctx.db.mutation.createTag({
+    if (exists) {
+      throw new Error("Tag already exists");
+    }
+
+    if (name.length < 2) {
+      throw new Error("Tag should have alteast 2 characters");
+    }
+
+    return ctx.db.mutation.createTag(
+      {
         data: {
           name: name
         }
-      });
-
-      return newTag;
-    }
+      },
+      info
+    );
   },
 
   createAnswer: async (parent, args, ctx, info) => {
