@@ -78,7 +78,7 @@ const Mutations = {
     });
 
     const mailRes = await transport.sendMail({
-      from: "wes@wesbos.com",
+      from: "jmcintosh@entra.io",
       to: user.email,
       subject: "Your Password Reset Token",
       html: makeANiceEmail(`Your Password Reset Token is here!
@@ -246,6 +246,61 @@ const Mutations = {
     return true;
   },
 
+  async deleteQuestion(parent, args, ctx, info) {
+    const where = { id: args.id };
+
+    const question = await ctx.db.query.question(
+      {
+        where: { id: args.id }
+      },
+      `{ id
+        createdAt
+        askedBy { id }}`
+    );
+    if (!question) {
+      throw new Error("Question already deleted");
+    }
+
+    const ownsQuestion = question.askedBy[0].id === ctx.request.userId;
+
+    if (!ownsQuestion) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    const answersResult = await ctx.db.query.answersConnection(
+      {
+        where: {
+          answeredTo_some: { id: args.id }
+        }
+      },
+      "{ aggregate { count }}"
+    );
+    if (answersResult.aggregate.count > 0) {
+      throw new Error("Can't delete question with answers");
+    }
+
+    const days = differenceInDays(new Date(), question.createdAt);
+    if (days >= 1) {
+      throw new Error("Can't delete question older than 1 day");
+    }
+
+    // 3. Delete it!
+
+    await ctx.db.mutation.deleteManyQuestionVotes(
+      {
+        where: { votedQuestion: { id: args.id } }
+      },
+      null
+    );
+    await ctx.db.mutation.deleteManyQuestionViews(
+      {
+        where: { viewedQuestion: { id: args.id } }
+      },
+      null
+    );
+    return ctx.db.mutation.deleteQuestion({ where }, info);
+  },
+
   async updateQuestion(parent, args, ctx, info) {
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
@@ -255,7 +310,9 @@ const Mutations = {
       {
         where: { id: args.id }
       },
-      `{ id askedBy { id }}`
+      `{ id
+        createdAt
+        askedBy { id }}`
     );
 
     const hasPermissions = ctx.request.user.permissions.some(permission =>
@@ -266,6 +323,23 @@ const Mutations = {
 
     if (!ownsQuestion && !hasPermissions) {
       throw new Error("You don't have permission to do that!");
+    }
+
+    const answersResult = await ctx.db.query.answersConnection(
+      {
+        where: {
+          answeredTo_some: { id: args.id }
+        }
+      },
+      "{ aggregate { count }}"
+    );
+    if (answersResult.aggregate.count > 0) {
+      throw new Error("Can't edit question with answers");
+    }
+
+    const days = differenceInDays(new Date(), question.createdAt);
+    if (days >= 1) {
+      throw new Error("Can't edit question older than 1 day");
     }
 
     // first take a copy of the updates
@@ -376,7 +450,11 @@ const Mutations = {
       {
         where: { id: args.id }
       },
-      `{ id body answeredBy { id }}`
+      `{ id body
+        selected
+        createdAt
+        answerVote { id }
+        answeredBy { id }}`
     );
 
     const ownsAnswer = answer.answeredBy.id === ctx.request.userId;
@@ -387,6 +465,15 @@ const Mutations = {
 
     if (!ownsAnswer && !hasPermissions) {
       throw new Error("You don't have permission to do that!");
+    }
+
+    if (answer.selected) {
+      throw new Error("Can't edit selected answer");
+    }
+
+    const days = differenceInDays(new Date(), answer.createdAt);
+    if (days >= 2) {
+      throw new Error("Can't edit answers older than 2 days");
     }
 
     // first take a copy of the updates
@@ -483,61 +570,6 @@ const Mutations = {
     );
 
     return ctx.db.mutation.deleteAnswer({ where }, info);
-  },
-
-  async deleteQuestion(parent, args, ctx, info) {
-    const where = { id: args.id };
-
-    const question = await ctx.db.query.question(
-      {
-        where: { id: args.id }
-      },
-      `{ id
-        createdAt
-        askedBy { id }}`
-    );
-    if (!question) {
-      throw new Error("Question already deleted");
-    }
-
-    const ownsQuestion = question.askedBy[0].id === ctx.request.userId;
-
-    if (!ownsQuestion) {
-      throw new Error("You don't have permission to do that!");
-    }
-
-    const answersResult = await ctx.db.query.answersConnection(
-      {
-        where: {
-          answeredTo_some: { id: args.id }
-        }
-      },
-      "{ aggregate { count }}"
-    );
-    if (answersResult.aggregate.count > 0) {
-      throw new Error("Can't delete question with answers");
-    }
-
-    const days = differenceInDays(new Date(), question.createdAt);
-    if (days >= 1) {
-      throw new Error("Can't delete question older than 1 day");
-    }
-
-    // 3. Delete it!
-
-    await ctx.db.mutation.deleteManyQuestionVotes(
-      {
-        where: { votedQuestion: { id: args.id } }
-      },
-      null
-    );
-    await ctx.db.mutation.deleteManyQuestionViews(
-      {
-        where: { viewedQuestion: { id: args.id } }
-      },
-      null
-    );
-    return ctx.db.mutation.deleteQuestion({ where }, info);
   },
 
   //--------------------Permissions--------------------//
