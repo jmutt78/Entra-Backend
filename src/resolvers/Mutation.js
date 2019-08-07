@@ -319,6 +319,23 @@ const Mutations = {
       ["ADMIN", "MODERATOR"].includes(permission)
     );
 
+    if (hasPermissions) {
+      const updates = { ...args, tags: { connect: args.tags } };
+      // remove the ID from the updates
+      delete updates.id;
+      // run the update method
+      return ctx.db.mutation.updateQuestion(
+        {
+          data: updates,
+
+          where: {
+            id: args.id
+          }
+        },
+        info
+      );
+    }
+
     const ownsQuestion = question.askedBy[0].id === ctx.request.userId;
 
     if (!ownsQuestion && !hasPermissions) {
@@ -462,6 +479,23 @@ const Mutations = {
     const hasPermissions = ctx.request.user.permissions.some(permission =>
       ["ADMIN", "MODERATOR"].includes(permission)
     );
+
+    if (hasPermissions) {
+      // first take a copy of the updates
+      const updates = { ...args };
+      // remove the ID from the updates
+      delete updates.id;
+      // run the update method
+      return ctx.db.mutation.updateAnswer(
+        {
+          data: updates,
+          where: {
+            id: args.id
+          }
+        },
+        info
+      );
+    }
 
     if (!ownsAnswer && !hasPermissions) {
       throw new Error("You don't have permission to do that!");
