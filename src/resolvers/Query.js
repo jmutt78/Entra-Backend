@@ -47,6 +47,15 @@ const Query = {
       );
     }
 
+    if (args.filter === "tags") {
+      return ctx.db.query.questions(
+        {
+          where: { tags_some: { id: args.where.tags_some.id } }
+        },
+        info
+      );
+    }
+
     if (args.filter === "approval") {
       return ctx.db.query.questions(
         {
@@ -113,6 +122,7 @@ const Query = {
         info
       );
     }
+
     return null;
   },
 
