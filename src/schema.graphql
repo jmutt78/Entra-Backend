@@ -25,6 +25,7 @@ type Mutation {
     display: String!
   ): User!
   signin(email: String!, password: String!): User!
+  facebookLogin(email: String!, name: String!): User!
   signout: SuccessMessage
   requestReset(email: String!): SuccessMessage
   resetPassword(
