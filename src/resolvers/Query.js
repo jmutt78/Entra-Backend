@@ -56,6 +56,17 @@ const Query = {
       );
     }
 
+    if (args.filter === "My BookMarked") {
+      return ctx.db.query.questions(
+        {
+          where: {
+            bookMark_some: { markedBy: { id: userId } }
+          }
+        },
+        info
+      );
+    }
+
     if (args.filter === "approval") {
       return ctx.db.query.questions(
         {
@@ -75,17 +86,6 @@ const Query = {
         {
           where: {
             askedBy_some: { id: userId }
-          }
-        },
-        info
-      );
-    }
-
-    if (args.filter === "My BookMarked") {
-      return ctx.db.query.questions(
-        {
-          where: {
-            bookMark_some: { markedBy: { id: userId } }
           }
         },
         info
@@ -127,6 +127,16 @@ const Query = {
   },
 
   tags: forwardTo("db"),
+  async tag(parent, args, ctx, info) {
+    const tag = await ctx.db.query.tag(
+      {
+        where: { id: args.id }
+      },
+      info
+    );
+
+    return tag;
+  },
   async questionsConnection(parent, args, ctx, info) {
     const { userId } = ctx.request;
 

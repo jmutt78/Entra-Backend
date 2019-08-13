@@ -63,6 +63,7 @@ type Query {
   user(id: ID!): User
   users: [User]!
   tags(first: Int, where: TagWhereInput): [Tag!]!
+  tag(id: ID!): Tag
   questions(
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
@@ -232,4 +233,9 @@ type Blocks implements Node {
   text: String
   type: String
   depth: Int
+}
+
+type Tag {
+  id: ID!
+  name: String!
 }
