@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { randomBytes } = require("crypto");
 const { promisify } = require("util");
-const { transport, makeANiceEmail } = require("../mail");
+const { transport, makeANiceEmail, welcomeEmail } = require("../mail");
 const { hasPermission } = require("../utils");
 const { differenceInDays } = require("date-fns");
 const crypto = require("crypto");
@@ -32,6 +32,15 @@ const Mutations = {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
+
+    const mailRes = await transport.sendMail({
+      from: "jmcintosh@entra.io",
+      to: user.email,
+      bcc: "fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com",
+      subject: "Welcome to Entra!",
+      html: welcomeEmail(`${args.name}`)
+    });
+
     // Finalllllly we return the user to the browser
     return user;
   },
@@ -67,6 +76,13 @@ const Mutations = {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
+
+    const mailRes = await transport.sendMail({
+      from: "jmcintosh@entra.io",
+      to: user.email,
+      subject: "Welcome to Entra!",
+      html: welcomeEmail(`${args.name}`)
+    });
     // Finalllllly we return the user to the browser
     return user;
   },
@@ -101,6 +117,13 @@ const Mutations = {
     ctx.response.cookie("token", token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
+    });
+
+    const mailRes = await transport.sendMail({
+      from: "jmcintosh@entra.io",
+      to: user.email,
+      subject: "Welcome to Entra!",
+      html: welcomeEmail(`${args.name}`)
     });
     // Finalllllly we return the user to the browser
     return user;
