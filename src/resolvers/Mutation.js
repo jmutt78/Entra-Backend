@@ -70,6 +70,41 @@ const Mutations = {
     // Finalllllly we return the user to the browser
     return user;
   },
+  async googleLogin(parent, args, ctx, info) {
+    // lowercase their email
+    args.email = args.email.toLowerCase();
+    let user = await ctx.db.query.user({ where: { email: args.email } });
+
+    // Randomly generated password as it is requried
+    const password = await bcrypt.hash(
+      crypto.randomBytes(64).toString("hex"),
+      10
+    );
+    if (!user) {
+      // create the user in the database
+      user = await ctx.db.mutation.createUser(
+        {
+          data: {
+            name: args.name,
+            display: args.name,
+            email: args.email,
+            password,
+            permissions: { set: ["USER"] }
+          }
+        },
+        info
+      );
+    }
+    // create the JWT token for them
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+    // We set the jwt as a cookie on the response
+    ctx.response.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
+    });
+    // Finalllllly we return the user to the browser
+    return user;
+  },
   //--------------------Signin Mutation--------------------//
   async signin(parent, { email, password }, ctx, info) {
     // 1. check if there is a user with that email
