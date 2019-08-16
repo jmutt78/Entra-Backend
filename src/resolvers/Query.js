@@ -104,8 +104,17 @@ const Query = {
 
   async answers(parent, args, ctx, info) {
     const { userId } = ctx.request;
-    if (!userId) {
-      throw new Error("you must be signed in!");
+
+    if (args.filter === "selected") {
+      return ctx.db.query.answers(
+        {
+          where: {
+            selected: true,
+            answeredBy: { id: args.where.answeredBy.id }
+          }
+        },
+        info
+      );
     }
 
     if (args.filter === "approval") {
@@ -113,18 +122,6 @@ const Query = {
         {
           where: {
             approval: null
-          }
-        },
-        info
-      );
-    }
-
-    if (args.filter === "selected") {
-      return ctx.db.query.answers(
-        {
-          where: {
-            answeredBy: { id: args.where.answeredBy.id },
-            selected: true
           }
         },
         info
