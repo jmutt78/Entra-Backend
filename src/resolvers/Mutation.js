@@ -2,7 +2,12 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { randomBytes } = require("crypto");
 const { promisify } = require("util");
-const { transport, makeANiceEmail, welcomeEmail } = require("../mail");
+const {
+  transport,
+  makeANiceEmail,
+  welcomeEmail,
+  resetEmail
+} = require("../mail");
 const { hasPermission } = require("../utils");
 const { differenceInDays } = require("date-fns");
 const crypto = require("crypto");
@@ -119,12 +124,6 @@ const Mutations = {
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
 
-    const mailRes = await transport.sendMail({
-      from: "jmcintosh@entra.io",
-      to: user.email,
-      subject: "Welcome to Entra!",
-      html: welcomeEmail(`${args.name}`)
-    });
     // Finalllllly we return the user to the browser
     return user;
   },
@@ -175,11 +174,14 @@ const Mutations = {
       from: "jmcintosh@entra.io",
       to: user.email,
       subject: "Your Password Reset Token",
-      html: makeANiceEmail(`Your Password Reset Token is here!
+      html: resetEmail(
+        `${user.name}`,
+        `You recently requested to reset your password for your Entra account. Use thelink below to reset it. This password reset is only valid for the next 24 hours.
           \n\n
           <a href="${
             process.env.FRONTEND_URL
-          }/reset?resetToken=${resetToken}">Click Here to Reset</a>`)
+          }/reset?resetToken=${resetToken}">Click Here to Reset</a>`
+      )
     });
 
     // 4. Return the message
