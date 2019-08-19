@@ -82,12 +82,12 @@ const Mutations = {
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
 
-    const mailRes = await transport.sendMail({
-      from: "jmcintosh@entra.io",
-      to: user.email,
-      subject: "Welcome to Entra!",
-      html: welcomeEmail(`${args.name}`)
-    });
+    // const mailRes = await transport.sendMail({
+    //   from: "jmcintosh@entra.io",
+    //   to: user.email,
+    //   subject: "Welcome to Entra!",
+    //   html: welcomeEmail(`${args.name}`)
+    // });
     // Finalllllly we return the user to the browser
     return user;
   },
