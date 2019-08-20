@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { randomBytes } = require("crypto");
 const { promisify } = require("util");
+const _ = require("lodash");
 const {
   transport,
   makeANiceEmail,
@@ -401,22 +402,30 @@ const Mutations = {
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
     }
-
     const question = await ctx.db.query.question(
       {
         where: { id: args.id }
       },
       `{ id
         createdAt
+        tags { name }
         askedBy { id }}`
     );
 
+    const deletedTags = _.differenceBy(
+      question.tags,
+      args.tags,
+      tag => tag.name
+    );
     const hasPermissions = ctx.request.user.permissions.some(permission =>
       ["ADMIN", "MODERATOR"].includes(permission)
     );
 
     if (hasPermissions) {
-      const updates = { ...args, tags: { connect: args.tags } };
+      const updates = {
+        ...args,
+        tags: { disconnect: deletedTags, connect: args.tags }
+      };
       // remove the ID from the updates
       delete updates.id;
       // run the update method
@@ -456,7 +465,10 @@ const Mutations = {
     }
 
     // first take a copy of the updates
-    const updates = { ...args, tags: { connect: args.tags } };
+    const updates = {
+      ...args,
+      tags: { disconnect: deletedTags, connect: args.tags }
+    };
     // remove the ID from the updates
     delete updates.id;
     // run the update method
