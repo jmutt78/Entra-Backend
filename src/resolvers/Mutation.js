@@ -260,6 +260,7 @@ const Mutations = {
               id: ctx.request.userId
             }
           },
+
           ...args,
           tags: { connect: args.tags }
         }
@@ -557,7 +558,7 @@ const Mutations = {
     const newAnswer = await ctx.db.mutation.createAnswer({
       data: {
         body: args.body,
-
+        approval: args.approval,
         answeredBy: { connect: { id: ctx.request.userId } },
         answeredTo: { connect: { id: args.questionId } }
       }

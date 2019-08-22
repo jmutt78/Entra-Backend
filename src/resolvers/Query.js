@@ -94,7 +94,7 @@ const Query = {
       return ctx.db.query.questions(
         {
           where: {
-            approval: null
+            approval: false
           }
         },
         info
@@ -121,7 +121,7 @@ const Query = {
       return ctx.db.query.answers(
         {
           where: {
-            approval: null
+            approval: null || false
           }
         },
         info

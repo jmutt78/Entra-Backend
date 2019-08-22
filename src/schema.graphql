@@ -9,13 +9,14 @@ type Mutation {
     title: String!
     description: String
     tags: [TagInput!]!
+    approval: Boolean
   ): Question!
   deleteBookMark(id: ID!): BookMark
   deleteAnswer(id: ID!): Answer
   deleteAnswerVote(id: ID!): AnswerVote
   deleteQuestion(id: ID!): Question
   createBookMark(questionId: ID!): BookMark!
-  createAnswer(body: String!, questionId: ID!): Answer!
+  createAnswer(body: String!, questionId: ID!, approval: Boolean): Answer!
   createBlog(blocks: [BlocksWhereInput]): Blog!
   createTag(name: String!): Tag!
   signup(
