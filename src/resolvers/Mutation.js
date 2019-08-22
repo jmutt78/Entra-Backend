@@ -412,11 +412,9 @@ const Mutations = {
         askedBy { id }}`
     );
 
-    const deletedTags = _.differenceBy(
-      question.tags,
-      args.tags,
-      tag => tag.name
-    );
+    const deletedTags = args.tags
+      ? _.differenceBy(question.tags, args.tags, tag => tag.name)
+      : [];
     const hasPermissions = ctx.request.user.permissions.some(permission =>
       ["ADMIN", "MODERATOR"].includes(permission)
     );
