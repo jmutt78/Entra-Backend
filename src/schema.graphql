@@ -96,6 +96,16 @@ type Query {
     first: Int
     last: Int
   ): QuestionConnection!
+  answersConnection(
+    where: AnswerWhereInput
+    orderBy: AnswerOrderByInput
+    filter: String
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AnswerConnection!
   bookMark(id: ID!): BookMark
   question(id: ID!): Question
   answer(id: ID!): Answer
