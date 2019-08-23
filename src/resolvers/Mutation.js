@@ -18,6 +18,48 @@ const Mutations = {
   async signup(parent, args, ctx, info) {
     // lowercase their email
     args.email = args.email.toLowerCase();
+
+    const sizedFields = {
+      password: {
+        min: 8,
+        max: 72
+      }
+    };
+
+    const tooSmallField = Object.keys(sizedFields).find(
+      field =>
+        "min" in sizedFields[field] &&
+        args.password.trim().length < sizedFields[field].min
+    );
+    const tooLargeField = Object.keys(sizedFields).find(
+      field =>
+        "max" in sizedFields[field] &&
+        args.password.trim().length > sizedFields[field].max
+    );
+
+    if (tooSmallField) {
+      throw new Error(
+        `Must be at least ${sizedFields[tooSmallField].min} characters long`
+      );
+    }
+    if (tooLargeField) {
+      throw new Error(
+        `Must be at most ${sizedFields[tooLargeField].max} characters long`
+      );
+    }
+
+    if (args.password.search(/[a-z]/) == -1) {
+      throw new Error("Your password needs at least one lower case letter. ");
+    }
+
+    if (args.password.search(/[A-Z]/) == -1) {
+      throw new Error("Your password needs at least one upper case letter. ");
+    }
+
+    if (args.password.search(/[0-9]/) == -1) {
+      throw new Error("password needs a number.");
+    }
+
     // hash their password
     const password = await bcrypt.hash(args.password, 10);
     // create the user in the database
