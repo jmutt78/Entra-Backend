@@ -185,6 +185,18 @@ const Query = {
       info
     );
   },
+  async answersConnection(parent, args, ctx, info) {
+    const { userId } = ctx.request;
+
+    return ctx.db.query.answersConnection(
+      {
+        where: {
+          answeredBy: { id: userId }
+        }
+      },
+      info
+    );
+  },
 
   async answer(parent, args, ctx, info) {
     const answer = await ctx.db.query.answer(
