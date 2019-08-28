@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const { randomBytes } = require("crypto");
 const { promisify } = require("util");
 const _ = require("lodash");
+const fetch = require("node-fetch");
+const qs = require("qs");
 const {
   transport,
   makeANiceEmail,
@@ -177,6 +179,75 @@ const Mutations = {
     // Finalllllly we return the user to the browser
     return user;
   },
+  async linkedinLogin(parent, args, ctx, info) {
+    const queryString = qs.stringify({
+      grant_type: "authorization_code",
+      code: args.code,
+      redirect_uri: process.env.LINKEDIN_REDIRECT_URI,
+      client_id: process.env.LINKEDIN_CLIENT_ID,
+      client_secret: process.env.LINKEDIN_CLIENT_SECRET
+    });
+    let emailResult, profileResult;
+    const accessTokenResult = await fetch(
+      `https://www.linkedin.com/oauth/v2/accessToken?${queryString}`,
+      {
+        method: "POST"
+      }
+    ).then(response => response.json());
+    if (accessTokenResult && accessTokenResult.access_token) {
+      emailResult = await fetch(
+        "https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))",
+        {
+          headers: {
+            Authorization: `Bearer ${accessTokenResult.access_token}`
+          }
+        }
+      ).then(response => response.json());
+      profileResult = await fetch("https://api.linkedin.com/v2/me", {
+        headers: {
+          Authorization: `Bearer ${accessTokenResult.access_token}`
+        }
+      }).then(response => response.json());
+    }
+    const email = _.get(emailResult, "elements.[0].handle~.emailAddress", "");
+    const firstName = _.get(profileResult, "localizedFirstName");
+    const lastName = _.get(profileResult, "localizedLastName");
+    const name = `${firstName} ${lastName}`;
+    let user = await ctx.db.query.user({
+      where: { email: email.toLowerCase() }
+    });
+
+    // Randomly generated password as it is requried
+    const password = await bcrypt.hash(
+      crypto.randomBytes(64).toString("hex"),
+      10
+    );
+    if (!user) {
+      // create the user in the database
+      user = await ctx.db.mutation.createUser(
+        {
+          data: {
+            name,
+            display: firstName,
+            email,
+            password,
+            permissions: { set: ["USER"] }
+          }
+        },
+        info
+      );
+    }
+    // create the JWT token for them
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+    // We set the jwt as a cookie on the response
+    ctx.response.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
+    });
+
+    // Finalllllly we return the user to the browser
+    return user;
+  },
   //--------------------Signin Mutation--------------------//
   async signin(parent, { email, password }, ctx, info) {
     // 1. check if there is a user with that email
@@ -228,9 +299,7 @@ const Mutations = {
         `${user.name}`,
         `You recently requested to reset your password for your Entra account. Use thelink below to reset it. This password reset is only valid for the next 24 hours.
           \n\n
-          <a href="${
-            process.env.FRONTEND_URL
-          }/reset?resetToken=${resetToken}">Click Here to Reset</a>`
+          <a href="${process.env.FRONTEND_URL}/reset?resetToken=${resetToken}">Click Here to Reset</a>`
       )
     });
 
