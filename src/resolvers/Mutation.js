@@ -104,6 +104,13 @@ const Mutations = {
     );
     if (!user) {
       // create the user in the database
+      const mailRes = await transport.sendMail({
+        from: "jmcintosh@entra.io",
+        to: user.email,
+        bcc: "fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com",
+        subject: "Welcome to Entra!",
+        html: welcomeEmail(`${args.name}`)
+      });
       user = await ctx.db.mutation.createUser(
         {
           data: {
@@ -125,13 +132,6 @@ const Mutations = {
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
 
-    // const mailRes = await transport.sendMail({
-    //   from: "jmcintosh@entra.io",
-    //   to: user.email,
-    //   subject: "Welcome to Entra!",
-    //   html: welcomeEmail(`${args.name}`)
-    // });
-    // Finalllllly we return the user to the browser
     return user;
   },
   async googleLogin(parent, args, ctx, info) {
@@ -145,6 +145,13 @@ const Mutations = {
       10
     );
     if (!user) {
+      const mailRes = await transport.sendMail({
+        from: "jmcintosh@entra.io",
+        to: user.email,
+        bcc: "fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com",
+        subject: "Welcome to Entra!",
+        html: welcomeEmail(`${args.name}`)
+      });
       // create the user in the database
       user = await ctx.db.mutation.createUser(
         {
