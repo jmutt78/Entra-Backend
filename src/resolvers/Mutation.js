@@ -223,6 +223,13 @@ const Mutations = {
       10
     );
     if (!user) {
+      const mailRes = await transport.sendMail({
+        from: "jmcintosh@entra.io",
+        to: email,
+        bcc: "fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com",
+        subject: "Welcome to Entra!",
+        html: welcomeEmail(`${name}`)
+      });
       // create the user in the database
       user = await ctx.db.mutation.createUser(
         {
@@ -299,7 +306,9 @@ const Mutations = {
         `${user.name}`,
         `You recently requested to reset your password for your Entra account. Use thelink below to reset it. This password reset is only valid for the next 24 hours.
           \n\n
-          <a href="${process.env.FRONTEND_URL}/reset?resetToken=${resetToken}">Click Here to Reset</a>`
+          <a href="${
+            process.env.FRONTEND_URL
+          }/reset?resetToken=${resetToken}">Click Here to Reset</a>`
       )
     });
 
