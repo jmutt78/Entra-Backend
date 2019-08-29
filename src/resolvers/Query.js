@@ -164,7 +164,33 @@ const Query = {
   },
   async questionsConnection(parent, args, ctx, info) {
     const { userId } = ctx.request;
+    if (args.filter === "My BookMarked") {
+      if (!userId) {
+        throw new Error("you must be signed in!");
+      }
+      return ctx.db.query.questionsConnection(
+        {
+          where: {
+            bookMark_some: { markedBy: { id: userId } }
+          }
+        },
+        info
+      );
+    }
 
+    if (args.filter === "my") {
+      if (!userId) {
+        throw new Error("you must be signed in!");
+      }
+      return ctx.db.query.questionsConnection(
+        {
+          where: {
+            askedBy_some: { id: userId }
+          }
+        },
+        info
+      );
+    }
     if (args.filter === "all") {
       return ctx.db.query.questionsConnection(
         {
@@ -176,26 +202,84 @@ const Query = {
       );
     }
 
-    return ctx.db.query.questionsConnection(
-      {
-        where: {
-          askedBy_some: { id: userId }
-        }
-      },
-      info
-    );
+    if (args.filter === "tags") {
+      return ctx.db.query.questionsConnection(
+        {
+          where: { tags_some: { id: args.where.tags_some.id } }
+        },
+        info
+      );
+    }
+
+    if (args.filter === "user") {
+      return ctx.db.query.questionsConnection(
+        {
+          where: { askedBy_some: { id: args.where.askedBy_some.id } }
+        },
+        info
+      );
+    }
+
+    if (args.filter === "approval") {
+      return ctx.db.query.questionsConnection(
+        {
+          where: {
+            approval: true
+          }
+        },
+        info
+      );
+    }
+    return null
   },
   async answersConnection(parent, args, ctx, info) {
     const { userId } = ctx.request;
+    if (args.filter === "selected") {
+      return ctx.db.query.answersConnection(
+        {
+          where: {
+            selected: true,
+            answeredBy: { id: args.where.answeredBy.id }
+          }
+        },
+        info
+      );
+    }
 
-    return ctx.db.query.answersConnection(
-      {
-        where: {
-          answeredBy: { id: userId }
-        }
-      },
-      info
-    );
+    if (args.filter === "approval") {
+      return ctx.db.query.answersConnection(
+        {
+          where: {
+            approval: true
+          }
+        },
+        info
+      );
+    }
+
+    if (args.filter === "user") {
+      return ctx.db.query.answersConnection(
+        {
+          where: { answeredBy: { id: args.where.answeredBy.id } }
+        },
+        info
+      );
+    }
+
+    if (args.filter === "my") {
+      return ctx.db.query.answersConnection(
+        {
+          where: {
+            answeredBy: { id: userId }
+          }
+        },
+        info
+      );
+    }
+
+    return null;
+
+
   },
 
   async answer(parent, args, ctx, info) {
