@@ -1,19 +1,19 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { randomBytes } = require("crypto");
-const { promisify } = require("util");
-const _ = require("lodash");
-const fetch = require("node-fetch");
-const qs = require("qs");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { randomBytes } = require('crypto');
+const { promisify } = require('util');
+const _ = require('lodash');
+const fetch = require('node-fetch');
+const qs = require('qs');
 const {
   transport,
   makeANiceEmail,
   welcomeEmail,
   resetEmail
-} = require("../mail");
-const { hasPermission } = require("../utils");
-const { differenceInDays } = require("date-fns");
-const crypto = require("crypto");
+} = require('../mail');
+const { hasPermission } = require('../utils');
+const { differenceInDays } = require('date-fns');
+const crypto = require('crypto');
 
 const Mutations = {
   //--------------------Signup Mutation--------------------//
@@ -30,12 +30,12 @@ const Mutations = {
 
     const tooSmallField = Object.keys(sizedFields).find(
       field =>
-        "min" in sizedFields[field] &&
+        'min' in sizedFields[field] &&
         args.password.trim().length < sizedFields[field].min
     );
     const tooLargeField = Object.keys(sizedFields).find(
       field =>
-        "max" in sizedFields[field] &&
+        'max' in sizedFields[field] &&
         args.password.trim().length > sizedFields[field].max
     );
 
@@ -51,15 +51,15 @@ const Mutations = {
     }
 
     if (args.password.search(/[a-z]/) == -1) {
-      throw new Error("Your password needs at least one lower case letter. ");
+      throw new Error('Your password needs at least one lower case letter. ');
     }
 
     if (args.password.search(/[A-Z]/) == -1) {
-      throw new Error("Your password needs at least one upper case letter. ");
+      throw new Error('Your password needs at least one upper case letter. ');
     }
 
     if (args.password.search(/[0-9]/) == -1) {
-      throw new Error("password needs a number.");
+      throw new Error('password needs a number.');
     }
 
     // hash their password
@@ -70,7 +70,7 @@ const Mutations = {
         data: {
           ...args,
           password,
-          permissions: { set: ["USER"] }
+          permissions: { set: ['USER'] }
         }
       },
       info
@@ -78,16 +78,16 @@ const Mutations = {
     // create the JWT token for them
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // We set the jwt as a cookie on the response
-    ctx.response.cookie("token", token, {
+    ctx.response.cookie('token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
 
     const mailRes = await transport.sendMail({
-      from: "jmcintosh@entra.io",
+      from: 'jmcintosh@entra.io',
       to: user.email,
-      bcc: "fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com",
-      subject: "Welcome to Entra!",
+      bcc: 'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+      subject: 'Welcome to Entra!',
       html: welcomeEmail(`${args.name}`)
     });
 
@@ -101,18 +101,12 @@ const Mutations = {
 
     // Randomly generated password as it is requried
     const password = await bcrypt.hash(
-      crypto.randomBytes(64).toString("hex"),
+      crypto.randomBytes(64).toString('hex'),
       10
     );
     if (!user) {
       // create the user in the database
-      const mailRes = await transport.sendMail({
-        from: "jmcintosh@entra.io",
-        to: user.email,
-        bcc: "fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com",
-        subject: "Welcome to Entra!",
-        html: welcomeEmail(`${args.name}`)
-      });
+
       user = await ctx.db.mutation.createUser(
         {
           data: {
@@ -120,16 +114,23 @@ const Mutations = {
             display: args.name,
             email: args.email,
             password,
-            permissions: { set: ["USER"] }
+            permissions: { set: ['USER'] }
           }
         },
         info
       );
+      const mailRes = await transport.sendMail({
+        from: 'jmcintosh@entra.io',
+        to: user.email,
+        bcc: 'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+        subject: 'Welcome to Entra!',
+        html: welcomeEmail(`${args.name}`)
+      });
     }
     // create the JWT token for them
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // We set the jwt as a cookie on the response
-    ctx.response.cookie("token", token, {
+    ctx.response.cookie('token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
@@ -143,17 +144,10 @@ const Mutations = {
 
     // Randomly generated password as it is requried
     const password = await bcrypt.hash(
-      crypto.randomBytes(64).toString("hex"),
+      crypto.randomBytes(64).toString('hex'),
       10
     );
     if (!user) {
-      const mailRes = await transport.sendMail({
-        from: "jmcintosh@entra.io",
-        to: user.email,
-        bcc: "fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com",
-        subject: "Welcome to Entra!",
-        html: welcomeEmail(`${args.name}`)
-      });
       // create the user in the database
       user = await ctx.db.mutation.createUser(
         {
@@ -162,16 +156,23 @@ const Mutations = {
             display: args.name,
             email: args.email,
             password,
-            permissions: { set: ["USER"] }
+            permissions: { set: ['USER'] }
           }
         },
         info
       );
+      const mailRes = await transport.sendMail({
+        from: 'jmcintosh@entra.io',
+        to: user.email,
+        bcc: 'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+        subject: 'Welcome to Entra!',
+        html: welcomeEmail(`${args.name}`)
+      });
     }
     // create the JWT token for them
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // We set the jwt as a cookie on the response
-    ctx.response.cookie("token", token, {
+    ctx.response.cookie('token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
@@ -181,7 +182,7 @@ const Mutations = {
   },
   async linkedinLogin(parent, args, ctx, info) {
     const queryString = qs.stringify({
-      grant_type: "authorization_code",
+      grant_type: 'authorization_code',
       code: args.code,
       redirect_uri: process.env.LINKEDIN_REDIRECT_URI,
       client_id: process.env.LINKEDIN_CLIENT_ID,
@@ -191,27 +192,27 @@ const Mutations = {
     const accessTokenResult = await fetch(
       `https://www.linkedin.com/oauth/v2/accessToken?${queryString}`,
       {
-        method: "POST"
+        method: 'POST'
       }
     ).then(response => response.json());
     if (accessTokenResult && accessTokenResult.access_token) {
       emailResult = await fetch(
-        "https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))",
+        'https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))',
         {
           headers: {
             Authorization: `Bearer ${accessTokenResult.access_token}`
           }
         }
       ).then(response => response.json());
-      profileResult = await fetch("https://api.linkedin.com/v2/me", {
+      profileResult = await fetch('https://api.linkedin.com/v2/me', {
         headers: {
           Authorization: `Bearer ${accessTokenResult.access_token}`
         }
       }).then(response => response.json());
     }
-    const email = _.get(emailResult, "elements.[0].handle~.emailAddress", "");
-    const firstName = _.get(profileResult, "localizedFirstName");
-    const lastName = _.get(profileResult, "localizedLastName");
+    const email = _.get(emailResult, 'elements.[0].handle~.emailAddress', '');
+    const firstName = _.get(profileResult, 'localizedFirstName');
+    const lastName = _.get(profileResult, 'localizedLastName');
     const name = `${firstName} ${lastName}`;
     let user = await ctx.db.query.user({
       where: { email: email.toLowerCase() }
@@ -219,15 +220,15 @@ const Mutations = {
 
     // Randomly generated password as it is requried
     const password = await bcrypt.hash(
-      crypto.randomBytes(64).toString("hex"),
+      crypto.randomBytes(64).toString('hex'),
       10
     );
     if (!user) {
       const mailRes = await transport.sendMail({
-        from: "jmcintosh@entra.io",
+        from: 'jmcintosh@entra.io',
         to: email,
-        bcc: "fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com",
-        subject: "Welcome to Entra!",
+        bcc: 'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+        subject: 'Welcome to Entra!',
         html: welcomeEmail(`${name}`)
       });
       // create the user in the database
@@ -238,7 +239,7 @@ const Mutations = {
             display: firstName,
             email,
             password,
-            permissions: { set: ["USER"] }
+            permissions: { set: ['USER'] }
           }
         },
         info
@@ -247,7 +248,7 @@ const Mutations = {
     // create the JWT token for them
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // We set the jwt as a cookie on the response
-    ctx.response.cookie("token", token, {
+    ctx.response.cookie('token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
@@ -265,12 +266,12 @@ const Mutations = {
     // 2. Check if their password is correct
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
-      throw new Error("Invalid Password!");
+      throw new Error('Invalid Password!');
     }
     // 3. generate the JWT Token
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // 4. Set the cookie with the token
-    ctx.response.cookie("token", token, {
+    ctx.response.cookie('token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365
     });
@@ -279,8 +280,8 @@ const Mutations = {
   },
   //--------------------Signout Mutation--------------------//
   signout(parent, args, ctx, info) {
-    ctx.response.clearCookie("token");
-    return { message: "Goodbye!" };
+    ctx.response.clearCookie('token');
+    return { message: 'Goodbye!' };
   },
   //--------------------Reset Password--------------------//
   async requestReset(parent, args, ctx, info) {
@@ -291,7 +292,7 @@ const Mutations = {
     }
     // 2. Set a reset token and expiry on that user
     const randomBytesPromiseified = promisify(randomBytes);
-    const resetToken = (await randomBytesPromiseified(20)).toString("hex");
+    const resetToken = (await randomBytesPromiseified(20)).toString('hex');
     const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
     const res = await ctx.db.mutation.updateUser({
       where: { email: args.email },
@@ -299,21 +300,19 @@ const Mutations = {
     });
 
     const mailRes = await transport.sendMail({
-      from: "jmcintosh@entra.io",
+      from: 'jmcintosh@entra.io',
       to: user.email,
-      subject: "Your Password Reset Token",
+      subject: 'Your Password Reset Token',
       html: resetEmail(
         `${user.name}`,
         `You recently requested to reset your password for your Entra account. Use thelink below to reset it. This password reset is only valid for the next 24 hours.
           \n\n
-          <a href="${
-            process.env.FRONTEND_URL
-          }/reset?resetToken=${resetToken}">Click Here to Reset</a>`
+          <a href="${process.env.FRONTEND_URL}/reset?resetToken=${resetToken}">Click Here to Reset</a>`
       )
     });
 
     // 4. Return the message
-    return { message: "Thanks!" };
+    return { message: 'Thanks!' };
     // 3. Email them that reset token
   },
   //--------------------Reset Password input Mutation--------------------//
@@ -331,7 +330,7 @@ const Mutations = {
       }
     });
     if (!user) {
-      throw new Error("This token is either invalid or expired!");
+      throw new Error('This token is either invalid or expired!');
     }
 
     const sizedFields = {
@@ -343,12 +342,12 @@ const Mutations = {
 
     const tooSmallField = Object.keys(sizedFields).find(
       field =>
-        "min" in sizedFields[field] &&
+        'min' in sizedFields[field] &&
         args.password.trim().length < sizedFields[field].min
     );
     const tooLargeField = Object.keys(sizedFields).find(
       field =>
-        "max" in sizedFields[field] &&
+        'max' in sizedFields[field] &&
         args.password.trim().length > sizedFields[field].max
     );
 
@@ -364,15 +363,15 @@ const Mutations = {
     }
 
     if (args.password.search(/[a-z]/) == -1) {
-      throw new Error("Your password needs at least one lower case letter. ");
+      throw new Error('Your password needs at least one lower case letter. ');
     }
 
     if (args.password.search(/[A-Z]/) == -1) {
-      throw new Error("Your password needs at least one upper case letter. ");
+      throw new Error('Your password needs at least one upper case letter. ');
     }
 
     if (args.password.search(/[0-9]/) == -1) {
-      throw new Error("password needs a number.");
+      throw new Error('password needs a number.');
     }
     // 4. Hash their new password
     const password = await bcrypt.hash(args.password, 10);
@@ -388,7 +387,7 @@ const Mutations = {
     // 6. Generate JWT
     const token = jwt.sign({ userId: updatedUser.id }, process.env.APP_SECRET);
     // 7. Set the JWT cookie
-    ctx.response.cookie("token", token, {
+    ctx.response.cookie('token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365
     });
@@ -416,7 +415,7 @@ const Mutations = {
 
   async createQuestion(parent, args, ctx, info) {
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
 
     const question = await ctx.db.mutation.createQuestion(
@@ -441,7 +440,7 @@ const Mutations = {
 
   async createQuestionView(parent, args, ctx, info) {
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
     const views = await ctx.db.query.questionViews({
       where: {
@@ -473,7 +472,7 @@ const Mutations = {
 
   async createQuestionVote(parent, args, ctx, info) {
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
     const votes = await ctx.db.query.questionVotes({
       where: {
@@ -524,7 +523,7 @@ const Mutations = {
         askedBy { id }}`
     );
     if (!question) {
-      throw new Error("Question already deleted");
+      throw new Error('Question already deleted');
     }
 
     const ownsQuestion = question.askedBy[0].id === ctx.request.userId;
@@ -539,7 +538,7 @@ const Mutations = {
           answeredTo_some: { id: args.id }
         }
       },
-      "{ aggregate { count }}"
+      '{ aggregate { count }}'
     );
     if (answersResult.aggregate.count > 0) {
       throw new Error("Can't delete question with answers");
@@ -569,7 +568,7 @@ const Mutations = {
 
   async updateQuestion(parent, args, ctx, info) {
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
     const question = await ctx.db.query.question(
       {
@@ -585,7 +584,7 @@ const Mutations = {
       ? _.differenceBy(question.tags, args.tags, tag => tag.name)
       : [];
     const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ["ADMIN", "MODERATOR"].includes(permission)
+      ['ADMIN', 'MODERATOR'].includes(permission)
     );
 
     if (hasPermissions) {
@@ -620,7 +619,7 @@ const Mutations = {
           answeredTo_some: { id: args.id }
         }
       },
-      "{ aggregate { count }}"
+      '{ aggregate { count }}'
     );
     if (answersResult.aggregate.count > 0) {
       throw new Error("Can't edit question with answers");
@@ -655,7 +654,7 @@ const Mutations = {
   async createAnswerVote(parent, args, ctx, info) {
     let answerVote;
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
     const votes = await ctx.db.query.answerVotes({
       where: {
@@ -699,11 +698,11 @@ const Mutations = {
     const exists = await ctx.db.query.tag({ where: { name } });
 
     if (exists) {
-      throw new Error("Tag already exists");
+      throw new Error('Tag already exists');
     }
 
     if (name.length < 2) {
-      throw new Error("Tag should have alteast 2 characters");
+      throw new Error('Tag should have alteast 2 characters');
     }
 
     return ctx.db.mutation.createTag(
@@ -718,7 +717,7 @@ const Mutations = {
 
   createAnswer: async (parent, args, ctx, info) => {
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
 
     const newAnswer = await ctx.db.mutation.createAnswer({
@@ -735,7 +734,7 @@ const Mutations = {
 
   async updateAnswer(parent, args, ctx, info) {
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
 
     const answer = await ctx.db.query.answer(
@@ -752,7 +751,7 @@ const Mutations = {
     const ownsAnswer = answer.answeredBy.id === ctx.request.userId;
 
     const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ["ADMIN", "MODERATOR"].includes(permission)
+      ['ADMIN', 'MODERATOR'].includes(permission)
     );
 
     if (hasPermissions) {
@@ -802,7 +801,7 @@ const Mutations = {
   },
   async selectAnswer(parent, args, ctx, info) {
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
     const answer = await ctx.db.query.answer(
       {
@@ -813,7 +812,7 @@ const Mutations = {
       `{ id body answeredBy { id } answeredTo { id askedBy { id }}}`
     );
     if (answer.answeredTo[0].askedBy[0].id !== ctx.request.userId) {
-      throw new Error("Answer can be approved only by question author");
+      throw new Error('Answer can be approved only by question author');
     }
     // Clear previously selected answers
     await ctx.db.mutation.updateManyAnswers({
@@ -851,7 +850,7 @@ const Mutations = {
     );
 
     if (!answer) {
-      throw new Error("Answer already deleted");
+      throw new Error('Answer already deleted');
     }
 
     const ownsAnswer = answer.answeredBy.id === ctx.request.userId;
@@ -884,7 +883,7 @@ const Mutations = {
   //--------------------Permissions--------------------//
   async updatePermissions(parent, args, ctx, info) {
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
 
     const currentUser = await ctx.db.query.user(
@@ -896,7 +895,7 @@ const Mutations = {
       info
     );
 
-    hasPermission(currentUser, ["ADMIN", "PERMISSIONUPDATE"]);
+    hasPermission(currentUser, ['ADMIN', 'PERMISSIONUPDATE']);
 
     return ctx.db.mutation.updateUser(
       {
@@ -917,7 +916,7 @@ const Mutations = {
 
   async createBlog(parent, args, ctx, info) {
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
 
     const newBlog = await ctx.db.mutation.createBlog(
@@ -939,7 +938,7 @@ const Mutations = {
 
   createBookMark: async (parent, args, ctx, info) => {
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
 
     const newBookMark = await ctx.db.mutation.createBookMark({
