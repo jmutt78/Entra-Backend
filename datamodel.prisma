@@ -19,9 +19,17 @@ type User {
   location: String
   about: String
   industry: String
+  fBLink: String
+  instaLink: String
+  linkinLink: String
+  twitterLink: String
+  websiteLink: String
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  accountConfirmed: Boolean
+  confirmToken: String
+  confirmExpiry: Float
   permissions: [Permission]
   myQuestions: [Question!]! @relation(link: INLINE)
   myAnswers: [Answer!]! @relation(link: INLINE)
