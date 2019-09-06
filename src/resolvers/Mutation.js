@@ -15,6 +15,10 @@ const { hasPermission } = require('../utils');
 const { differenceInDays } = require('date-fns');
 const crypto = require('crypto');
 
+const linkedin_redirect_uri = process.env.LINKEDIN_REDIRECT_URI;
+const linkedin_client_id = process.env.LINKEDIN_CLIENT_ID;
+const linkedin_client_secret = process.env.LINKEDIN_CLIENT_SECRET;
+
 const Mutations = {
   //--------------------Signup Mutation--------------------//
   async signup(parent, args, ctx, info) {
@@ -184,9 +188,9 @@ const Mutations = {
     const queryString = qs.stringify({
       grant_type: 'authorization_code',
       code: args.code,
-      redirect_uri: process.env.LINKEDIN_REDIRECT_URI,
-      client_id: process.env.LINKEDIN_CLIENT_ID,
-      client_secret: process.env.LINKEDIN_CLIENT_SECRET
+      redirect_uri: linkedin_redirect_uri,
+      client_id: linkedin_client_id,
+      client_secret: linkedin_client_secret
     });
     let emailResult, profileResult;
     const accessTokenResult = await fetch(
