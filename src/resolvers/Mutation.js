@@ -16,7 +16,7 @@ const { differenceInDays } = require('date-fns');
 const crypto = require('crypto');
 
 const env = process.env.NODE_ENV || 'development';
-const domain = env === 'production' ? 'entra.io' : undefined;
+const domain = env === 'production' ? 'api.entra.io' : undefined;
 
 const Mutations = {
   //--------------------Signup Mutation--------------------//
