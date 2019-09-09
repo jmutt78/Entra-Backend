@@ -289,8 +289,6 @@ const Mutations = {
   //--------------------Signout Mutation--------------------//
   signout(parent, args, ctx, info) {
     ctx.response.clearCookie('token');
-    console.log("Env: ", env);
-    console.log("Domain: ", domain);
     return { message: 'Goodbye!' };
   },
   //--------------------Reset Password--------------------//
