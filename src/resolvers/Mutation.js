@@ -18,6 +18,8 @@ const crypto = require('crypto');
 const linkedin_redirect_uri = process.env.LINKEDIN_REDIRECT_URI;
 const linkedin_client_id = process.env.LINKEDIN_CLIENT_ID;
 const linkedin_client_secret = process.env.LINKEDIN_CLIENT_SECRET;
+const env = process.env.NODE_ENV || 'development';
+const domain = env === 'production' ? 'entra.io' : undefined;
 
 const Mutations = {
   //--------------------Signup Mutation--------------------//
@@ -83,6 +85,7 @@ const Mutations = {
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // We set the jwt as a cookie on the response
     ctx.response.cookie('token', token, {
+      domain,
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
@@ -135,6 +138,7 @@ const Mutations = {
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // We set the jwt as a cookie on the response
     ctx.response.cookie('token', token, {
+      domain,
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
@@ -177,6 +181,7 @@ const Mutations = {
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // We set the jwt as a cookie on the response
     ctx.response.cookie('token', token, {
+      domain,
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
@@ -253,6 +258,7 @@ const Mutations = {
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // We set the jwt as a cookie on the response
     ctx.response.cookie('token', token, {
+      domain,
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
@@ -276,6 +282,7 @@ const Mutations = {
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // 4. Set the cookie with the token
     ctx.response.cookie('token', token, {
+      domain,
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365
     });
@@ -392,6 +399,7 @@ const Mutations = {
     const token = jwt.sign({ userId: updatedUser.id }, process.env.APP_SECRET);
     // 7. Set the JWT cookie
     ctx.response.cookie('token', token, {
+      domain,
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365
     });
