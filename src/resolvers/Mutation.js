@@ -11,7 +11,7 @@ const {
   welcomeEmail,
   resetEmail
 } = require('../mail');
-const { hasPermission } = require('../utils');
+const { hasPermission, containsProfanity } = require('../utils');
 const { differenceInDays } = require('date-fns');
 const crypto = require('crypto');
 
@@ -707,6 +707,12 @@ const Mutations = {
 
     if (name.length < 2) {
       throw new Error('Tag should have alteast 2 characters');
+    }
+
+    if (containsProfanity(name)) {
+      throw new Error(
+        `Sorry, the word ${name} goes against our code of conduct.`
+      );
     }
 
     return ctx.db.mutation.createTag(
