@@ -557,10 +557,10 @@ const Mutations = {
       throw new Error("Can't delete question with answers");
     }
 
-    const days = differenceInDays(new Date(), question.createdAt);
-    if (days >= 1) {
-      throw new Error("Can't delete question older than 1 day");
-    }
+    // const days = differenceInDays(new Date(), question.createdAt);
+    // if (days >= 1) {
+    //   throw new Error("Can't delete question older than 1 day");
+    // }
 
     // 3. Delete it!
 
