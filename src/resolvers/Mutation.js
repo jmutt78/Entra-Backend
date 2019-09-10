@@ -537,11 +537,7 @@ const Mutations = {
 
     const ownsQuestion = question.askedBy[0].id === ctx.request.userId;
 
-    const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ['ADMIN', 'MODERATOR'].includes(permission)
-    );
-
-    if (!ownsQuestion && !hasPermissions) {
+    if (!ownsQuestion) {
       throw new Error("You don't have permission to do that!");
     }
 
@@ -557,10 +553,10 @@ const Mutations = {
       throw new Error("Can't delete question with answers");
     }
 
-    // const days = differenceInDays(new Date(), question.createdAt);
-    // if (days >= 1) {
-    //   throw new Error("Can't delete question older than 1 day");
-    // }
+    const days = differenceInDays(new Date(), question.createdAt);
+    if (days >= 1) {
+      throw new Error("Can't delete question older than 1 day");
+    }
 
     // 3. Delete it!
 
