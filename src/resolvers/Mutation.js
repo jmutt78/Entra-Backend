@@ -279,7 +279,7 @@ const Mutations = {
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // 4. Set the cookie with the token
     ctx.response.cookie('token', token, {
-      domain,
+      domain: domain,
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365
     });
@@ -288,7 +288,7 @@ const Mutations = {
   },
   //--------------------Signout Mutation--------------------//
   signout(parent, args, ctx, info) {
-    ctx.response.clearCookie('token', { domain });
+    ctx.response.clearCookie('token', { domain: domain });
     return { message: 'Goodbye!' };
   },
   //--------------------Reset Password--------------------//
