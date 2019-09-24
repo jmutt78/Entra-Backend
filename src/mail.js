@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 
 const transport = nodemailer.createTransport({
   host: process.env.MAIL_HOST,
@@ -9,7 +9,7 @@ const transport = nodemailer.createTransport({
   }
 });
 
-const makeANiceEmail = text => `
+const makeANiceEmail = (name, text) => `
   <div className="email" style="
     border: 1px solid black;
     padding: 20px;
@@ -17,9 +17,23 @@ const makeANiceEmail = text => `
     line-height: 2;
     font-size: 20px;
   ">
-    <h2>Hello There!</h2>
+    <h2>New Question</h2>
     <p>${text}</p>
-    <p>😘, Justin McIntosh</p>
+    <p>by ${name}</p>
+  </div>
+`;
+
+const answeredQuestion = (name, text) => `
+  <div className="email" style="
+    border: 1px solid black;
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 2;
+    font-size: 20px;
+  ">
+    <h2>New Answer</h2>
+    <p>${text}</p>
+    <p>by ${name}</p>
   </div>
 `;
 
@@ -554,3 +568,4 @@ exports.transport = transport;
 exports.makeANiceEmail = makeANiceEmail;
 exports.welcomeEmail = welcomeEmail;
 exports.resetEmail = resetEmail;
+exports.answeredQuestion = answeredQuestion;

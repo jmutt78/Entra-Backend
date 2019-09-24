@@ -8,6 +8,7 @@ const qs = require('qs');
 const {
   transport,
   makeANiceEmail,
+  answeredQuestion,
   welcomeEmail,
   resetEmail
 } = require('../mail');
@@ -90,7 +91,10 @@ const Mutations = {
     const mailRes = await transport.sendMail({
       from: 'jmcintosh@entra.io',
       to: user.email,
-      bcc: 'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+      bcc: [
+        'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+        'jmcintosh@entra.io'
+      ],
       subject: 'Welcome to Entra!',
       html: welcomeEmail(`${args.name}`)
     });
@@ -126,7 +130,10 @@ const Mutations = {
       const mailRes = await transport.sendMail({
         from: 'jmcintosh@entra.io',
         to: user.email,
-        bcc: 'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+        bcc: [
+          'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+          'jmcintosh@entra.io'
+        ],
         subject: 'Welcome to Entra!',
         html: welcomeEmail(`${args.name}`)
       });
@@ -169,7 +176,10 @@ const Mutations = {
       const mailRes = await transport.sendMail({
         from: 'jmcintosh@entra.io',
         to: user.email,
-        bcc: 'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+        bcc: [
+          'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+          'jmcintosh@entra.io'
+        ],
         subject: 'Welcome to Entra!',
         html: welcomeEmail(`${args.name}`)
       });
@@ -233,7 +243,10 @@ const Mutations = {
       const mailRes = await transport.sendMail({
         from: 'jmcintosh@entra.io',
         to: email,
-        bcc: 'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+        bcc: [
+          'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
+          'jmcintosh@entra.io'
+        ],
         subject: 'Welcome to Entra!',
         html: welcomeEmail(`${name}`)
       });
@@ -443,6 +456,13 @@ const Mutations = {
       },
       info
     );
+
+    const mailRes = await transport.sendMail({
+      from: 'jmcintosh@entra.io',
+      to: 'jmcintosh@entra.io',
+      subject: 'New Question!',
+      html: makeANiceEmail(`${ctx.request.userId}`, `${args.title}`)
+    });
 
     return question;
   },
@@ -743,7 +763,12 @@ const Mutations = {
         answeredTo: { connect: { id: args.questionId } }
       }
     });
-
+    const mailRes = await transport.sendMail({
+      from: 'jmcintosh@entra.io',
+      to: 'jmcintosh@entra.io',
+      subject: 'New Answer!',
+      html: answeredQuestion(`${ctx.request.userId}`, `${args.body}`)
+    });
     return newAnswer;
   },
 
