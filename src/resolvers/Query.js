@@ -37,12 +37,29 @@ const Query = {
 
   async questions(parent, args, ctx, info) {
     const { userId } = ctx.request;
+    let orderBy;
+
+    switch (args.sortBy) {
+      case 'default':
+        orderBy = 'voteDiff_DESC';
+        break;
+      case 'top':
+        orderBy = 'upvotes_DESC';
+        break;
+      case 'new':
+        orderBy = 'createdAt_DESC';
+        break;
+      default:
+        orderBy = 'createdAt_DESC';
+    }
+
     if (args.filter === 'My BookMarked') {
       return ctx.db.query.questions(
         {
           where: {
             bookMark_some: { markedBy: { id: userId } }
-          }
+          },
+          orderBy
         },
         info
       );
@@ -56,7 +73,8 @@ const Query = {
         {
           where: {
             askedBy_some: { id: userId }
-          }
+          },
+          orderBy
         },
         info
       );
@@ -66,7 +84,8 @@ const Query = {
         {
           where: {
             approval: true
-          }
+          },
+          orderBy
         },
         info
       );
@@ -78,7 +97,8 @@ const Query = {
           where: {
             tags_some: { id: args.where.tags_some.id },
             approval: null || true
-          }
+          },
+          orderBy
         },
         info
       );
@@ -90,7 +110,8 @@ const Query = {
           where: {
             askedBy_some: { id: args.where.askedBy_some.id },
             approval: null || true
-          }
+          },
+          orderBy
         },
         info
       );
@@ -101,7 +122,8 @@ const Query = {
         {
           where: {
             approval: null || false
-          }
+          },
+          orderBy
         },
         info
       );
