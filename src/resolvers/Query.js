@@ -39,7 +39,37 @@ const Query = {
     const { userId } = ctx.request;
     let orderBy;
 
-    switch (args.sortBy) {
+    const { sortBy, searchScope, searchTerm } = args;
+
+    const searchWhere = ((searchTerm, searchScope) => {
+      if (!searchTerm || !searchScope) return {};
+      switch (searchScope) {
+        case 'all':
+          return {
+            OR: {
+              title_contains: searchTerm,
+              description_contains: searchTerm
+              // TODO
+              // tags: [Tag!]! @relation(link: INLINE)
+              // askedBy: [User!]!
+            }
+          };
+        case 'titles':
+          return {
+            title_contains: searchTerm,
+          }
+        case 'authors':
+          // TODO
+          return {};
+        case 'tags':
+          // TODO
+          return {};
+        default:
+          return {};
+      }
+    })(searchTerm, searchScope);
+
+    switch (sortBy) {
       case 'default':
         orderBy = 'voteDiff_DESC';
         break;
@@ -57,7 +87,8 @@ const Query = {
       return ctx.db.query.questions(
         {
           where: {
-            bookMark_some: { markedBy: { id: userId } }
+            bookMark_some: { markedBy: { id: userId } },
+            ...searchWhere
           },
           orderBy
         },
@@ -72,7 +103,8 @@ const Query = {
       return ctx.db.query.questions(
         {
           where: {
-            askedBy_some: { id: userId }
+            askedBy_some: { id: userId },
+            ...searchWhere
           },
           orderBy
         },
@@ -83,7 +115,8 @@ const Query = {
       return ctx.db.query.questions(
         {
           where: {
-            approval: true
+            approval: true,
+            ...searchWhere
           },
           orderBy
         },
@@ -96,7 +129,8 @@ const Query = {
         {
           where: {
             tags_some: { id: args.where.tags_some.id },
-            approval: null || true
+            approval: null || true,
+            ...searchWhere
           },
           orderBy
         },
@@ -109,7 +143,8 @@ const Query = {
         {
           where: {
             askedBy_some: { id: args.where.askedBy_some.id },
-            approval: null || true
+            approval: null || true,
+            ...searchWhere
           },
           orderBy
         },
@@ -121,7 +156,8 @@ const Query = {
       return ctx.db.query.questions(
         {
           where: {
-            approval: null || false
+            approval: null || false,
+            ...searchWhere
           },
           orderBy
         },
