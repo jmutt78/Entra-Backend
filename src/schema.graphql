@@ -77,6 +77,8 @@ type Query {
     first: Int
     last: Int
     sortBy: String
+    searchScope: String
+    searchTerm: String
   ): [Question]!
   answers(
     where: AnswerWhereInput

@@ -46,23 +46,20 @@ const Query = {
       switch (searchScope) {
         case 'all':
           return {
-            OR: {
-              title_contains: searchTerm,
-              description_contains: searchTerm
-              // TODO
-              // tags: [Tag!]! @relation(link: INLINE)
-              // askedBy: [User!]!
-            }
+            // TODO use logical OR (not in generated input for some reason)
+            description_contains: searchTerm
           };
         case 'titles':
           return {
-            title_contains: searchTerm,
-          }
+            title_contains: searchTerm
+          };
         case 'authors':
           // TODO
+          // askedBy: [User!]!
           return {};
         case 'tags':
           // TODO
+          // tags: [Tag!]! @relation(link: INLINE)
           return {};
         default:
           return {};
