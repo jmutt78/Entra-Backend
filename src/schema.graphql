@@ -99,6 +99,8 @@ type Query {
     before: String
     first: Int
     last: Int
+    searchScope: String
+    searchTerm: String
   ): QuestionConnection!
   answersConnection(
     where: AnswerWhereInput
