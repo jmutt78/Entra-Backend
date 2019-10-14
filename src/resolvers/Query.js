@@ -1,6 +1,31 @@
 const { forwardTo } = require('prisma-binding');
 const { hasPermission } = require('../utils');
 
+const searchWhere = (searchTerm, searchScope) => {
+  if (!searchTerm || !searchScope) return {};
+  switch (searchScope) {
+    case 'all':
+      return {
+        // TODO use logical OR (not in generated input for some reason)
+        description_contains: searchTerm
+      };
+    case 'titles':
+      return {
+        title_contains: searchTerm
+      };
+    case 'authors':
+      // TODO
+      // askedBy: [User!]!
+      return {};
+    case 'tags':
+      // TODO
+      // tags: [Tag!]! @relation(link: INLINE)
+      return {};
+    default:
+      return {};
+  }
+};
+
 const Query = {
   me(parent, args, ctx, info) {
     // check if there is a current user ID
@@ -37,12 +62,35 @@ const Query = {
 
   async questions(parent, args, ctx, info) {
     const { userId } = ctx.request;
+    const { sortBy, searchScope, searchTerm } = args;
+    let orderBy;
+
+    switch (sortBy) {
+      case 'default':
+        // TODO TEMP - just testing
+        orderBy = 'title_ASC';
+        break;
+      // case 'top':
+      //   orderBy = 'upvotes_DESC';
+      //   break;
+      case 'new':
+        orderBy = 'createdAt_DESC';
+        break;
+      case 'old':
+        orderBy = 'createdAt_ASC';
+        break;
+      default:
+        orderBy = 'createdAt_DESC';
+    }
+
     if (args.filter === 'My BookMarked') {
       return ctx.db.query.questions(
         {
           where: {
-            bookMark_some: { markedBy: { id: userId } }
-          }
+            bookMark_some: { markedBy: { id: userId } },
+            ...searchWhere(searchTerm, searchScope)
+          },
+          orderBy
         },
         info
       );
@@ -55,8 +103,10 @@ const Query = {
       return ctx.db.query.questions(
         {
           where: {
-            askedBy_some: { id: userId }
-          }
+            askedBy_some: { id: userId },
+            ...searchWhere(searchTerm, searchScope)
+          },
+          orderBy
         },
         info
       );
@@ -65,8 +115,10 @@ const Query = {
       return ctx.db.query.questions(
         {
           where: {
-            approval: true
-          }
+            approval: true,
+            ...searchWhere(searchTerm, searchScope)
+          },
+          orderBy
         },
         info
       );
@@ -77,8 +129,10 @@ const Query = {
         {
           where: {
             tags_some: { id: args.where.tags_some.id },
-            approval: null || true
-          }
+            approval: null || true,
+            ...searchWhere(searchTerm, searchScope)
+          },
+          orderBy
         },
         info
       );
@@ -89,8 +143,10 @@ const Query = {
         {
           where: {
             askedBy_some: { id: args.where.askedBy_some.id },
-            approval: null || true
-          }
+            approval: null || true,
+            ...searchWhere(searchTerm, searchScope)
+          },
+          orderBy
         },
         info
       );
@@ -100,8 +156,10 @@ const Query = {
       return ctx.db.query.questions(
         {
           where: {
-            approval: null || false
-          }
+            approval: null || false,
+            ...searchWhere(searchTerm, searchScope)
+          },
+          orderBy
         },
         info
       );
@@ -174,6 +232,8 @@ const Query = {
   },
   async questionsConnection(parent, args, ctx, info) {
     const { userId } = ctx.request;
+    const { searchScope, searchTerm } = args;
+
     if (args.filter === 'My BookMarked') {
       if (!userId) {
         throw new Error('you must be signed in!');
@@ -181,7 +241,8 @@ const Query = {
       return ctx.db.query.questionsConnection(
         {
           where: {
-            bookMark_some: { markedBy: { id: userId } }
+            bookMark_some: { markedBy: { id: userId } },
+            ...searchWhere(searchTerm, searchScope)
           }
         },
         info
@@ -195,7 +256,8 @@ const Query = {
       return ctx.db.query.questionsConnection(
         {
           where: {
-            askedBy_some: { id: userId }
+            askedBy_some: { id: userId },
+            ...searchWhere(searchTerm, searchScope)
           }
         },
         info
@@ -205,7 +267,8 @@ const Query = {
       return ctx.db.query.questionsConnection(
         {
           where: {
-            approval: true
+            approval: true,
+            ...searchWhere(searchTerm, searchScope)
           }
         },
         info
@@ -215,7 +278,8 @@ const Query = {
     if (args.filter === 'tags') {
       return ctx.db.query.questionsConnection(
         {
-          where: { tags_some: { id: args.where.tags_some.id } }
+          where: { tags_some: { id: args.where.tags_some.id } },
+          ...searchWhere(searchTerm, searchScope)
         },
         info
       );
@@ -224,7 +288,8 @@ const Query = {
     if (args.filter === 'user') {
       return ctx.db.query.questionsConnection(
         {
-          where: { askedBy_some: { id: args.where.askedBy_some.id } }
+          where: { askedBy_some: { id: args.where.askedBy_some.id } },
+          ...searchWhere(searchTerm, searchScope)
         },
         info
       );
@@ -234,7 +299,8 @@ const Query = {
       return ctx.db.query.questionsConnection(
         {
           where: {
-            approval: null || false
+            approval: null || false,
+            ...searchWhere(searchTerm, searchScope)
           }
         },
         info
