@@ -65,7 +65,7 @@ type Query {
   me: User
   user(id: ID!): User
   users: [User]!
-  tags(first: Int, where: TagWhereInput): [Tag!]!
+  tags(orderBy: TagOrderByInput, first: Int, where: TagWhereInput): [Tag!]!
   tag(id: ID!): Tag
   questions(
     where: QuestionWhereInput
