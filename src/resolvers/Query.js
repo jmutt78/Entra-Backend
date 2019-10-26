@@ -84,6 +84,18 @@ const Query = {
       );
     }
 
+    if (args.filter === 'tagslist') {
+      return ctx.db.query.questions(
+        {
+          where: {
+            tags_some: { id_in: args.where.tags_some.id_in },
+            approval: null || true
+          }
+        },
+        info
+      );
+    }
+
     if (args.filter === 'user') {
       return ctx.db.query.questions(
         {
