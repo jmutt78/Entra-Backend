@@ -49,6 +49,7 @@ type Mutation {
     image: String
     location: String
     about: String
+    tags: [TagInput!]
     industry: String
   ): User!
   updateQuestion(

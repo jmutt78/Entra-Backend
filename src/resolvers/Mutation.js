@@ -417,11 +417,28 @@ const Mutations = {
     return updatedUser;
   },
   //--------------------Update User Profile--------------------//
-  updateUser(parent, args, ctx, info) {
+  async updateUser(parent, args, ctx, info) {
+    const user = await ctx.db.query.user(
+      {
+        where: { id: args.id }
+      },
+      `{ id
+        tags { name }
+    }`
+    );
+
+    const deletedTags = args.tags
+      ? _.differenceBy(user.tags, args.tags, tag => tag.name)
+      : [];
+
     // first take a copy of the updates
-    const updates = { ...args };
+    const updates = {
+      ...args,
+      tags: { disconnect: deletedTags, connect: args.tags }
+    };
     // remove the ID from the updates
     delete updates.id;
+
     // run the update method
     return ctx.db.mutation.updateUser(
       {

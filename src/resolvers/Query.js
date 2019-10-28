@@ -14,6 +14,7 @@ const Query = {
       info
     );
   },
+
   user(parent, args, ctx, info) {
     return ctx.db.query.user(
       {
@@ -22,6 +23,7 @@ const Query = {
       info
     );
   },
+
   async users(parent, args, ctx, info) {
     const { userId } = ctx.request;
     if (!userId) {
