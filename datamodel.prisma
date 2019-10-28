@@ -26,7 +26,7 @@ type User {
   myQuestions: [Question!]! @relation(link: INLINE)
   myAnswers: [Answer!]! @relation(link: INLINE)
   myBookMarks: [BookMark!]
-  myFeed: [ID]
+  tags: [Tag!]! @relation(link: INLINE)
 }
 
 type Question {

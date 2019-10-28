@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sat Oct 26 2019 07:24:10 GMT-0700 (PDT)
+# timestamp: Sun Oct 27 2019 07:05:50 GMT-0700 (PDT)
 
 type AggregateAnswer {
   count: Int!
@@ -2409,8 +2409,8 @@ type Mutation {
   createAnswerVote(data: AnswerVoteCreateInput!): AnswerVote!
   createBlog(data: BlogCreateInput!): Blog!
   createQuestion(data: QuestionCreateInput!): Question!
-  createTag(data: TagCreateInput!): Tag!
   createBlocks(data: BlocksCreateInput!): Blocks!
+  createTag(data: TagCreateInput!): Tag!
   createUser(data: UserCreateInput!): User!
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateBookMark(
@@ -2434,8 +2434,8 @@ type Mutation {
     data: QuestionUpdateInput!
     where: QuestionWhereUniqueInput!
   ): Question
-  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
   updateBlocks(data: BlocksUpdateInput!, where: BlocksWhereUniqueInput!): Blocks
+  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteBookMark(where: BookMarkWhereUniqueInput!): BookMark
@@ -2444,8 +2444,8 @@ type Mutation {
   deleteAnswerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
   deleteBlog(where: BlogWhereUniqueInput!): Blog
   deleteQuestion(where: QuestionWhereUniqueInput!): Question
-  deleteTag(where: TagWhereUniqueInput!): Tag
   deleteBlocks(where: BlocksWhereUniqueInput!): Blocks
+  deleteTag(where: TagWhereUniqueInput!): Tag
   deleteUser(where: UserWhereUniqueInput!): User
   upsertAnswer(
     where: AnswerWhereUniqueInput!
@@ -2482,16 +2482,16 @@ type Mutation {
     create: QuestionCreateInput!
     update: QuestionUpdateInput!
   ): Question!
-  upsertTag(
-    where: TagWhereUniqueInput!
-    create: TagCreateInput!
-    update: TagUpdateInput!
-  ): Tag!
   upsertBlocks(
     where: BlocksWhereUniqueInput!
     create: BlocksCreateInput!
     update: BlocksUpdateInput!
   ): Blocks!
+  upsertTag(
+    where: TagWhereUniqueInput!
+    create: TagCreateInput!
+    update: TagUpdateInput!
+  ): Tag!
   upsertUser(
     where: UserWhereUniqueInput!
     create: UserCreateInput!
@@ -2513,13 +2513,13 @@ type Mutation {
     data: QuestionUpdateManyMutationInput!
     where: QuestionWhereInput
   ): BatchPayload!
-  updateManyTags(
-    data: TagUpdateManyMutationInput!
-    where: TagWhereInput
-  ): BatchPayload!
   updateManyBlockses(
     data: BlocksUpdateManyMutationInput!
     where: BlocksWhereInput
+  ): BatchPayload!
+  updateManyTags(
+    data: TagUpdateManyMutationInput!
+    where: TagWhereInput
   ): BatchPayload!
   updateManyUsers(
     data: UserUpdateManyMutationInput!
@@ -2532,8 +2532,8 @@ type Mutation {
   deleteManyAnswerVotes(where: AnswerVoteWhereInput): BatchPayload!
   deleteManyBlogs(where: BlogWhereInput): BatchPayload!
   deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
-  deleteManyTags(where: TagWhereInput): BatchPayload!
   deleteManyBlockses(where: BlocksWhereInput): BatchPayload!
+  deleteManyTags(where: TagWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
@@ -2649,15 +2649,6 @@ type Query {
     first: Int
     last: Int
   ): [Question]!
-  tags(
-    where: TagWhereInput
-    orderBy: TagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Tag]!
   blockses(
     where: BlocksWhereInput
     orderBy: BlocksOrderByInput
@@ -2667,6 +2658,15 @@ type Query {
     first: Int
     last: Int
   ): [Blocks]!
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag]!
   users(
     where: UserWhereInput
     orderBy: UserOrderByInput
@@ -2683,8 +2683,8 @@ type Query {
   answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
   blog(where: BlogWhereUniqueInput!): Blog
   question(where: QuestionWhereUniqueInput!): Question
-  tag(where: TagWhereUniqueInput!): Tag
   blocks(where: BlocksWhereUniqueInput!): Blocks
+  tag(where: TagWhereUniqueInput!): Tag
   user(where: UserWhereUniqueInput!): User
   answersConnection(
     where: AnswerWhereInput
@@ -2749,15 +2749,6 @@ type Query {
     first: Int
     last: Int
   ): QuestionConnection!
-  tagsConnection(
-    where: TagWhereInput
-    orderBy: TagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): TagConnection!
   blocksesConnection(
     where: BlocksWhereInput
     orderBy: BlocksOrderByInput
@@ -2767,6 +2758,15 @@ type Query {
     first: Int
     last: Int
   ): BlocksConnection!
+  tagsConnection(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagConnection!
   usersConnection(
     where: UserWhereInput
     orderBy: UserOrderByInput
@@ -4399,8 +4399,8 @@ type Subscription {
   ): AnswerVoteSubscriptionPayload
   blog(where: BlogSubscriptionWhereInput): BlogSubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
-  tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   blocks(where: BlocksSubscriptionWhereInput): BlocksSubscriptionPayload
+  tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -4876,7 +4876,15 @@ type User implements Node {
     first: Int
     last: Int
   ): [BookMark!]
-  myFeed: [ID!]!
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag!]
 }
 
 """
@@ -4908,19 +4916,15 @@ input UserCreateInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
-  myFeed: UserCreatemyFeedInput
   myQuestions: QuestionCreateManyWithoutAskedByInput
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
+  tags: TagCreateManyInput
 }
 
 input UserCreateManyWithoutMyQuestionsInput {
   create: [UserCreateWithoutMyQuestionsInput!]
   connect: [UserWhereUniqueInput!]
-}
-
-input UserCreatemyFeedInput {
-  set: [ID!]
 }
 
 input UserCreateOneInput {
@@ -4955,9 +4959,9 @@ input UserCreateWithoutMyAnswersInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
-  myFeed: UserCreatemyFeedInput
   myQuestions: QuestionCreateManyWithoutAskedByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
+  tags: TagCreateManyInput
 }
 
 input UserCreateWithoutMyBookMarksInput {
@@ -4973,9 +4977,9 @@ input UserCreateWithoutMyBookMarksInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
-  myFeed: UserCreatemyFeedInput
   myQuestions: QuestionCreateManyWithoutAskedByInput
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
+  tags: TagCreateManyInput
 }
 
 input UserCreateWithoutMyQuestionsInput {
@@ -4991,9 +4995,9 @@ input UserCreateWithoutMyQuestionsInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
-  myFeed: UserCreatemyFeedInput
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
+  tags: TagCreateManyInput
 }
 
 """
@@ -5055,7 +5059,6 @@ type UserPreviousValues {
   resetToken: String
   resetTokenExpiry: Float
   permissions: [Permission!]!
-  myFeed: [ID!]!
 }
 
 input UserScalarWhereInput {
@@ -5890,10 +5893,10 @@ input UserUpdateDataInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
-  myFeed: UserUpdatemyFeedInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
+  tags: TagUpdateManyInput
 }
 
 input UserUpdateInput {
@@ -5908,10 +5911,10 @@ input UserUpdateInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
-  myFeed: UserUpdatemyFeedInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
+  tags: TagUpdateManyInput
 }
 
 input UserUpdateManyDataInput {
@@ -5926,7 +5929,6 @@ input UserUpdateManyDataInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
-  myFeed: UserUpdatemyFeedInput
 }
 
 input UserUpdateManyMutationInput {
@@ -5941,7 +5943,6 @@ input UserUpdateManyMutationInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
-  myFeed: UserUpdatemyFeedInput
 }
 
 input UserUpdateManyWithoutMyQuestionsInput {
@@ -5959,10 +5960,6 @@ input UserUpdateManyWithoutMyQuestionsInput {
 input UserUpdateManyWithWhereNestedInput {
   where: UserScalarWhereInput!
   data: UserUpdateManyDataInput!
-}
-
-input UserUpdatemyFeedInput {
-  set: [ID!]
 }
 
 input UserUpdateOneRequiredInput {
@@ -6002,9 +5999,9 @@ input UserUpdateWithoutMyAnswersDataInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
-  myFeed: UserUpdatemyFeedInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
+  tags: TagUpdateManyInput
 }
 
 input UserUpdateWithoutMyBookMarksDataInput {
@@ -6019,9 +6016,9 @@ input UserUpdateWithoutMyBookMarksDataInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
-  myFeed: UserUpdatemyFeedInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
+  tags: TagUpdateManyInput
 }
 
 input UserUpdateWithoutMyQuestionsDataInput {
@@ -6036,9 +6033,9 @@ input UserUpdateWithoutMyQuestionsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
-  myFeed: UserUpdatemyFeedInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
+  tags: TagUpdateManyInput
 }
 
 input UserUpdateWithWhereUniqueWithoutMyQuestionsInput {
@@ -6843,6 +6840,7 @@ input UserWhereInput {
   myQuestions_some: QuestionWhereInput
   myAnswers_some: AnswerWhereInput
   myBookMarks_some: BookMarkWhereInput
+  tags_some: TagWhereInput
 }
 
 input UserWhereUniqueInput {

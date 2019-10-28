@@ -143,6 +143,15 @@ type User {
   myAnswers: [Answer!]!
   badges: Badges
   myBookMarks: [BookMark!]
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag!]
 }
 
 type Badges {
