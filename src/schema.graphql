@@ -111,6 +111,7 @@ type Query {
   question(id: ID!): Question
   answer(id: ID!): Answer
   answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
+  searchQuestions(where: QuestionWhereInput): [Question]!
 }
 
 input TagInput {
