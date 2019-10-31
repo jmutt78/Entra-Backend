@@ -39,6 +39,7 @@ const Query = {
 
   async questions(parent, args, ctx, info) {
     const { userId } = ctx.request;
+
     if (args.filter === 'My BookMarked') {
       return ctx.db.query.questions(
         {
@@ -188,6 +189,7 @@ const Query = {
   },
   async questionsConnection(parent, args, ctx, info) {
     const { userId } = ctx.request;
+
     if (args.filter === 'My BookMarked') {
       if (!userId) {
         throw new Error('you must be signed in!');
@@ -249,6 +251,18 @@ const Query = {
         {
           where: {
             approval: null || false
+          }
+        },
+        info
+      );
+    }
+
+    if (args.filter === 'tagslist') {
+      return ctx.db.query.questionsConnection(
+        {
+          where: {
+            tags_some: { id_in: args.where.tags_some.id_in },
+            approval: null || true
           }
         },
         info
