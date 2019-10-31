@@ -36,7 +36,15 @@ const Query = {
     // 2. if they do, query all the users!
     return ctx.db.query.users({}, info);
   },
-
+  async searchQuestions(parent, args, ctx, info) {
+    const result = await ctx.db.query.questions(
+      {
+        where: args.where
+      },
+      info
+    );
+    return result;
+  },
   async questions(parent, args, ctx, info) {
     const { userId } = ctx.request;
 
