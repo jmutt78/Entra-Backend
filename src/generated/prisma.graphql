@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sun Oct 27 2019 07:05:50 GMT-0700 (PDT)
+# timestamp: Fri Nov 08 2019 12:26:51 GMT-0800 (PST)
 
 type AggregateAnswer {
   count: Int!
@@ -9,15 +9,11 @@ type AggregateAnswerVote {
   count: Int!
 }
 
-type AggregateBlocks {
-  count: Int!
-}
-
-type AggregateBlog {
-  count: Int!
-}
-
 type AggregateBookMark {
+  count: Int!
+}
+
+type AggregateBusinessIdea {
   count: Int!
 }
 
@@ -1233,832 +1229,6 @@ type BatchPayload {
   count: Long!
 }
 
-type Blocks implements Node {
-  id: ID!
-  text: String
-  type: String
-  depth: Int
-}
-
-"""
-A connection to a list of items.
-"""
-type BlocksConnection {
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-
-  """
-  A list of edges.
-  """
-  edges: [BlocksEdge]!
-  aggregate: AggregateBlocks!
-}
-
-input BlocksCreateInput {
-  id: ID
-  text: String
-  type: String
-  depth: Int
-}
-
-input BlocksCreateManyInput {
-  create: [BlocksCreateInput!]
-  connect: [BlocksWhereUniqueInput!]
-}
-
-"""
-An edge in a connection.
-"""
-type BlocksEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: Blocks!
-
-  """
-  A cursor for use in pagination.
-  """
-  cursor: String!
-}
-
-enum BlocksOrderByInput {
-  id_ASC
-  id_DESC
-  text_ASC
-  text_DESC
-  type_ASC
-  type_DESC
-  depth_ASC
-  depth_DESC
-}
-
-type BlocksPreviousValues {
-  id: ID!
-  text: String
-  type: String
-  depth: Int
-}
-
-input BlocksScalarWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [BlocksScalarWhereInput!]
-
-  """
-  Logical OR on all given filters.
-  """
-  OR: [BlocksScalarWhereInput!]
-
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [BlocksScalarWhereInput!]
-  id: ID
-
-  """
-  All values that are not equal to given value.
-  """
-  id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
-  id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
-  id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
-  id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
-  id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
-  id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
-  id_gte: ID
-
-  """
-  All values containing the given string.
-  """
-  id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
-  id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
-  id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
-  id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
-  id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
-  id_not_ends_with: ID
-  text: String
-
-  """
-  All values that are not equal to given value.
-  """
-  text_not: String
-
-  """
-  All values that are contained in given list.
-  """
-  text_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
-  text_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
-  text_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
-  text_lte: String
-
-  """
-  All values greater than the given value.
-  """
-  text_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
-  text_gte: String
-
-  """
-  All values containing the given string.
-  """
-  text_contains: String
-
-  """
-  All values not containing the given string.
-  """
-  text_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
-  text_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
-  text_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
-  text_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
-  text_not_ends_with: String
-  type: String
-
-  """
-  All values that are not equal to given value.
-  """
-  type_not: String
-
-  """
-  All values that are contained in given list.
-  """
-  type_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
-  type_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
-  type_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
-  type_lte: String
-
-  """
-  All values greater than the given value.
-  """
-  type_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
-  type_gte: String
-
-  """
-  All values containing the given string.
-  """
-  type_contains: String
-
-  """
-  All values not containing the given string.
-  """
-  type_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
-  type_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
-  type_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
-  type_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
-  type_not_ends_with: String
-  depth: Int
-
-  """
-  All values that are not equal to given value.
-  """
-  depth_not: Int
-
-  """
-  All values that are contained in given list.
-  """
-  depth_in: [Int!]
-
-  """
-  All values that are not contained in given list.
-  """
-  depth_not_in: [Int!]
-
-  """
-  All values less than the given value.
-  """
-  depth_lt: Int
-
-  """
-  All values less than or equal the given value.
-  """
-  depth_lte: Int
-
-  """
-  All values greater than the given value.
-  """
-  depth_gt: Int
-
-  """
-  All values greater than or equal the given value.
-  """
-  depth_gte: Int
-}
-
-type BlocksSubscriptionPayload {
-  mutation: MutationType!
-  node: Blocks
-  updatedFields: [String!]
-  previousValues: BlocksPreviousValues
-}
-
-input BlocksSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [BlocksSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: BlocksWhereInput
-}
-
-input BlocksUpdateDataInput {
-  text: String
-  type: String
-  depth: Int
-}
-
-input BlocksUpdateInput {
-  text: String
-  type: String
-  depth: Int
-}
-
-input BlocksUpdateManyDataInput {
-  text: String
-  type: String
-  depth: Int
-}
-
-input BlocksUpdateManyInput {
-  create: [BlocksCreateInput!]
-  connect: [BlocksWhereUniqueInput!]
-  set: [BlocksWhereUniqueInput!]
-  disconnect: [BlocksWhereUniqueInput!]
-  delete: [BlocksWhereUniqueInput!]
-  update: [BlocksUpdateWithWhereUniqueNestedInput!]
-  updateMany: [BlocksUpdateManyWithWhereNestedInput!]
-  deleteMany: [BlocksScalarWhereInput!]
-  upsert: [BlocksUpsertWithWhereUniqueNestedInput!]
-}
-
-input BlocksUpdateManyMutationInput {
-  text: String
-  type: String
-  depth: Int
-}
-
-input BlocksUpdateManyWithWhereNestedInput {
-  where: BlocksScalarWhereInput!
-  data: BlocksUpdateManyDataInput!
-}
-
-input BlocksUpdateWithWhereUniqueNestedInput {
-  where: BlocksWhereUniqueInput!
-  data: BlocksUpdateDataInput!
-}
-
-input BlocksUpsertWithWhereUniqueNestedInput {
-  where: BlocksWhereUniqueInput!
-  update: BlocksUpdateDataInput!
-  create: BlocksCreateInput!
-}
-
-input BlocksWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [BlocksWhereInput!]
-  id: ID
-
-  """
-  All values that are not equal to given value.
-  """
-  id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
-  id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
-  id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
-  id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
-  id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
-  id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
-  id_gte: ID
-
-  """
-  All values containing the given string.
-  """
-  id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
-  id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
-  id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
-  id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
-  id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
-  id_not_ends_with: ID
-  text: String
-
-  """
-  All values that are not equal to given value.
-  """
-  text_not: String
-
-  """
-  All values that are contained in given list.
-  """
-  text_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
-  text_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
-  text_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
-  text_lte: String
-
-  """
-  All values greater than the given value.
-  """
-  text_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
-  text_gte: String
-
-  """
-  All values containing the given string.
-  """
-  text_contains: String
-
-  """
-  All values not containing the given string.
-  """
-  text_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
-  text_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
-  text_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
-  text_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
-  text_not_ends_with: String
-  type: String
-
-  """
-  All values that are not equal to given value.
-  """
-  type_not: String
-
-  """
-  All values that are contained in given list.
-  """
-  type_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
-  type_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
-  type_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
-  type_lte: String
-
-  """
-  All values greater than the given value.
-  """
-  type_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
-  type_gte: String
-
-  """
-  All values containing the given string.
-  """
-  type_contains: String
-
-  """
-  All values not containing the given string.
-  """
-  type_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
-  type_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
-  type_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
-  type_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
-  type_not_ends_with: String
-  depth: Int
-
-  """
-  All values that are not equal to given value.
-  """
-  depth_not: Int
-
-  """
-  All values that are contained in given list.
-  """
-  depth_in: [Int!]
-
-  """
-  All values that are not contained in given list.
-  """
-  depth_not_in: [Int!]
-
-  """
-  All values less than the given value.
-  """
-  depth_lt: Int
-
-  """
-  All values less than or equal the given value.
-  """
-  depth_lte: Int
-
-  """
-  All values greater than the given value.
-  """
-  depth_gt: Int
-
-  """
-  All values greater than or equal the given value.
-  """
-  depth_gte: Int
-}
-
-input BlocksWhereUniqueInput {
-  id: ID
-}
-
-type Blog implements Node {
-  id: ID!
-  blocks(
-    where: BlocksWhereInput
-    orderBy: BlocksOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Blocks!]
-}
-
-"""
-A connection to a list of items.
-"""
-type BlogConnection {
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-
-  """
-  A list of edges.
-  """
-  edges: [BlogEdge]!
-  aggregate: AggregateBlog!
-}
-
-input BlogCreateInput {
-  id: ID
-  blocks: BlocksCreateManyInput
-}
-
-"""
-An edge in a connection.
-"""
-type BlogEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: Blog!
-
-  """
-  A cursor for use in pagination.
-  """
-  cursor: String!
-}
-
-enum BlogOrderByInput {
-  id_ASC
-  id_DESC
-}
-
-type BlogPreviousValues {
-  id: ID!
-}
-
-type BlogSubscriptionPayload {
-  mutation: MutationType!
-  node: Blog
-  updatedFields: [String!]
-  previousValues: BlogPreviousValues
-}
-
-input BlogSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [BlogSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: BlogWhereInput
-}
-
-input BlogUpdateInput {
-  blocks: BlocksUpdateManyInput
-}
-
-input BlogWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [BlogWhereInput!]
-  id: ID
-
-  """
-  All values that are not equal to given value.
-  """
-  id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
-  id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
-  id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
-  id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
-  id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
-  id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
-  id_gte: ID
-
-  """
-  All values containing the given string.
-  """
-  id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
-  id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
-  id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
-  id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
-  id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
-  id_not_ends_with: ID
-  blocks_some: BlocksWhereInput
-}
-
-input BlogWhereUniqueInput {
-  id: ID
-}
-
 type BookMark implements Node {
   id: ID!
   questions(
@@ -2393,6 +1563,1012 @@ input BookMarkWhereUniqueInput {
   id: ID
 }
 
+type BusinessIdea implements Node {
+  id: ID!
+  createdBy: User!
+  idea: String!
+  problem: String
+  solution: String
+  customer: String
+  value: String
+}
+
+"""
+A connection to a list of items.
+"""
+type BusinessIdeaConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [BusinessIdeaEdge]!
+  aggregate: AggregateBusinessIdea!
+}
+
+input BusinessIdeaCreateInput {
+  id: ID
+  idea: String!
+  problem: String
+  solution: String
+  customer: String
+  value: String
+  createdBy: UserCreateOneWithoutBusinessIdeasInput!
+}
+
+input BusinessIdeaCreateManyWithoutCreatedByInput {
+  create: [BusinessIdeaCreateWithoutCreatedByInput!]
+  connect: [BusinessIdeaWhereUniqueInput!]
+}
+
+input BusinessIdeaCreateWithoutCreatedByInput {
+  id: ID
+  idea: String!
+  problem: String
+  solution: String
+  customer: String
+  value: String
+}
+
+"""
+An edge in a connection.
+"""
+type BusinessIdeaEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: BusinessIdea!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum BusinessIdeaOrderByInput {
+  id_ASC
+  id_DESC
+  idea_ASC
+  idea_DESC
+  problem_ASC
+  problem_DESC
+  solution_ASC
+  solution_DESC
+  customer_ASC
+  customer_DESC
+  value_ASC
+  value_DESC
+}
+
+type BusinessIdeaPreviousValues {
+  id: ID!
+  idea: String!
+  problem: String
+  solution: String
+  customer: String
+  value: String
+}
+
+input BusinessIdeaScalarWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [BusinessIdeaScalarWhereInput!]
+
+  """
+  Logical OR on all given filters.
+  """
+  OR: [BusinessIdeaScalarWhereInput!]
+
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [BusinessIdeaScalarWhereInput!]
+  id: ID
+
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  idea: String
+
+  """
+  All values that are not equal to given value.
+  """
+  idea_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  idea_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  idea_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  idea_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  idea_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  idea_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  idea_gte: String
+
+  """
+  All values containing the given string.
+  """
+  idea_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  idea_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  idea_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  idea_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  idea_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  idea_not_ends_with: String
+  problem: String
+
+  """
+  All values that are not equal to given value.
+  """
+  problem_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  problem_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  problem_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  problem_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  problem_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  problem_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  problem_gte: String
+
+  """
+  All values containing the given string.
+  """
+  problem_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  problem_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  problem_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  problem_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  problem_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  problem_not_ends_with: String
+  solution: String
+
+  """
+  All values that are not equal to given value.
+  """
+  solution_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  solution_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  solution_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  solution_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  solution_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  solution_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  solution_gte: String
+
+  """
+  All values containing the given string.
+  """
+  solution_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  solution_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  solution_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  solution_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  solution_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  solution_not_ends_with: String
+  customer: String
+
+  """
+  All values that are not equal to given value.
+  """
+  customer_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  customer_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  customer_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  customer_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  customer_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  customer_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  customer_gte: String
+
+  """
+  All values containing the given string.
+  """
+  customer_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  customer_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  customer_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  customer_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  customer_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  customer_not_ends_with: String
+  value: String
+
+  """
+  All values that are not equal to given value.
+  """
+  value_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  value_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  value_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  value_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  value_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  value_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  value_gte: String
+
+  """
+  All values containing the given string.
+  """
+  value_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  value_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  value_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  value_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  value_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  value_not_ends_with: String
+}
+
+type BusinessIdeaSubscriptionPayload {
+  mutation: MutationType!
+  node: BusinessIdea
+  updatedFields: [String!]
+  previousValues: BusinessIdeaPreviousValues
+}
+
+input BusinessIdeaSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [BusinessIdeaSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: BusinessIdeaWhereInput
+}
+
+input BusinessIdeaUpdateInput {
+  idea: String
+  problem: String
+  solution: String
+  customer: String
+  value: String
+  createdBy: UserUpdateOneRequiredWithoutBusinessIdeasInput
+}
+
+input BusinessIdeaUpdateManyDataInput {
+  idea: String
+  problem: String
+  solution: String
+  customer: String
+  value: String
+}
+
+input BusinessIdeaUpdateManyMutationInput {
+  idea: String
+  problem: String
+  solution: String
+  customer: String
+  value: String
+}
+
+input BusinessIdeaUpdateManyWithoutCreatedByInput {
+  create: [BusinessIdeaCreateWithoutCreatedByInput!]
+  connect: [BusinessIdeaWhereUniqueInput!]
+  set: [BusinessIdeaWhereUniqueInput!]
+  disconnect: [BusinessIdeaWhereUniqueInput!]
+  delete: [BusinessIdeaWhereUniqueInput!]
+  update: [BusinessIdeaUpdateWithWhereUniqueWithoutCreatedByInput!]
+  updateMany: [BusinessIdeaUpdateManyWithWhereNestedInput!]
+  deleteMany: [BusinessIdeaScalarWhereInput!]
+  upsert: [BusinessIdeaUpsertWithWhereUniqueWithoutCreatedByInput!]
+}
+
+input BusinessIdeaUpdateManyWithWhereNestedInput {
+  where: BusinessIdeaScalarWhereInput!
+  data: BusinessIdeaUpdateManyDataInput!
+}
+
+input BusinessIdeaUpdateWithoutCreatedByDataInput {
+  idea: String
+  problem: String
+  solution: String
+  customer: String
+  value: String
+}
+
+input BusinessIdeaUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: BusinessIdeaWhereUniqueInput!
+  data: BusinessIdeaUpdateWithoutCreatedByDataInput!
+}
+
+input BusinessIdeaUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: BusinessIdeaWhereUniqueInput!
+  update: BusinessIdeaUpdateWithoutCreatedByDataInput!
+  create: BusinessIdeaCreateWithoutCreatedByInput!
+}
+
+input BusinessIdeaWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [BusinessIdeaWhereInput!]
+  id: ID
+
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  idea: String
+
+  """
+  All values that are not equal to given value.
+  """
+  idea_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  idea_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  idea_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  idea_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  idea_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  idea_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  idea_gte: String
+
+  """
+  All values containing the given string.
+  """
+  idea_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  idea_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  idea_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  idea_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  idea_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  idea_not_ends_with: String
+  problem: String
+
+  """
+  All values that are not equal to given value.
+  """
+  problem_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  problem_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  problem_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  problem_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  problem_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  problem_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  problem_gte: String
+
+  """
+  All values containing the given string.
+  """
+  problem_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  problem_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  problem_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  problem_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  problem_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  problem_not_ends_with: String
+  solution: String
+
+  """
+  All values that are not equal to given value.
+  """
+  solution_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  solution_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  solution_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  solution_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  solution_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  solution_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  solution_gte: String
+
+  """
+  All values containing the given string.
+  """
+  solution_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  solution_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  solution_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  solution_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  solution_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  solution_not_ends_with: String
+  customer: String
+
+  """
+  All values that are not equal to given value.
+  """
+  customer_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  customer_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  customer_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  customer_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  customer_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  customer_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  customer_gte: String
+
+  """
+  All values containing the given string.
+  """
+  customer_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  customer_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  customer_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  customer_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  customer_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  customer_not_ends_with: String
+  value: String
+
+  """
+  All values that are not equal to given value.
+  """
+  value_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  value_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  value_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  value_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  value_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  value_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  value_gte: String
+
+  """
+  All values containing the given string.
+  """
+  value_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  value_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  value_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  value_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  value_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  value_not_ends_with: String
+  createdBy: UserWhereInput
+}
+
+input BusinessIdeaWhereUniqueInput {
+  id: ID
+}
+
 scalar DateTime
 
 """
@@ -2407,9 +2583,8 @@ type Mutation {
   createQuestionView(data: QuestionViewCreateInput!): QuestionView!
   createQuestionVote(data: QuestionVoteCreateInput!): QuestionVote!
   createAnswerVote(data: AnswerVoteCreateInput!): AnswerVote!
-  createBlog(data: BlogCreateInput!): Blog!
+  createBusinessIdea(data: BusinessIdeaCreateInput!): BusinessIdea!
   createQuestion(data: QuestionCreateInput!): Question!
-  createBlocks(data: BlocksCreateInput!): Blocks!
   createTag(data: TagCreateInput!): Tag!
   createUser(data: UserCreateInput!): User!
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
@@ -2429,12 +2604,14 @@ type Mutation {
     data: AnswerVoteUpdateInput!
     where: AnswerVoteWhereUniqueInput!
   ): AnswerVote
-  updateBlog(data: BlogUpdateInput!, where: BlogWhereUniqueInput!): Blog
+  updateBusinessIdea(
+    data: BusinessIdeaUpdateInput!
+    where: BusinessIdeaWhereUniqueInput!
+  ): BusinessIdea
   updateQuestion(
     data: QuestionUpdateInput!
     where: QuestionWhereUniqueInput!
   ): Question
-  updateBlocks(data: BlocksUpdateInput!, where: BlocksWhereUniqueInput!): Blocks
   updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
@@ -2442,9 +2619,8 @@ type Mutation {
   deleteQuestionView(where: QuestionViewWhereUniqueInput!): QuestionView
   deleteQuestionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
   deleteAnswerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
-  deleteBlog(where: BlogWhereUniqueInput!): Blog
+  deleteBusinessIdea(where: BusinessIdeaWhereUniqueInput!): BusinessIdea
   deleteQuestion(where: QuestionWhereUniqueInput!): Question
-  deleteBlocks(where: BlocksWhereUniqueInput!): Blocks
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteUser(where: UserWhereUniqueInput!): User
   upsertAnswer(
@@ -2472,21 +2648,16 @@ type Mutation {
     create: AnswerVoteCreateInput!
     update: AnswerVoteUpdateInput!
   ): AnswerVote!
-  upsertBlog(
-    where: BlogWhereUniqueInput!
-    create: BlogCreateInput!
-    update: BlogUpdateInput!
-  ): Blog!
+  upsertBusinessIdea(
+    where: BusinessIdeaWhereUniqueInput!
+    create: BusinessIdeaCreateInput!
+    update: BusinessIdeaUpdateInput!
+  ): BusinessIdea!
   upsertQuestion(
     where: QuestionWhereUniqueInput!
     create: QuestionCreateInput!
     update: QuestionUpdateInput!
   ): Question!
-  upsertBlocks(
-    where: BlocksWhereUniqueInput!
-    create: BlocksCreateInput!
-    update: BlocksUpdateInput!
-  ): Blocks!
   upsertTag(
     where: TagWhereUniqueInput!
     create: TagCreateInput!
@@ -2509,13 +2680,13 @@ type Mutation {
     data: AnswerVoteUpdateManyMutationInput!
     where: AnswerVoteWhereInput
   ): BatchPayload!
+  updateManyBusinessIdeas(
+    data: BusinessIdeaUpdateManyMutationInput!
+    where: BusinessIdeaWhereInput
+  ): BatchPayload!
   updateManyQuestions(
     data: QuestionUpdateManyMutationInput!
     where: QuestionWhereInput
-  ): BatchPayload!
-  updateManyBlockses(
-    data: BlocksUpdateManyMutationInput!
-    where: BlocksWhereInput
   ): BatchPayload!
   updateManyTags(
     data: TagUpdateManyMutationInput!
@@ -2530,9 +2701,8 @@ type Mutation {
   deleteManyQuestionViews(where: QuestionViewWhereInput): BatchPayload!
   deleteManyQuestionVotes(where: QuestionVoteWhereInput): BatchPayload!
   deleteManyAnswerVotes(where: AnswerVoteWhereInput): BatchPayload!
-  deleteManyBlogs(where: BlogWhereInput): BatchPayload!
+  deleteManyBusinessIdeas(where: BusinessIdeaWhereInput): BatchPayload!
   deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
-  deleteManyBlockses(where: BlocksWhereInput): BatchPayload!
   deleteManyTags(where: TagWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
@@ -2631,15 +2801,15 @@ type Query {
     first: Int
     last: Int
   ): [AnswerVote]!
-  blogs(
-    where: BlogWhereInput
-    orderBy: BlogOrderByInput
+  businessIdeas(
+    where: BusinessIdeaWhereInput
+    orderBy: BusinessIdeaOrderByInput
     skip: Int
     after: String
     before: String
     first: Int
     last: Int
-  ): [Blog]!
+  ): [BusinessIdea]!
   questions(
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
@@ -2649,15 +2819,6 @@ type Query {
     first: Int
     last: Int
   ): [Question]!
-  blockses(
-    where: BlocksWhereInput
-    orderBy: BlocksOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Blocks]!
   tags(
     where: TagWhereInput
     orderBy: TagOrderByInput
@@ -2681,9 +2842,8 @@ type Query {
   questionView(where: QuestionViewWhereUniqueInput!): QuestionView
   questionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
   answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
-  blog(where: BlogWhereUniqueInput!): Blog
+  businessIdea(where: BusinessIdeaWhereUniqueInput!): BusinessIdea
   question(where: QuestionWhereUniqueInput!): Question
-  blocks(where: BlocksWhereUniqueInput!): Blocks
   tag(where: TagWhereUniqueInput!): Tag
   user(where: UserWhereUniqueInput!): User
   answersConnection(
@@ -2731,15 +2891,15 @@ type Query {
     first: Int
     last: Int
   ): AnswerVoteConnection!
-  blogsConnection(
-    where: BlogWhereInput
-    orderBy: BlogOrderByInput
+  businessIdeasConnection(
+    where: BusinessIdeaWhereInput
+    orderBy: BusinessIdeaOrderByInput
     skip: Int
     after: String
     before: String
     first: Int
     last: Int
-  ): BlogConnection!
+  ): BusinessIdeaConnection!
   questionsConnection(
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
@@ -2749,15 +2909,6 @@ type Query {
     first: Int
     last: Int
   ): QuestionConnection!
-  blocksesConnection(
-    where: BlocksWhereInput
-    orderBy: BlocksOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): BlocksConnection!
   tagsConnection(
     where: TagWhereInput
     orderBy: TagOrderByInput
@@ -4397,9 +4548,10 @@ type Subscription {
   answerVote(
     where: AnswerVoteSubscriptionWhereInput
   ): AnswerVoteSubscriptionPayload
-  blog(where: BlogSubscriptionWhereInput): BlogSubscriptionPayload
+  businessIdea(
+    where: BusinessIdeaSubscriptionWhereInput
+  ): BusinessIdeaSubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
-  blocks(where: BlocksSubscriptionWhereInput): BlocksSubscriptionPayload
   tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -4876,6 +5028,15 @@ type User implements Node {
     first: Int
     last: Int
   ): [BookMark!]
+  businessIdeas(
+    where: BusinessIdeaWhereInput
+    orderBy: BusinessIdeaOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [BusinessIdea!]
   tags(
     where: TagWhereInput
     orderBy: TagOrderByInput
@@ -4919,6 +5080,7 @@ input UserCreateInput {
   myQuestions: QuestionCreateManyWithoutAskedByInput
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
+  businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
 }
 
@@ -4929,6 +5091,11 @@ input UserCreateManyWithoutMyQuestionsInput {
 
 input UserCreateOneInput {
   create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutBusinessIdeasInput {
+  create: UserCreateWithoutBusinessIdeasInput
   connect: UserWhereUniqueInput
 }
 
@@ -4946,6 +5113,25 @@ input UserCreatepermissionsInput {
   set: [Permission!]
 }
 
+input UserCreateWithoutBusinessIdeasInput {
+  id: ID
+  name: String!
+  email: String!
+  display: String!
+  image: String
+  location: String
+  about: String
+  industry: String
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  myQuestions: QuestionCreateManyWithoutAskedByInput
+  myAnswers: AnswerCreateManyWithoutAnsweredByInput
+  myBookMarks: BookMarkCreateManyWithoutMarkedByInput
+  tags: TagCreateManyInput
+}
+
 input UserCreateWithoutMyAnswersInput {
   id: ID
   name: String!
@@ -4961,6 +5147,7 @@ input UserCreateWithoutMyAnswersInput {
   permissions: UserCreatepermissionsInput
   myQuestions: QuestionCreateManyWithoutAskedByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
+  businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
 }
 
@@ -4979,6 +5166,7 @@ input UserCreateWithoutMyBookMarksInput {
   permissions: UserCreatepermissionsInput
   myQuestions: QuestionCreateManyWithoutAskedByInput
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
+  businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
 }
 
@@ -4997,6 +5185,7 @@ input UserCreateWithoutMyQuestionsInput {
   permissions: UserCreatepermissionsInput
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
+  businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
 }
 
@@ -5896,6 +6085,7 @@ input UserUpdateDataInput {
   myQuestions: QuestionUpdateManyWithoutAskedByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
+  businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
 }
 
@@ -5914,6 +6104,7 @@ input UserUpdateInput {
   myQuestions: QuestionUpdateManyWithoutAskedByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
+  businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
 }
 
@@ -5969,6 +6160,13 @@ input UserUpdateOneRequiredInput {
   upsert: UserUpsertNestedInput
 }
 
+input UserUpdateOneRequiredWithoutBusinessIdeasInput {
+  create: UserCreateWithoutBusinessIdeasInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutBusinessIdeasDataInput
+  upsert: UserUpsertWithoutBusinessIdeasInput
+}
+
 input UserUpdateOneRequiredWithoutMyAnswersInput {
   create: UserCreateWithoutMyAnswersInput
   connect: UserWhereUniqueInput
@@ -5987,6 +6185,24 @@ input UserUpdatepermissionsInput {
   set: [Permission!]
 }
 
+input UserUpdateWithoutBusinessIdeasDataInput {
+  name: String
+  email: String
+  display: String
+  image: String
+  location: String
+  about: String
+  industry: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  myQuestions: QuestionUpdateManyWithoutAskedByInput
+  myAnswers: AnswerUpdateManyWithoutAnsweredByInput
+  myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
+  tags: TagUpdateManyInput
+}
+
 input UserUpdateWithoutMyAnswersDataInput {
   name: String
   email: String
@@ -6001,6 +6217,7 @@ input UserUpdateWithoutMyAnswersDataInput {
   permissions: UserUpdatepermissionsInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
+  businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
 }
 
@@ -6018,6 +6235,7 @@ input UserUpdateWithoutMyBookMarksDataInput {
   permissions: UserUpdatepermissionsInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
+  businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
 }
 
@@ -6035,6 +6253,7 @@ input UserUpdateWithoutMyQuestionsDataInput {
   permissions: UserUpdatepermissionsInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
+  businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
 }
 
@@ -6046,6 +6265,11 @@ input UserUpdateWithWhereUniqueWithoutMyQuestionsInput {
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutBusinessIdeasInput {
+  update: UserUpdateWithoutBusinessIdeasDataInput!
+  create: UserCreateWithoutBusinessIdeasInput!
 }
 
 input UserUpsertWithoutMyAnswersInput {
@@ -6840,6 +7064,7 @@ input UserWhereInput {
   myQuestions_some: QuestionWhereInput
   myAnswers_some: AnswerWhereInput
   myBookMarks_some: BookMarkWhereInput
+  businessIdeas_some: BusinessIdeaWhereInput
   tags_some: TagWhereInput
 }
 

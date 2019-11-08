@@ -593,6 +593,34 @@ const Query = {
     );
 
     return question;
+  },
+  async businessIdea(parent, args, ctx, info) {
+    const businessIdea = await ctx.db.query.businessIdea(
+      {
+        where: { id: args.id }
+      },
+      info
+    );
+
+    return businessIdea;
+  },
+
+  async businessIdeas(parent, args, ctx, info) {
+    const { userId } = ctx.request;
+
+    if (args.filter === 'my') {
+      if (!userId) {
+        throw new Error('you must be signed in!');
+      }
+      return ctx.db.query.businessIdeas(
+        {
+          where: {
+            createdBy: { id: userId }
+          }
+        },
+        info
+      );
+    }
   }
 };
 
