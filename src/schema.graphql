@@ -278,6 +278,8 @@ type BookMark implements Node {
 
 type BusinessIdea implements Node {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   createdBy: User!
   idea: String!
   problem: String

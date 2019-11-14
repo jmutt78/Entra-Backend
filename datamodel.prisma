@@ -90,6 +90,8 @@ type AnswerVote {
 type BusinessIdea {
 id: ID! @id @unique
 createdBy: User!
+createdAt: DateTime! @createdAt
+updatedAt: DateTime! @updatedAt
 idea: String!
 problem: String
 solution: String
