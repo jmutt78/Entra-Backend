@@ -148,7 +148,12 @@ type Query {
   businessIdea(id: ID!): BusinessIdea
   answer(id: ID!): Answer
   answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
-  searchQuestions(where: QuestionWhereInput): [Question]!
+  searchQuestions(
+    where: QuestionWhereInput
+    limit: Int
+    offset: Int
+    noDuplicates: Boolean
+  ): [Question]!
 }
 
 input TagInput {
@@ -260,6 +265,7 @@ type Question implements Node {
   downVotes: Int
   questionVote: [QuestionVote]
   bookMark: [BookMark]
+  searchTermFoundIn: String
 }
 
 type BookMark implements Node {

@@ -3166,6 +3166,7 @@ input QuestionCreateInput {
   title: String!
   description: String!
   approval: Boolean
+  searchTermFoundIn: String
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
@@ -3203,6 +3204,7 @@ input QuestionCreateWithoutAnswersInput {
   title: String!
   description: String!
   approval: Boolean
+  searchTermFoundIn: String
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
@@ -3214,6 +3216,7 @@ input QuestionCreateWithoutAskedByInput {
   title: String!
   description: String!
   approval: Boolean
+  searchTermFoundIn: String
   tags: TagCreateManyInput
   answers: AnswerCreateManyWithoutAnsweredToInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
@@ -3225,6 +3228,7 @@ input QuestionCreateWithoutBookMarkInput {
   title: String!
   description: String!
   approval: Boolean
+  searchTermFoundIn: String
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
@@ -3236,6 +3240,7 @@ input QuestionCreateWithoutQuestionVoteInput {
   title: String!
   description: String!
   approval: Boolean
+  searchTermFoundIn: String
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
@@ -3270,6 +3275,8 @@ enum QuestionOrderByInput {
   updatedAt_DESC
   approval_ASC
   approval_DESC
+  searchTermFoundIn_ASC
+  searchTermFoundIn_DESC
 }
 
 type QuestionPreviousValues {
@@ -3279,6 +3286,7 @@ type QuestionPreviousValues {
   createdAt: DateTime!
   updatedAt: DateTime!
   approval: Boolean
+  searchTermFoundIn: String
 }
 
 input QuestionScalarWhereInput {
@@ -3572,6 +3580,72 @@ input QuestionScalarWhereInput {
   All values that are not equal to given value.
   """
   approval_not: Boolean
+  searchTermFoundIn: String
+
+  """
+  All values that are not equal to given value.
+  """
+  searchTermFoundIn_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  searchTermFoundIn_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  searchTermFoundIn_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  searchTermFoundIn_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  searchTermFoundIn_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  searchTermFoundIn_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  searchTermFoundIn_gte: String
+
+  """
+  All values containing the given string.
+  """
+  searchTermFoundIn_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  searchTermFoundIn_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  searchTermFoundIn_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  searchTermFoundIn_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  searchTermFoundIn_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  searchTermFoundIn_not_ends_with: String
 }
 
 type QuestionSubscriptionPayload {
@@ -3613,6 +3687,7 @@ input QuestionUpdateDataInput {
   title: String
   description: String
   approval: Boolean
+  searchTermFoundIn: String
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
@@ -3624,6 +3699,7 @@ input QuestionUpdateInput {
   title: String
   description: String
   approval: Boolean
+  searchTermFoundIn: String
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
@@ -3635,12 +3711,14 @@ input QuestionUpdateManyDataInput {
   title: String
   description: String
   approval: Boolean
+  searchTermFoundIn: String
 }
 
 input QuestionUpdateManyMutationInput {
   title: String
   description: String
   approval: Boolean
+  searchTermFoundIn: String
 }
 
 input QuestionUpdateManyWithoutAnswersInput {
@@ -3702,6 +3780,7 @@ input QuestionUpdateWithoutAnswersDataInput {
   title: String
   description: String
   approval: Boolean
+  searchTermFoundIn: String
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
@@ -3712,6 +3791,7 @@ input QuestionUpdateWithoutAskedByDataInput {
   title: String
   description: String
   approval: Boolean
+  searchTermFoundIn: String
   tags: TagUpdateManyInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
@@ -3722,6 +3802,7 @@ input QuestionUpdateWithoutBookMarkDataInput {
   title: String
   description: String
   approval: Boolean
+  searchTermFoundIn: String
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
@@ -3732,6 +3813,7 @@ input QuestionUpdateWithoutQuestionVoteDataInput {
   title: String
   description: String
   approval: Boolean
+  searchTermFoundIn: String
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
@@ -4677,6 +4759,72 @@ input QuestionWhereInput {
   All values that are not equal to given value.
   """
   approval_not: Boolean
+  searchTermFoundIn: String
+
+  """
+  All values that are not equal to given value.
+  """
+  searchTermFoundIn_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  searchTermFoundIn_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  searchTermFoundIn_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  searchTermFoundIn_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  searchTermFoundIn_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  searchTermFoundIn_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  searchTermFoundIn_gte: String
+
+  """
+  All values containing the given string.
+  """
+  searchTermFoundIn_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  searchTermFoundIn_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  searchTermFoundIn_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  searchTermFoundIn_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  searchTermFoundIn_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  searchTermFoundIn_not_ends_with: String
   tags_some: TagWhereInput
   askedBy_some: UserWhereInput
   answers_some: AnswerWhereInput
