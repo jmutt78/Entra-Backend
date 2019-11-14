@@ -303,6 +303,7 @@ const Query = {
       info
     );
   },
+
   user(parent, args, ctx, info) {
     return ctx.db.query.user(
       {
@@ -311,6 +312,7 @@ const Query = {
       info
     );
   },
+
   async users(parent, args, ctx, info) {
     const { userId } = ctx.request;
     if (!userId) {
@@ -370,6 +372,7 @@ const Query = {
   },
   async questions(parent, args, ctx, info) {
     const { userId } = ctx.request;
+
     if (args.filter === 'My BookMarked') {
       return ctx.db.query.questions(
         {
@@ -410,6 +413,18 @@ const Query = {
         {
           where: {
             tags_some: { id: args.where.tags_some.id },
+            approval: null || true
+          }
+        },
+        info
+      );
+    }
+
+    if (args.filter === 'tagslist') {
+      return ctx.db.query.questions(
+        {
+          where: {
+            tags_some: { id_in: args.where.tags_some.id_in },
             approval: null || true
           }
         },
@@ -507,6 +522,7 @@ const Query = {
   },
   async questionsConnection(parent, args, ctx, info) {
     const { userId } = ctx.request;
+
     if (args.filter === 'My BookMarked') {
       if (!userId) {
         throw new Error('you must be signed in!');
@@ -568,6 +584,18 @@ const Query = {
         {
           where: {
             approval: null || false
+          }
+        },
+        info
+      );
+    }
+
+    if (args.filter === 'tagslist') {
+      return ctx.db.query.questionsConnection(
+        {
+          where: {
+            tags_some: { id_in: args.where.tags_some.id_in },
+            approval: null || true
           }
         },
         info
@@ -655,6 +683,34 @@ const Query = {
     );
 
     return question;
+  },
+  async businessIdea(parent, args, ctx, info) {
+    const businessIdea = await ctx.db.query.businessIdea(
+      {
+        where: { id: args.id }
+      },
+      info
+    );
+
+    return businessIdea;
+  },
+
+  async businessIdeas(parent, args, ctx, info) {
+    const { userId } = ctx.request;
+
+    if (args.filter === 'my') {
+      if (!userId) {
+        throw new Error('you must be signed in!');
+      }
+      return ctx.db.query.businessIdeas(
+        {
+          where: {
+            createdBy: { id: userId }
+          }
+        },
+        info
+      );
+    }
   }
 };
 
