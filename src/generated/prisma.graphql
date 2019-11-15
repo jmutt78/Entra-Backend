@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Wed Nov 13 2019 15:02:04 GMT-0800 (PST)
+# timestamp: Thu Nov 14 2019 06:35:13 GMT-0800 (PST)
 
 type AggregateAnswer {
   count: Int!
@@ -3143,6 +3143,7 @@ type Question implements Node {
     first: Int
     last: Int
   ): [BookMark!]
+  searchTermFoundIn: String
 }
 
 """
