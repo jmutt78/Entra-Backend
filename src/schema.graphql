@@ -60,7 +60,6 @@ type Mutation {
   ): Question!
   updatePermissions(permissions: [Permission], userId: ID!): User
   createBusinessIdea(
-    id: ID!
     idea: String!
     problem: String
     solution: String
