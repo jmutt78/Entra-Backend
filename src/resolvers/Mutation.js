@@ -193,7 +193,6 @@ const Mutations = {
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
 
-    // Finalllllly we return the user to the browser
     return user;
   },
   async linkedinLogin(parent, args, ctx, info) {
@@ -417,11 +416,28 @@ const Mutations = {
     return updatedUser;
   },
   //--------------------Update User Profile--------------------//
-  updateUser(parent, args, ctx, info) {
+  async updateUser(parent, args, ctx, info) {
+    const user = await ctx.db.query.user(
+      {
+        where: { id: args.id }
+      },
+      `{ id
+        tags { name }
+    }`
+    );
+
+    const deletedTags = args.tags
+      ? _.differenceBy(user.tags, args.tags, tag => tag.name)
+      : [];
+
     // first take a copy of the updates
-    const updates = { ...args };
+    const updates = {
+      ...args,
+      tags: { disconnect: deletedTags, connect: args.tags }
+    };
     // remove the ID from the updates
     delete updates.id;
+
     // run the update method
     return ctx.db.mutation.updateUser(
       {
@@ -952,29 +968,82 @@ const Mutations = {
     );
   },
 
-  //--------------------Blog--------------------//
-
-  async createBlog(parent, args, ctx, info) {
+  //-----------------------BusinessIdea-----------------------//
+  async createBusinessIdea(parent, args, ctx, info) {
     if (!ctx.request.userId) {
       throw new Error('You must be logged in to do that!');
     }
 
-    const newBlog = await ctx.db.mutation.createBlog(
+    const businessIdea = await ctx.db.mutation.createBusinessIdea(
       {
         data: {
-          blocks: {
+          createdBy: {
             connect: {
-              id: args.key,
-              ...args
+              id: ctx.request.userId
             }
-          }
+          },
+          ...args
         }
       },
       info
     );
 
-    return newBlog;
+    const mailRes = await transport.sendMail({
+      from: 'jmcintosh@entra.io',
+      to: 'jmcintosh@entra.io',
+      subject: 'New business idea!',
+      html: makeANiceEmail(`${ctx.request.userId}`, `${args.idea}`)
+    });
+
+    return businessIdea;
   },
+
+  async deleteBusinessIdea(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in to do that!');
+    }
+
+    const where = { id: args.id };
+
+    const businessIdea = await ctx.db.query.businessIdea(
+      {
+        where: { id: args.id }
+      },
+      `{ id
+        createdAt
+        createdBy { id }}`
+    );
+    if (!businessIdea) {
+      throw new Error('Idea already deleted');
+    }
+
+    return ctx.db.mutation.deleteBusinessIdea({ where }, info);
+  },
+
+  async updateBusinessIdea(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in to do that!');
+    }
+
+    const updates = {
+      ...args
+    };
+    // remove the ID from the updates
+    delete updates.id;
+    // run the update method
+    return ctx.db.mutation.updateBusinessIdea(
+      {
+        data: updates,
+
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
+
+  //--------------------BookMark--------------------//
 
   createBookMark: async (parent, args, ctx, info) => {
     if (!ctx.request.userId) {

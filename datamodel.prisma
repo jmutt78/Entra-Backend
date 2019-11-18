@@ -26,6 +26,8 @@ type User {
   myQuestions: [Question!]! @relation(link: INLINE)
   myAnswers: [Answer!]! @relation(link: INLINE)
   myBookMarks: [BookMark!]
+  businessIdeas: [BusinessIdea!]! @relation(link: INLINE)
+  tags: [Tag!]! @relation(link: INLINE)
 }
 
 type Question {
@@ -40,6 +42,7 @@ approval: Boolean
 answers: [Answer!]! @relation(link: INLINE)
 questionVote: [QuestionVote]
 bookMark: [BookMark]
+searchTermFoundIn: String
 }
 
 type Tag {
@@ -85,14 +88,14 @@ type AnswerVote {
   vote: String
 }
 
-type Blog {
-id: ID! @id
-blocks: [Blocks!] @relation(link: INLINE)
-}
-
-type Blocks {
-id: ID! @id
-text: String
-type: String
-depth: Int
+type BusinessIdea {
+id: ID! @id @unique
+createdBy: User!
+createdAt: DateTime! @createdAt
+updatedAt: DateTime! @updatedAt
+idea: String!
+problem: String
+solution: String
+customer: String
+value: String
 }

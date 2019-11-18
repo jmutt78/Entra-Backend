@@ -17,7 +17,6 @@ type Mutation {
   deleteQuestion(id: ID!): Question
   createBookMark(questionId: ID!): BookMark!
   createAnswer(body: String!, questionId: ID!, approval: Boolean): Answer!
-  createBlog(blocks: [BlocksWhereInput]): Blog!
   createTag(name: String!): Tag!
   signup(
     email: String!
@@ -49,6 +48,7 @@ type Mutation {
     image: String
     location: String
     about: String
+    tags: [TagInput!]
     industry: String
   ): User!
   updateQuestion(
@@ -59,13 +59,39 @@ type Mutation {
     tags: [TagInput!]
   ): Question!
   updatePermissions(permissions: [Permission], userId: ID!): User
+  createBusinessIdea(
+    idea: String!
+    problem: String
+    solution: String
+    customer: String
+    value: String
+  ): BusinessIdea!
+  deleteBusinessIdea(id: ID!): BusinessIdea
+  updateBusinessIdea(
+    id: ID!
+    idea: String!
+    problem: String
+    solution: String
+    customer: String
+    value: String
+  ): BusinessIdea!
 }
 
 type Query {
   me: User
   user(id: ID!): User
   users: [User]!
-  tags(orderBy: TagOrderByInput, first: Int, where: TagWhereInput): [Tag!]!
+  tags(
+    first: Int
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    filter: String
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag!]!
   tag(id: ID!): Tag
   questions(
     where: QuestionWhereInput
@@ -77,6 +103,16 @@ type Query {
     first: Int
     last: Int
   ): [Question]!
+  businessIdeas(
+    where: BusinessIdeaWhereInput
+    orderBy: BusinessIdeaOrderByInput
+    filter: String
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [BusinessIdea]!
   answers(
     where: AnswerWhereInput
     orderBy: AnswerOrderByInput
@@ -109,8 +145,15 @@ type Query {
   ): AnswerConnection!
   bookMark(id: ID!): BookMark
   question(id: ID!): Question
+  businessIdea(id: ID!): BusinessIdea
   answer(id: ID!): Answer
   answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
+  searchQuestions(
+    where: QuestionWhereInput
+    limit: Int
+    offset: Int
+    noDuplicates: Boolean
+  ): [Question]!
 }
 
 input TagInput {
@@ -133,6 +176,16 @@ type User {
   myAnswers: [Answer!]!
   badges: Badges
   myBookMarks: [BookMark!]
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag!]
+  businessIdeas: [BusinessIdea!]!
 }
 
 type Badges {
@@ -212,6 +265,7 @@ type Question implements Node {
   downVotes: Int
   questionVote: [QuestionVote]
   bookMark: [BookMark]
+  searchTermFoundIn: String
 }
 
 type BookMark implements Node {
@@ -228,24 +282,16 @@ type BookMark implements Node {
   markedBy: User!
 }
 
-type Blog implements Node {
+type BusinessIdea implements Node {
   id: ID!
-  blocks(
-    where: BlocksWhereInput
-    orderBy: BlocksOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Blocks!]
-}
-
-type Blocks implements Node {
-  id: ID!
-  text: String
-  type: String
-  depth: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdBy: User!
+  idea: String!
+  problem: String
+  solution: String
+  customer: String
+  value: String
 }
 
 type Tag {
