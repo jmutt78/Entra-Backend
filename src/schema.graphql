@@ -97,11 +97,11 @@ type Query {
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
     filter: String
-    skip: Int
     after: String
     before: String
-    first: Int
     last: Int
+    offset: Int
+    limit: Int
   ): [Question]!
   businessIdeas(
     where: BusinessIdeaWhereInput
