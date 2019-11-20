@@ -292,6 +292,7 @@ type BusinessIdea implements Node {
   solution: String
   customer: String
   value: String
+  status: Boolean
 }
 
 type Tag {

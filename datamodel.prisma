@@ -7,7 +7,6 @@ PERMISSIONUPDATE
 
 
 
-
 type User {
   id: ID! @id @unique
   name: String!
@@ -98,4 +97,5 @@ problem: String
 solution: String
 customer: String
 value: String
+status: Boolean
 }
