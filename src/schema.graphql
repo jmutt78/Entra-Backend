@@ -69,7 +69,7 @@ type Mutation {
   deleteBusinessIdea(id: ID!): BusinessIdea
   updateBusinessIdea(
     id: ID!
-    idea: String!
+    idea: String
     problem: String
     solution: String
     customer: String
@@ -97,11 +97,11 @@ type Query {
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
     filter: String
-    skip: Int
     after: String
     before: String
-    first: Int
     last: Int
+    offset: Int
+    limit: Int
   ): [Question]!
   businessIdeas(
     where: BusinessIdeaWhereInput

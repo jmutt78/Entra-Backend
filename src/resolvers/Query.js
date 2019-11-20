@@ -372,6 +372,7 @@ const Query = {
   },
   async questions(parent, args, ctx, info) {
     const { userId } = ctx.request;
+    const { limit, offset = 0 } = args;
 
     if (args.filter === 'My BookMarked') {
       return ctx.db.query.questions(
@@ -398,14 +399,14 @@ const Query = {
       );
     }
     if (args.filter === 'all') {
-      return ctx.db.query.questions(
+      return (await ctx.db.query.questions(
         {
           where: {
             approval: true
           }
         },
         info
-      );
+      )).filter((q, i) => i >= offset && i < offset + limit);
     }
 
     if (args.filter === 'tags') {
