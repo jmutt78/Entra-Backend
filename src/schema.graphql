@@ -74,6 +74,7 @@ type Mutation {
     solution: String
     customer: String
     value: String
+    status: Boolean
   ): BusinessIdea!
 }
 

@@ -991,7 +991,7 @@ const Mutations = {
     const mailRes = await transport.sendMail({
       from: 'jmcintosh@entra.io',
       to: 'jmcintosh@entra.io',
-      subject: 'New business idea!',
+      subject: 'New business Idea!',
       html: makeANiceEmail(`${ctx.request.userId}`, `${args.idea}`)
     });
 
