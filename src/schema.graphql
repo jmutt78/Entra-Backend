@@ -102,6 +102,8 @@ type Query {
     last: Int
     offset: Int
     limit: Int
+    filrst: Int
+    skip: Int
   ): [Question]!
   businessIdeas(
     where: BusinessIdeaWhereInput
