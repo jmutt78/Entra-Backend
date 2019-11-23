@@ -14,6 +14,10 @@ type AggregateBusinessIdea {
   count: Int!
 }
 
+type AggregateBusinessIdeaVote {
+  count: Int!
+}
+
 type AggregateQuestion {
   count: Int!
 }
@@ -779,6 +783,15 @@ type BusinessIdea {
   customer: String
   value: String
   status: Boolean
+  businessIdeaVote(
+    where: BusinessIdeaVoteWhereInput
+    orderBy: BusinessIdeaVoteOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [BusinessIdeaVote!]
 }
 
 type BusinessIdeaConnection {
@@ -796,11 +809,28 @@ input BusinessIdeaCreateInput {
   customer: String
   value: String
   status: Boolean
+  businessIdeaVote: BusinessIdeaVoteCreateManyWithoutVotedBusinessIdeaInput
 }
 
 input BusinessIdeaCreateManyWithoutCreatedByInput {
   create: [BusinessIdeaCreateWithoutCreatedByInput!]
   connect: [BusinessIdeaWhereUniqueInput!]
+}
+
+input BusinessIdeaCreateOneWithoutBusinessIdeaVoteInput {
+  create: BusinessIdeaCreateWithoutBusinessIdeaVoteInput
+  connect: BusinessIdeaWhereUniqueInput
+}
+
+input BusinessIdeaCreateWithoutBusinessIdeaVoteInput {
+  id: ID
+  createdBy: UserCreateOneWithoutBusinessIdeasInput!
+  idea: String!
+  problem: String
+  solution: String
+  customer: String
+  value: String
+  status: Boolean
 }
 
 input BusinessIdeaCreateWithoutCreatedByInput {
@@ -811,6 +841,7 @@ input BusinessIdeaCreateWithoutCreatedByInput {
   customer: String
   value: String
   status: Boolean
+  businessIdeaVote: BusinessIdeaVoteCreateManyWithoutVotedBusinessIdeaInput
 }
 
 type BusinessIdeaEdge {
@@ -985,6 +1016,7 @@ input BusinessIdeaUpdateInput {
   customer: String
   value: String
   status: Boolean
+  businessIdeaVote: BusinessIdeaVoteUpdateManyWithoutVotedBusinessIdeaInput
 }
 
 input BusinessIdeaUpdateManyDataInput {
@@ -1022,7 +1054,15 @@ input BusinessIdeaUpdateManyWithWhereNestedInput {
   data: BusinessIdeaUpdateManyDataInput!
 }
 
-input BusinessIdeaUpdateWithoutCreatedByDataInput {
+input BusinessIdeaUpdateOneRequiredWithoutBusinessIdeaVoteInput {
+  create: BusinessIdeaCreateWithoutBusinessIdeaVoteInput
+  update: BusinessIdeaUpdateWithoutBusinessIdeaVoteDataInput
+  upsert: BusinessIdeaUpsertWithoutBusinessIdeaVoteInput
+  connect: BusinessIdeaWhereUniqueInput
+}
+
+input BusinessIdeaUpdateWithoutBusinessIdeaVoteDataInput {
+  createdBy: UserUpdateOneRequiredWithoutBusinessIdeasInput
   idea: String
   problem: String
   solution: String
@@ -1031,15 +1071,217 @@ input BusinessIdeaUpdateWithoutCreatedByDataInput {
   status: Boolean
 }
 
+input BusinessIdeaUpdateWithoutCreatedByDataInput {
+  idea: String
+  problem: String
+  solution: String
+  customer: String
+  value: String
+  status: Boolean
+  businessIdeaVote: BusinessIdeaVoteUpdateManyWithoutVotedBusinessIdeaInput
+}
+
 input BusinessIdeaUpdateWithWhereUniqueWithoutCreatedByInput {
   where: BusinessIdeaWhereUniqueInput!
   data: BusinessIdeaUpdateWithoutCreatedByDataInput!
+}
+
+input BusinessIdeaUpsertWithoutBusinessIdeaVoteInput {
+  update: BusinessIdeaUpdateWithoutBusinessIdeaVoteDataInput!
+  create: BusinessIdeaCreateWithoutBusinessIdeaVoteInput!
 }
 
 input BusinessIdeaUpsertWithWhereUniqueWithoutCreatedByInput {
   where: BusinessIdeaWhereUniqueInput!
   update: BusinessIdeaUpdateWithoutCreatedByDataInput!
   create: BusinessIdeaCreateWithoutCreatedByInput!
+}
+
+type BusinessIdeaVote {
+  id: ID!
+  votedBy: User!
+  votedBusinessIdea: BusinessIdea!
+  vote: String
+}
+
+type BusinessIdeaVoteConnection {
+  pageInfo: PageInfo!
+  edges: [BusinessIdeaVoteEdge]!
+  aggregate: AggregateBusinessIdeaVote!
+}
+
+input BusinessIdeaVoteCreateInput {
+  id: ID
+  votedBy: UserCreateOneInput!
+  votedBusinessIdea: BusinessIdeaCreateOneWithoutBusinessIdeaVoteInput!
+  vote: String
+}
+
+input BusinessIdeaVoteCreateManyWithoutVotedBusinessIdeaInput {
+  create: [BusinessIdeaVoteCreateWithoutVotedBusinessIdeaInput!]
+  connect: [BusinessIdeaVoteWhereUniqueInput!]
+}
+
+input BusinessIdeaVoteCreateWithoutVotedBusinessIdeaInput {
+  id: ID
+  votedBy: UserCreateOneInput!
+  vote: String
+}
+
+type BusinessIdeaVoteEdge {
+  node: BusinessIdeaVote!
+  cursor: String!
+}
+
+enum BusinessIdeaVoteOrderByInput {
+  id_ASC
+  id_DESC
+  vote_ASC
+  vote_DESC
+}
+
+type BusinessIdeaVotePreviousValues {
+  id: ID!
+  vote: String
+}
+
+input BusinessIdeaVoteScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  vote: String
+  vote_not: String
+  vote_in: [String!]
+  vote_not_in: [String!]
+  vote_lt: String
+  vote_lte: String
+  vote_gt: String
+  vote_gte: String
+  vote_contains: String
+  vote_not_contains: String
+  vote_starts_with: String
+  vote_not_starts_with: String
+  vote_ends_with: String
+  vote_not_ends_with: String
+  AND: [BusinessIdeaVoteScalarWhereInput!]
+  OR: [BusinessIdeaVoteScalarWhereInput!]
+  NOT: [BusinessIdeaVoteScalarWhereInput!]
+}
+
+type BusinessIdeaVoteSubscriptionPayload {
+  mutation: MutationType!
+  node: BusinessIdeaVote
+  updatedFields: [String!]
+  previousValues: BusinessIdeaVotePreviousValues
+}
+
+input BusinessIdeaVoteSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: BusinessIdeaVoteWhereInput
+  AND: [BusinessIdeaVoteSubscriptionWhereInput!]
+  OR: [BusinessIdeaVoteSubscriptionWhereInput!]
+  NOT: [BusinessIdeaVoteSubscriptionWhereInput!]
+}
+
+input BusinessIdeaVoteUpdateInput {
+  votedBy: UserUpdateOneRequiredInput
+  votedBusinessIdea: BusinessIdeaUpdateOneRequiredWithoutBusinessIdeaVoteInput
+  vote: String
+}
+
+input BusinessIdeaVoteUpdateManyDataInput {
+  vote: String
+}
+
+input BusinessIdeaVoteUpdateManyMutationInput {
+  vote: String
+}
+
+input BusinessIdeaVoteUpdateManyWithoutVotedBusinessIdeaInput {
+  create: [BusinessIdeaVoteCreateWithoutVotedBusinessIdeaInput!]
+  delete: [BusinessIdeaVoteWhereUniqueInput!]
+  connect: [BusinessIdeaVoteWhereUniqueInput!]
+  set: [BusinessIdeaVoteWhereUniqueInput!]
+  disconnect: [BusinessIdeaVoteWhereUniqueInput!]
+  update: [BusinessIdeaVoteUpdateWithWhereUniqueWithoutVotedBusinessIdeaInput!]
+  upsert: [BusinessIdeaVoteUpsertWithWhereUniqueWithoutVotedBusinessIdeaInput!]
+  deleteMany: [BusinessIdeaVoteScalarWhereInput!]
+  updateMany: [BusinessIdeaVoteUpdateManyWithWhereNestedInput!]
+}
+
+input BusinessIdeaVoteUpdateManyWithWhereNestedInput {
+  where: BusinessIdeaVoteScalarWhereInput!
+  data: BusinessIdeaVoteUpdateManyDataInput!
+}
+
+input BusinessIdeaVoteUpdateWithoutVotedBusinessIdeaDataInput {
+  votedBy: UserUpdateOneRequiredInput
+  vote: String
+}
+
+input BusinessIdeaVoteUpdateWithWhereUniqueWithoutVotedBusinessIdeaInput {
+  where: BusinessIdeaVoteWhereUniqueInput!
+  data: BusinessIdeaVoteUpdateWithoutVotedBusinessIdeaDataInput!
+}
+
+input BusinessIdeaVoteUpsertWithWhereUniqueWithoutVotedBusinessIdeaInput {
+  where: BusinessIdeaVoteWhereUniqueInput!
+  update: BusinessIdeaVoteUpdateWithoutVotedBusinessIdeaDataInput!
+  create: BusinessIdeaVoteCreateWithoutVotedBusinessIdeaInput!
+}
+
+input BusinessIdeaVoteWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  votedBy: UserWhereInput
+  votedBusinessIdea: BusinessIdeaWhereInput
+  vote: String
+  vote_not: String
+  vote_in: [String!]
+  vote_not_in: [String!]
+  vote_lt: String
+  vote_lte: String
+  vote_gt: String
+  vote_gte: String
+  vote_contains: String
+  vote_not_contains: String
+  vote_starts_with: String
+  vote_not_starts_with: String
+  vote_ends_with: String
+  vote_not_ends_with: String
+  AND: [BusinessIdeaVoteWhereInput!]
+  OR: [BusinessIdeaVoteWhereInput!]
+  NOT: [BusinessIdeaVoteWhereInput!]
+}
+
+input BusinessIdeaVoteWhereUniqueInput {
+  id: ID
 }
 
 input BusinessIdeaWhereInput {
@@ -1146,6 +1388,9 @@ input BusinessIdeaWhereInput {
   value_not_ends_with: String
   status: Boolean
   status_not: Boolean
+  businessIdeaVote_every: BusinessIdeaVoteWhereInput
+  businessIdeaVote_some: BusinessIdeaVoteWhereInput
+  businessIdeaVote_none: BusinessIdeaVoteWhereInput
   AND: [BusinessIdeaWhereInput!]
   OR: [BusinessIdeaWhereInput!]
   NOT: [BusinessIdeaWhereInput!]
@@ -1217,6 +1462,24 @@ type Mutation {
   ): BusinessIdea!
   deleteBusinessIdea(where: BusinessIdeaWhereUniqueInput!): BusinessIdea
   deleteManyBusinessIdeas(where: BusinessIdeaWhereInput): BatchPayload!
+  createBusinessIdeaVote(data: BusinessIdeaVoteCreateInput!): BusinessIdeaVote!
+  updateBusinessIdeaVote(
+    data: BusinessIdeaVoteUpdateInput!
+    where: BusinessIdeaVoteWhereUniqueInput!
+  ): BusinessIdeaVote
+  updateManyBusinessIdeaVotes(
+    data: BusinessIdeaVoteUpdateManyMutationInput!
+    where: BusinessIdeaVoteWhereInput
+  ): BatchPayload!
+  upsertBusinessIdeaVote(
+    where: BusinessIdeaVoteWhereUniqueInput!
+    create: BusinessIdeaVoteCreateInput!
+    update: BusinessIdeaVoteUpdateInput!
+  ): BusinessIdeaVote!
+  deleteBusinessIdeaVote(
+    where: BusinessIdeaVoteWhereUniqueInput!
+  ): BusinessIdeaVote
+  deleteManyBusinessIdeaVotes(where: BusinessIdeaVoteWhereInput): BatchPayload!
   createQuestion(data: QuestionCreateInput!): Question!
   updateQuestion(
     data: QuestionUpdateInput!
@@ -1390,6 +1653,25 @@ type Query {
     first: Int
     last: Int
   ): BusinessIdeaConnection!
+  businessIdeaVote(where: BusinessIdeaVoteWhereUniqueInput!): BusinessIdeaVote
+  businessIdeaVotes(
+    where: BusinessIdeaVoteWhereInput
+    orderBy: BusinessIdeaVoteOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [BusinessIdeaVote]!
+  businessIdeaVotesConnection(
+    where: BusinessIdeaVoteWhereInput
+    orderBy: BusinessIdeaVoteOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): BusinessIdeaVoteConnection!
   question(where: QuestionWhereUniqueInput!): Question
   questions(
     where: QuestionWhereInput
@@ -2321,6 +2603,9 @@ type Subscription {
   businessIdea(
     where: BusinessIdeaSubscriptionWhereInput
   ): BusinessIdeaSubscriptionPayload
+  businessIdeaVote(
+    where: BusinessIdeaVoteSubscriptionWhereInput
+  ): BusinessIdeaVoteSubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   questionView(
     where: QuestionViewSubscriptionWhereInput

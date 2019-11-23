@@ -674,6 +674,7 @@ const Query = {
   },
 
   answerVote: forwardTo('db'),
+  businessIdeaVote: forwardTo('db'),
 
   async question(parent, args, ctx, info) {
     const question = await ctx.db.query.question(
@@ -707,6 +708,17 @@ const Query = {
         {
           where: {
             createdBy: { id: userId }
+          }
+        },
+        info
+      );
+    }
+
+    if (args.filter === 'public') {
+      return ctx.db.query.businessIdeas(
+        {
+          where: {
+            status: true
           }
         },
         info
