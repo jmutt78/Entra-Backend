@@ -102,7 +102,7 @@ type Query {
     last: Int
     offset: Int
     limit: Int
-    filrst: Int
+    first: Int
     skip: Int
   ): [Question]!
   businessIdeas(
