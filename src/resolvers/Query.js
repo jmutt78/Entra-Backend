@@ -399,14 +399,21 @@ const Query = {
       );
     }
     if (args.filter === 'all') {
-      return (await ctx.db.query.questions(
+      let questions = await ctx.db.query.questions(
         {
           where: {
             approval: true
           }
         },
         info
-      )).filter((q, i) => i >= offset && i < offset + limit);
+      );
+      if (limit) {
+        questions = questions.filter(
+          (q, i) => i >= offset && i < offset + limit
+        );
+        return questions;
+      }
+      return questions;
     }
 
     if (args.filter === 'tags') {
