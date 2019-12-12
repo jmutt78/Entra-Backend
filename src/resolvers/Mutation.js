@@ -473,12 +473,12 @@ const Mutations = {
       info
     );
 
-    // const mailRes = await transport.sendMail({
-    //   from: 'jmcintosh@entra.io',
-    //   to: 'jmcintosh@entra.io',
-    //   subject: 'New Question!',
-    //   html: makeANiceEmail(`${ctx.request.userId}`, `${args.title}`)
-    // });
+    const mailRes = await transport.sendMail({
+      from: 'jmcintosh@entra.io',
+      to: 'jmcintosh@entra.io',
+      subject: 'New Question!',
+      html: makeANiceEmail(`${ctx.request.userId}`, `${args.title}`)
+    });
 
     return question;
   },

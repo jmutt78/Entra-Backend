@@ -398,6 +398,7 @@ const Query = {
         info
       );
     }
+
     if (args.filter === 'all') {
       let questions = await ctx.db.query.questions(
         {
@@ -417,7 +418,7 @@ const Query = {
     }
 
     if (args.filter === 'tags') {
-      return ctx.db.query.questions(
+      let questions = await ctx.db.query.questions(
         {
           where: {
             tags_some: { id: args.where.tags_some.id },
@@ -426,10 +427,17 @@ const Query = {
         },
         info
       );
+      if (limit) {
+        questions = questions.filter(
+          (q, i) => i >= offset && i < offset + limit
+        );
+        return questions;
+      }
+      return questions;
     }
 
     if (args.filter === 'tagslist') {
-      return ctx.db.query.questions(
+      let questions = await ctx.db.query.questions(
         {
           where: {
             tags_some: { id_in: args.where.tags_some.id_in },
@@ -438,10 +446,17 @@ const Query = {
         },
         info
       );
+      if (limit) {
+        questions = questions.filter(
+          (q, i) => i >= offset && i < offset + limit
+        );
+        return questions;
+      }
+      return questions;
     }
 
     if (args.filter === 'user') {
-      return ctx.db.query.questions(
+      let questions = await ctx.db.query.questions(
         {
           where: {
             askedBy_some: { id: args.where.askedBy_some.id },
@@ -450,6 +465,13 @@ const Query = {
         },
         info
       );
+      if (limit) {
+        questions = questions.filter(
+          (q, i) => i >= offset && i < offset + limit
+        );
+        return questions;
+      }
+      return questions;
     }
 
     if (args.filter === 'approval') {
