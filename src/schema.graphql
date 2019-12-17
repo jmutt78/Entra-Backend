@@ -40,6 +40,7 @@ type Mutation {
   createQuestionView(questionId: ID!): Boolean
   createQuestionVote(questionId: ID!, vote: String): Boolean
   createAnswerVote(answerId: ID!, vote: String): AnswerVote
+  createBusinessIdeaVote(ideaId: ID!, vote: String): BusinessIdeaVote
   updateUser(
     id: ID!
     email: String!
@@ -69,11 +70,12 @@ type Mutation {
   deleteBusinessIdea(id: ID!): BusinessIdea
   updateBusinessIdea(
     id: ID!
-    idea: String!
+    idea: String
     problem: String
     solution: String
     customer: String
     value: String
+    status: Boolean
   ): BusinessIdea!
 }
 
@@ -97,11 +99,13 @@ type Query {
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
     filter: String
-    skip: Int
     after: String
     before: String
-    first: Int
     last: Int
+    offset: Int
+    limit: Int
+    first: Int
+    skip: Int
   ): [Question]!
   businessIdeas(
     where: BusinessIdeaWhereInput
@@ -148,6 +152,7 @@ type Query {
   businessIdea(id: ID!): BusinessIdea
   answer(id: ID!): Answer
   answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
+  businessIdeaVote(where: BusinessIdeaVoteWhereUniqueInput!): BusinessIdeaVote
   searchQuestions(
     where: QuestionWhereInput
     limit: Int
@@ -292,6 +297,10 @@ type BusinessIdea implements Node {
   solution: String
   customer: String
   value: String
+  status: Boolean
+  upVotes: Int
+  downVotes: Int
+  businessIdeaVote: [BusinessIdeaVote]
 }
 
 type Tag {

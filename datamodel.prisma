@@ -7,7 +7,6 @@ PERMISSIONUPDATE
 
 
 
-
 type User {
   id: ID! @id @unique
   name: String!
@@ -98,4 +97,13 @@ problem: String
 solution: String
 customer: String
 value: String
+status: Boolean
+businessIdeaVote: [BusinessIdeaVote]
+}
+
+type BusinessIdeaVote {
+  id: ID! @id @unique
+  votedBy: User! @relation(link: INLINE)
+  votedBusinessIdea: BusinessIdea! @relation(link: INLINE)
+  vote: String
 }

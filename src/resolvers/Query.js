@@ -372,6 +372,7 @@ const Query = {
   },
   async questions(parent, args, ctx, info) {
     const { userId } = ctx.request;
+    const { limit, offset = 0 } = args;
 
     if (args.filter === 'My BookMarked') {
       return ctx.db.query.questions(
@@ -397,8 +398,9 @@ const Query = {
         info
       );
     }
+
     if (args.filter === 'all') {
-      return ctx.db.query.questions(
+      let questions = await ctx.db.query.questions(
         {
           where: {
             approval: true
@@ -406,10 +408,17 @@ const Query = {
         },
         info
       );
+      if (limit) {
+        questions = questions.filter(
+          (q, i) => i >= offset && i < offset + limit
+        );
+        return questions;
+      }
+      return questions;
     }
 
     if (args.filter === 'tags') {
-      return ctx.db.query.questions(
+      let questions = await ctx.db.query.questions(
         {
           where: {
             tags_some: { id: args.where.tags_some.id },
@@ -418,10 +427,17 @@ const Query = {
         },
         info
       );
+      if (limit) {
+        questions = questions.filter(
+          (q, i) => i >= offset && i < offset + limit
+        );
+        return questions;
+      }
+      return questions;
     }
 
     if (args.filter === 'tagslist') {
-      return ctx.db.query.questions(
+      let questions = await ctx.db.query.questions(
         {
           where: {
             tags_some: { id_in: args.where.tags_some.id_in },
@@ -430,10 +446,17 @@ const Query = {
         },
         info
       );
+      if (limit) {
+        questions = questions.filter(
+          (q, i) => i >= offset && i < offset + limit
+        );
+        return questions;
+      }
+      return questions;
     }
 
     if (args.filter === 'user') {
-      return ctx.db.query.questions(
+      let questions = await ctx.db.query.questions(
         {
           where: {
             askedBy_some: { id: args.where.askedBy_some.id },
@@ -442,6 +465,13 @@ const Query = {
         },
         info
       );
+      if (limit) {
+        questions = questions.filter(
+          (q, i) => i >= offset && i < offset + limit
+        );
+        return questions;
+      }
+      return questions;
     }
 
     if (args.filter === 'approval') {
@@ -673,6 +703,7 @@ const Query = {
   },
 
   answerVote: forwardTo('db'),
+  businessIdeaVote: forwardTo('db'),
 
   async question(parent, args, ctx, info) {
     const question = await ctx.db.query.question(
@@ -706,6 +737,17 @@ const Query = {
         {
           where: {
             createdBy: { id: userId }
+          }
+        },
+        info
+      );
+    }
+
+    if (args.filter === 'public') {
+      return ctx.db.query.businessIdeas(
+        {
+          where: {
+            status: true
           }
         },
         info

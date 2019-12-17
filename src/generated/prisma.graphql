@@ -1,6 +1,3 @@
-# source: http://localhost:4466
-# timestamp: Thu Nov 14 2019 06:35:13 GMT-0800 (PST)
-
 type AggregateAnswer {
   count: Int!
 }
@@ -14,6 +11,10 @@ type AggregateBookMark {
 }
 
 type AggregateBusinessIdea {
+  count: Int!
+}
+
+type AggregateBusinessIdeaVote {
   count: Int!
 }
 
@@ -37,7 +38,7 @@ type AggregateUser {
   count: Int!
 }
 
-type Answer implements Node {
+type Answer {
   id: ID!
   body: String!
   answeredBy: User!
@@ -65,18 +66,8 @@ type Answer implements Node {
   ): [AnswerVote!]
 }
 
-"""
-A connection to a list of items.
-"""
 type AnswerConnection {
-  """
-  Information to aid in pagination.
-  """
   pageInfo: PageInfo!
-
-  """
-  A list of edges.
-  """
   edges: [AnswerEdge]!
   aggregate: AggregateAnswer!
 }
@@ -84,10 +75,10 @@ type AnswerConnection {
 input AnswerCreateInput {
   id: ID
   body: String!
-  approval: Boolean
-  selected: Boolean
   answeredBy: UserCreateOneWithoutMyAnswersInput!
   answeredTo: QuestionCreateManyWithoutAnswersInput
+  approval: Boolean
+  selected: Boolean
   answerVote: AnswerVoteCreateManyWithoutVotedAnswerInput
 }
 
@@ -109,42 +100,32 @@ input AnswerCreateOneWithoutAnswerVoteInput {
 input AnswerCreateWithoutAnsweredByInput {
   id: ID
   body: String!
+  answeredTo: QuestionCreateManyWithoutAnswersInput
   approval: Boolean
   selected: Boolean
-  answeredTo: QuestionCreateManyWithoutAnswersInput
   answerVote: AnswerVoteCreateManyWithoutVotedAnswerInput
 }
 
 input AnswerCreateWithoutAnsweredToInput {
   id: ID
   body: String!
+  answeredBy: UserCreateOneWithoutMyAnswersInput!
   approval: Boolean
   selected: Boolean
-  answeredBy: UserCreateOneWithoutMyAnswersInput!
   answerVote: AnswerVoteCreateManyWithoutVotedAnswerInput
 }
 
 input AnswerCreateWithoutAnswerVoteInput {
   id: ID
   body: String!
-  approval: Boolean
-  selected: Boolean
   answeredBy: UserCreateOneWithoutMyAnswersInput!
   answeredTo: QuestionCreateManyWithoutAnswersInput
+  approval: Boolean
+  selected: Boolean
 }
 
-"""
-An edge in a connection.
-"""
 type AnswerEdge {
-  """
-  The item at the end of the edge.
-  """
   node: Answer!
-
-  """
-  A cursor for use in pagination.
-  """
   cursor: String!
 }
 
@@ -173,236 +154,57 @@ type AnswerPreviousValues {
 }
 
 input AnswerScalarWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [AnswerScalarWhereInput!]
-
-  """
-  Logical OR on all given filters.
-  """
-  OR: [AnswerScalarWhereInput!]
-
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [AnswerScalarWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
   body: String
-
-  """
-  All values that are not equal to given value.
-  """
   body_not: String
-
-  """
-  All values that are contained in given list.
-  """
   body_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   body_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   body_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   body_lte: String
-
-  """
-  All values greater than the given value.
-  """
   body_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   body_gte: String
-
-  """
-  All values containing the given string.
-  """
   body_contains: String
-
-  """
-  All values not containing the given string.
-  """
   body_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   body_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   body_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   body_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   body_not_ends_with: String
   approval: Boolean
-
-  """
-  All values that are not equal to given value.
-  """
   approval_not: Boolean
   selected: Boolean
-
-  """
-  All values that are not equal to given value.
-  """
   selected_not: Boolean
   createdAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   createdAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   createdAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   createdAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   createdAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   createdAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   createdAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   createdAt_gte: DateTime
   updatedAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   updatedAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   updatedAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   updatedAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   updatedAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   updatedAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   updatedAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   updatedAt_gte: DateTime
+  AND: [AnswerScalarWhereInput!]
+  OR: [AnswerScalarWhereInput!]
+  NOT: [AnswerScalarWhereInput!]
 }
 
 type AnswerSubscriptionPayload {
@@ -413,39 +215,22 @@ type AnswerSubscriptionPayload {
 }
 
 input AnswerSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [AnswerSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: AnswerWhereInput
+  AND: [AnswerSubscriptionWhereInput!]
+  OR: [AnswerSubscriptionWhereInput!]
+  NOT: [AnswerSubscriptionWhereInput!]
 }
 
 input AnswerUpdateInput {
   body: String
-  approval: Boolean
-  selected: Boolean
   answeredBy: UserUpdateOneRequiredWithoutMyAnswersInput
   answeredTo: QuestionUpdateManyWithoutAnswersInput
+  approval: Boolean
+  selected: Boolean
   answerVote: AnswerVoteUpdateManyWithoutVotedAnswerInput
 }
 
@@ -463,26 +248,26 @@ input AnswerUpdateManyMutationInput {
 
 input AnswerUpdateManyWithoutAnsweredByInput {
   create: [AnswerCreateWithoutAnsweredByInput!]
+  delete: [AnswerWhereUniqueInput!]
   connect: [AnswerWhereUniqueInput!]
   set: [AnswerWhereUniqueInput!]
   disconnect: [AnswerWhereUniqueInput!]
-  delete: [AnswerWhereUniqueInput!]
   update: [AnswerUpdateWithWhereUniqueWithoutAnsweredByInput!]
-  updateMany: [AnswerUpdateManyWithWhereNestedInput!]
-  deleteMany: [AnswerScalarWhereInput!]
   upsert: [AnswerUpsertWithWhereUniqueWithoutAnsweredByInput!]
+  deleteMany: [AnswerScalarWhereInput!]
+  updateMany: [AnswerUpdateManyWithWhereNestedInput!]
 }
 
 input AnswerUpdateManyWithoutAnsweredToInput {
   create: [AnswerCreateWithoutAnsweredToInput!]
+  delete: [AnswerWhereUniqueInput!]
   connect: [AnswerWhereUniqueInput!]
   set: [AnswerWhereUniqueInput!]
   disconnect: [AnswerWhereUniqueInput!]
-  delete: [AnswerWhereUniqueInput!]
   update: [AnswerUpdateWithWhereUniqueWithoutAnsweredToInput!]
-  updateMany: [AnswerUpdateManyWithWhereNestedInput!]
-  deleteMany: [AnswerScalarWhereInput!]
   upsert: [AnswerUpsertWithWhereUniqueWithoutAnsweredToInput!]
+  deleteMany: [AnswerScalarWhereInput!]
+  updateMany: [AnswerUpdateManyWithWhereNestedInput!]
 }
 
 input AnswerUpdateManyWithWhereNestedInput {
@@ -492,33 +277,33 @@ input AnswerUpdateManyWithWhereNestedInput {
 
 input AnswerUpdateOneRequiredWithoutAnswerVoteInput {
   create: AnswerCreateWithoutAnswerVoteInput
-  connect: AnswerWhereUniqueInput
   update: AnswerUpdateWithoutAnswerVoteDataInput
   upsert: AnswerUpsertWithoutAnswerVoteInput
+  connect: AnswerWhereUniqueInput
 }
 
 input AnswerUpdateWithoutAnsweredByDataInput {
   body: String
+  answeredTo: QuestionUpdateManyWithoutAnswersInput
   approval: Boolean
   selected: Boolean
-  answeredTo: QuestionUpdateManyWithoutAnswersInput
   answerVote: AnswerVoteUpdateManyWithoutVotedAnswerInput
 }
 
 input AnswerUpdateWithoutAnsweredToDataInput {
   body: String
+  answeredBy: UserUpdateOneRequiredWithoutMyAnswersInput
   approval: Boolean
   selected: Boolean
-  answeredBy: UserUpdateOneRequiredWithoutMyAnswersInput
   answerVote: AnswerVoteUpdateManyWithoutVotedAnswerInput
 }
 
 input AnswerUpdateWithoutAnswerVoteDataInput {
   body: String
-  approval: Boolean
-  selected: Boolean
   answeredBy: UserUpdateOneRequiredWithoutMyAnswersInput
   answeredTo: QuestionUpdateManyWithoutAnswersInput
+  approval: Boolean
+  selected: Boolean
 }
 
 input AnswerUpdateWithWhereUniqueWithoutAnsweredByInput {
@@ -548,34 +333,24 @@ input AnswerUpsertWithWhereUniqueWithoutAnsweredToInput {
   create: AnswerCreateWithoutAnsweredToInput!
 }
 
-type AnswerVote implements Node {
+type AnswerVote {
   id: ID!
   votedBy: User!
   votedAnswer: Answer!
   vote: String
 }
 
-"""
-A connection to a list of items.
-"""
 type AnswerVoteConnection {
-  """
-  Information to aid in pagination.
-  """
   pageInfo: PageInfo!
-
-  """
-  A list of edges.
-  """
   edges: [AnswerVoteEdge]!
   aggregate: AggregateAnswerVote!
 }
 
 input AnswerVoteCreateInput {
   id: ID
-  vote: String
   votedBy: UserCreateOneInput!
   votedAnswer: AnswerCreateOneWithoutAnswerVoteInput!
+  vote: String
 }
 
 input AnswerVoteCreateManyWithoutVotedAnswerInput {
@@ -585,22 +360,12 @@ input AnswerVoteCreateManyWithoutVotedAnswerInput {
 
 input AnswerVoteCreateWithoutVotedAnswerInput {
   id: ID
-  vote: String
   votedBy: UserCreateOneInput!
+  vote: String
 }
 
-"""
-An edge in a connection.
-"""
 type AnswerVoteEdge {
-  """
-  The item at the end of the edge.
-  """
   node: AnswerVote!
-
-  """
-  A cursor for use in pagination.
-  """
   cursor: String!
 }
 
@@ -617,152 +382,37 @@ type AnswerVotePreviousValues {
 }
 
 input AnswerVoteScalarWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [AnswerVoteScalarWhereInput!]
-
-  """
-  Logical OR on all given filters.
-  """
-  OR: [AnswerVoteScalarWhereInput!]
-
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [AnswerVoteScalarWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
   vote: String
-
-  """
-  All values that are not equal to given value.
-  """
   vote_not: String
-
-  """
-  All values that are contained in given list.
-  """
   vote_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   vote_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   vote_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   vote_lte: String
-
-  """
-  All values greater than the given value.
-  """
   vote_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   vote_gte: String
-
-  """
-  All values containing the given string.
-  """
   vote_contains: String
-
-  """
-  All values not containing the given string.
-  """
   vote_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   vote_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   vote_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   vote_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   vote_not_ends_with: String
+  AND: [AnswerVoteScalarWhereInput!]
+  OR: [AnswerVoteScalarWhereInput!]
+  NOT: [AnswerVoteScalarWhereInput!]
 }
 
 type AnswerVoteSubscriptionPayload {
@@ -773,37 +423,20 @@ type AnswerVoteSubscriptionPayload {
 }
 
 input AnswerVoteSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [AnswerVoteSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: AnswerVoteWhereInput
+  AND: [AnswerVoteSubscriptionWhereInput!]
+  OR: [AnswerVoteSubscriptionWhereInput!]
+  NOT: [AnswerVoteSubscriptionWhereInput!]
 }
 
 input AnswerVoteUpdateInput {
-  vote: String
   votedBy: UserUpdateOneRequiredInput
   votedAnswer: AnswerUpdateOneRequiredWithoutAnswerVoteInput
+  vote: String
 }
 
 input AnswerVoteUpdateManyDataInput {
@@ -816,14 +449,14 @@ input AnswerVoteUpdateManyMutationInput {
 
 input AnswerVoteUpdateManyWithoutVotedAnswerInput {
   create: [AnswerVoteCreateWithoutVotedAnswerInput!]
+  delete: [AnswerVoteWhereUniqueInput!]
   connect: [AnswerVoteWhereUniqueInput!]
   set: [AnswerVoteWhereUniqueInput!]
   disconnect: [AnswerVoteWhereUniqueInput!]
-  delete: [AnswerVoteWhereUniqueInput!]
   update: [AnswerVoteUpdateWithWhereUniqueWithoutVotedAnswerInput!]
-  updateMany: [AnswerVoteUpdateManyWithWhereNestedInput!]
-  deleteMany: [AnswerVoteScalarWhereInput!]
   upsert: [AnswerVoteUpsertWithWhereUniqueWithoutVotedAnswerInput!]
+  deleteMany: [AnswerVoteScalarWhereInput!]
+  updateMany: [AnswerVoteUpdateManyWithWhereNestedInput!]
 }
 
 input AnswerVoteUpdateManyWithWhereNestedInput {
@@ -832,8 +465,8 @@ input AnswerVoteUpdateManyWithWhereNestedInput {
 }
 
 input AnswerVoteUpdateWithoutVotedAnswerDataInput {
-  vote: String
   votedBy: UserUpdateOneRequiredInput
+  vote: String
 }
 
 input AnswerVoteUpdateWithWhereUniqueWithoutVotedAnswerInput {
@@ -848,144 +481,39 @@ input AnswerVoteUpsertWithWhereUniqueWithoutVotedAnswerInput {
 }
 
 input AnswerVoteWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [AnswerVoteWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
-  vote: String
-
-  """
-  All values that are not equal to given value.
-  """
-  vote_not: String
-
-  """
-  All values that are contained in given list.
-  """
-  vote_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
-  vote_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
-  vote_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
-  vote_lte: String
-
-  """
-  All values greater than the given value.
-  """
-  vote_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
-  vote_gte: String
-
-  """
-  All values containing the given string.
-  """
-  vote_contains: String
-
-  """
-  All values not containing the given string.
-  """
-  vote_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
-  vote_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
-  vote_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
-  vote_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
-  vote_not_ends_with: String
   votedBy: UserWhereInput
   votedAnswer: AnswerWhereInput
+  vote: String
+  vote_not: String
+  vote_in: [String!]
+  vote_not_in: [String!]
+  vote_lt: String
+  vote_lte: String
+  vote_gt: String
+  vote_gte: String
+  vote_contains: String
+  vote_not_contains: String
+  vote_starts_with: String
+  vote_not_starts_with: String
+  vote_ends_with: String
+  vote_not_ends_with: String
+  AND: [AnswerVoteWhereInput!]
+  OR: [AnswerVoteWhereInput!]
+  NOT: [AnswerVoteWhereInput!]
 }
 
 input AnswerVoteWhereUniqueInput {
@@ -993,229 +521,64 @@ input AnswerVoteWhereUniqueInput {
 }
 
 input AnswerWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [AnswerWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
   body: String
-
-  """
-  All values that are not equal to given value.
-  """
   body_not: String
-
-  """
-  All values that are contained in given list.
-  """
   body_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   body_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   body_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   body_lte: String
-
-  """
-  All values greater than the given value.
-  """
   body_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   body_gte: String
-
-  """
-  All values containing the given string.
-  """
   body_contains: String
-
-  """
-  All values not containing the given string.
-  """
   body_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   body_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   body_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   body_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   body_not_ends_with: String
+  answeredBy: UserWhereInput
+  answeredTo_every: QuestionWhereInput
+  answeredTo_some: QuestionWhereInput
+  answeredTo_none: QuestionWhereInput
   approval: Boolean
-
-  """
-  All values that are not equal to given value.
-  """
   approval_not: Boolean
   selected: Boolean
-
-  """
-  All values that are not equal to given value.
-  """
   selected_not: Boolean
   createdAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   createdAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   createdAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   createdAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   createdAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   createdAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   createdAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   createdAt_gte: DateTime
   updatedAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   updatedAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   updatedAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   updatedAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   updatedAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   updatedAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   updatedAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   updatedAt_gte: DateTime
-  answeredBy: UserWhereInput
-  answeredTo_some: QuestionWhereInput
+  answerVote_every: AnswerVoteWhereInput
   answerVote_some: AnswerVoteWhereInput
+  answerVote_none: AnswerVoteWhereInput
+  AND: [AnswerWhereInput!]
+  OR: [AnswerWhereInput!]
+  NOT: [AnswerWhereInput!]
 }
 
 input AnswerWhereUniqueInput {
@@ -1223,13 +586,10 @@ input AnswerWhereUniqueInput {
 }
 
 type BatchPayload {
-  """
-  The number of nodes that have been affected by the Batch operation.
-  """
   count: Long!
 }
 
-type BookMark implements Node {
+type BookMark {
   id: ID!
   questions(
     where: QuestionWhereInput
@@ -1243,18 +603,8 @@ type BookMark implements Node {
   markedBy: User!
 }
 
-"""
-A connection to a list of items.
-"""
 type BookMarkConnection {
-  """
-  Information to aid in pagination.
-  """
   pageInfo: PageInfo!
-
-  """
-  A list of edges.
-  """
   edges: [BookMarkEdge]!
   aggregate: AggregateBookMark!
 }
@@ -1285,18 +635,8 @@ input BookMarkCreateWithoutQuestionsInput {
   markedBy: UserCreateOneWithoutMyBookMarksInput!
 }
 
-"""
-An edge in a connection.
-"""
 type BookMarkEdge {
-  """
-  The item at the end of the edge.
-  """
   node: BookMark!
-
-  """
-  A cursor for use in pagination.
-  """
   cursor: String!
 }
 
@@ -1310,86 +650,23 @@ type BookMarkPreviousValues {
 }
 
 input BookMarkScalarWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [BookMarkScalarWhereInput!]
-
-  """
-  Logical OR on all given filters.
-  """
-  OR: [BookMarkScalarWhereInput!]
-
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [BookMarkScalarWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
+  AND: [BookMarkScalarWhereInput!]
+  OR: [BookMarkScalarWhereInput!]
+  NOT: [BookMarkScalarWhereInput!]
 }
 
 type BookMarkSubscriptionPayload {
@@ -1400,31 +677,14 @@ type BookMarkSubscriptionPayload {
 }
 
 input BookMarkSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [BookMarkSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: BookMarkWhereInput
+  AND: [BookMarkSubscriptionWhereInput!]
+  OR: [BookMarkSubscriptionWhereInput!]
+  NOT: [BookMarkSubscriptionWhereInput!]
 }
 
 input BookMarkUpdateInput {
@@ -1434,24 +694,24 @@ input BookMarkUpdateInput {
 
 input BookMarkUpdateManyWithoutMarkedByInput {
   create: [BookMarkCreateWithoutMarkedByInput!]
+  delete: [BookMarkWhereUniqueInput!]
   connect: [BookMarkWhereUniqueInput!]
   set: [BookMarkWhereUniqueInput!]
   disconnect: [BookMarkWhereUniqueInput!]
-  delete: [BookMarkWhereUniqueInput!]
   update: [BookMarkUpdateWithWhereUniqueWithoutMarkedByInput!]
-  deleteMany: [BookMarkScalarWhereInput!]
   upsert: [BookMarkUpsertWithWhereUniqueWithoutMarkedByInput!]
+  deleteMany: [BookMarkScalarWhereInput!]
 }
 
 input BookMarkUpdateManyWithoutQuestionsInput {
   create: [BookMarkCreateWithoutQuestionsInput!]
+  delete: [BookMarkWhereUniqueInput!]
   connect: [BookMarkWhereUniqueInput!]
   set: [BookMarkWhereUniqueInput!]
   disconnect: [BookMarkWhereUniqueInput!]
-  delete: [BookMarkWhereUniqueInput!]
   update: [BookMarkUpdateWithWhereUniqueWithoutQuestionsInput!]
-  deleteMany: [BookMarkScalarWhereInput!]
   upsert: [BookMarkUpsertWithWhereUniqueWithoutQuestionsInput!]
+  deleteMany: [BookMarkScalarWhereInput!]
 }
 
 input BookMarkUpdateWithoutMarkedByDataInput {
@@ -1485,85 +745,34 @@ input BookMarkUpsertWithWhereUniqueWithoutQuestionsInput {
 }
 
 input BookMarkWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [BookMarkWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
+  questions_every: QuestionWhereInput
   questions_some: QuestionWhereInput
+  questions_none: QuestionWhereInput
   markedBy: UserWhereInput
+  AND: [BookMarkWhereInput!]
+  OR: [BookMarkWhereInput!]
+  NOT: [BookMarkWhereInput!]
 }
 
 input BookMarkWhereUniqueInput {
   id: ID
 }
 
-type BusinessIdea implements Node {
+type BusinessIdea {
   id: ID!
   createdBy: User!
   createdAt: DateTime!
@@ -1573,37 +782,55 @@ type BusinessIdea implements Node {
   solution: String
   customer: String
   value: String
+  status: Boolean
+  businessIdeaVote(
+    where: BusinessIdeaVoteWhereInput
+    orderBy: BusinessIdeaVoteOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [BusinessIdeaVote!]
 }
 
-"""
-A connection to a list of items.
-"""
 type BusinessIdeaConnection {
-  """
-  Information to aid in pagination.
-  """
   pageInfo: PageInfo!
-
-  """
-  A list of edges.
-  """
   edges: [BusinessIdeaEdge]!
   aggregate: AggregateBusinessIdea!
 }
 
 input BusinessIdeaCreateInput {
   id: ID
+  createdBy: UserCreateOneWithoutBusinessIdeasInput!
   idea: String!
   problem: String
   solution: String
   customer: String
   value: String
-  createdBy: UserCreateOneWithoutBusinessIdeasInput!
+  status: Boolean
+  businessIdeaVote: BusinessIdeaVoteCreateManyWithoutVotedBusinessIdeaInput
 }
 
 input BusinessIdeaCreateManyWithoutCreatedByInput {
   create: [BusinessIdeaCreateWithoutCreatedByInput!]
   connect: [BusinessIdeaWhereUniqueInput!]
+}
+
+input BusinessIdeaCreateOneWithoutBusinessIdeaVoteInput {
+  create: BusinessIdeaCreateWithoutBusinessIdeaVoteInput
+  connect: BusinessIdeaWhereUniqueInput
+}
+
+input BusinessIdeaCreateWithoutBusinessIdeaVoteInput {
+  id: ID
+  createdBy: UserCreateOneWithoutBusinessIdeasInput!
+  idea: String!
+  problem: String
+  solution: String
+  customer: String
+  value: String
+  status: Boolean
 }
 
 input BusinessIdeaCreateWithoutCreatedByInput {
@@ -1613,20 +840,12 @@ input BusinessIdeaCreateWithoutCreatedByInput {
   solution: String
   customer: String
   value: String
+  status: Boolean
+  businessIdeaVote: BusinessIdeaVoteCreateManyWithoutVotedBusinessIdeaInput
 }
 
-"""
-An edge in a connection.
-"""
 type BusinessIdeaEdge {
-  """
-  The item at the end of the edge.
-  """
   node: BusinessIdea!
-
-  """
-  A cursor for use in pagination.
-  """
   cursor: String!
 }
 
@@ -1647,6 +866,8 @@ enum BusinessIdeaOrderByInput {
   customer_DESC
   value_ASC
   value_DESC
+  status_ASC
+  status_DESC
 }
 
 type BusinessIdeaPreviousValues {
@@ -1658,491 +879,115 @@ type BusinessIdeaPreviousValues {
   solution: String
   customer: String
   value: String
+  status: Boolean
 }
 
 input BusinessIdeaScalarWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [BusinessIdeaScalarWhereInput!]
-
-  """
-  Logical OR on all given filters.
-  """
-  OR: [BusinessIdeaScalarWhereInput!]
-
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [BusinessIdeaScalarWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
   createdAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   createdAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   createdAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   createdAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   createdAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   createdAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   createdAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   createdAt_gte: DateTime
   updatedAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   updatedAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   updatedAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   updatedAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   updatedAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   updatedAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   updatedAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   updatedAt_gte: DateTime
   idea: String
-
-  """
-  All values that are not equal to given value.
-  """
   idea_not: String
-
-  """
-  All values that are contained in given list.
-  """
   idea_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   idea_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   idea_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   idea_lte: String
-
-  """
-  All values greater than the given value.
-  """
   idea_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   idea_gte: String
-
-  """
-  All values containing the given string.
-  """
   idea_contains: String
-
-  """
-  All values not containing the given string.
-  """
   idea_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   idea_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   idea_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   idea_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   idea_not_ends_with: String
   problem: String
-
-  """
-  All values that are not equal to given value.
-  """
   problem_not: String
-
-  """
-  All values that are contained in given list.
-  """
   problem_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   problem_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   problem_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   problem_lte: String
-
-  """
-  All values greater than the given value.
-  """
   problem_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   problem_gte: String
-
-  """
-  All values containing the given string.
-  """
   problem_contains: String
-
-  """
-  All values not containing the given string.
-  """
   problem_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   problem_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   problem_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   problem_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   problem_not_ends_with: String
   solution: String
-
-  """
-  All values that are not equal to given value.
-  """
   solution_not: String
-
-  """
-  All values that are contained in given list.
-  """
   solution_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   solution_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   solution_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   solution_lte: String
-
-  """
-  All values greater than the given value.
-  """
   solution_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   solution_gte: String
-
-  """
-  All values containing the given string.
-  """
   solution_contains: String
-
-  """
-  All values not containing the given string.
-  """
   solution_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   solution_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   solution_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   solution_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   solution_not_ends_with: String
   customer: String
-
-  """
-  All values that are not equal to given value.
-  """
   customer_not: String
-
-  """
-  All values that are contained in given list.
-  """
   customer_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   customer_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   customer_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   customer_lte: String
-
-  """
-  All values greater than the given value.
-  """
   customer_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   customer_gte: String
-
-  """
-  All values containing the given string.
-  """
   customer_contains: String
-
-  """
-  All values not containing the given string.
-  """
   customer_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   customer_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   customer_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   customer_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   customer_not_ends_with: String
   value: String
-
-  """
-  All values that are not equal to given value.
-  """
   value_not: String
-
-  """
-  All values that are contained in given list.
-  """
   value_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   value_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   value_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   value_lte: String
-
-  """
-  All values greater than the given value.
-  """
   value_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   value_gte: String
-
-  """
-  All values containing the given string.
-  """
   value_contains: String
-
-  """
-  All values not containing the given string.
-  """
   value_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   value_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   value_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   value_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   value_not_ends_with: String
+  status: Boolean
+  status_not: Boolean
+  AND: [BusinessIdeaScalarWhereInput!]
+  OR: [BusinessIdeaScalarWhereInput!]
+  NOT: [BusinessIdeaScalarWhereInput!]
 }
 
 type BusinessIdeaSubscriptionPayload {
@@ -2153,40 +998,25 @@ type BusinessIdeaSubscriptionPayload {
 }
 
 input BusinessIdeaSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [BusinessIdeaSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: BusinessIdeaWhereInput
+  AND: [BusinessIdeaSubscriptionWhereInput!]
+  OR: [BusinessIdeaSubscriptionWhereInput!]
+  NOT: [BusinessIdeaSubscriptionWhereInput!]
 }
 
 input BusinessIdeaUpdateInput {
+  createdBy: UserUpdateOneRequiredWithoutBusinessIdeasInput
   idea: String
   problem: String
   solution: String
   customer: String
   value: String
-  createdBy: UserUpdateOneRequiredWithoutBusinessIdeasInput
+  status: Boolean
+  businessIdeaVote: BusinessIdeaVoteUpdateManyWithoutVotedBusinessIdeaInput
 }
 
 input BusinessIdeaUpdateManyDataInput {
@@ -2195,6 +1025,7 @@ input BusinessIdeaUpdateManyDataInput {
   solution: String
   customer: String
   value: String
+  status: Boolean
 }
 
 input BusinessIdeaUpdateManyMutationInput {
@@ -2203,23 +1034,41 @@ input BusinessIdeaUpdateManyMutationInput {
   solution: String
   customer: String
   value: String
+  status: Boolean
 }
 
 input BusinessIdeaUpdateManyWithoutCreatedByInput {
   create: [BusinessIdeaCreateWithoutCreatedByInput!]
+  delete: [BusinessIdeaWhereUniqueInput!]
   connect: [BusinessIdeaWhereUniqueInput!]
   set: [BusinessIdeaWhereUniqueInput!]
   disconnect: [BusinessIdeaWhereUniqueInput!]
-  delete: [BusinessIdeaWhereUniqueInput!]
   update: [BusinessIdeaUpdateWithWhereUniqueWithoutCreatedByInput!]
-  updateMany: [BusinessIdeaUpdateManyWithWhereNestedInput!]
-  deleteMany: [BusinessIdeaScalarWhereInput!]
   upsert: [BusinessIdeaUpsertWithWhereUniqueWithoutCreatedByInput!]
+  deleteMany: [BusinessIdeaScalarWhereInput!]
+  updateMany: [BusinessIdeaUpdateManyWithWhereNestedInput!]
 }
 
 input BusinessIdeaUpdateManyWithWhereNestedInput {
   where: BusinessIdeaScalarWhereInput!
   data: BusinessIdeaUpdateManyDataInput!
+}
+
+input BusinessIdeaUpdateOneRequiredWithoutBusinessIdeaVoteInput {
+  create: BusinessIdeaCreateWithoutBusinessIdeaVoteInput
+  update: BusinessIdeaUpdateWithoutBusinessIdeaVoteDataInput
+  upsert: BusinessIdeaUpsertWithoutBusinessIdeaVoteInput
+  connect: BusinessIdeaWhereUniqueInput
+}
+
+input BusinessIdeaUpdateWithoutBusinessIdeaVoteDataInput {
+  createdBy: UserUpdateOneRequiredWithoutBusinessIdeasInput
+  idea: String
+  problem: String
+  solution: String
+  customer: String
+  value: String
+  status: Boolean
 }
 
 input BusinessIdeaUpdateWithoutCreatedByDataInput {
@@ -2228,11 +1077,18 @@ input BusinessIdeaUpdateWithoutCreatedByDataInput {
   solution: String
   customer: String
   value: String
+  status: Boolean
+  businessIdeaVote: BusinessIdeaVoteUpdateManyWithoutVotedBusinessIdeaInput
 }
 
 input BusinessIdeaUpdateWithWhereUniqueWithoutCreatedByInput {
   where: BusinessIdeaWhereUniqueInput!
   data: BusinessIdeaUpdateWithoutCreatedByDataInput!
+}
+
+input BusinessIdeaUpsertWithoutBusinessIdeaVoteInput {
+  update: BusinessIdeaUpdateWithoutBusinessIdeaVoteDataInput!
+  create: BusinessIdeaCreateWithoutBusinessIdeaVoteInput!
 }
 
 input BusinessIdeaUpsertWithWhereUniqueWithoutCreatedByInput {
@@ -2241,480 +1097,303 @@ input BusinessIdeaUpsertWithWhereUniqueWithoutCreatedByInput {
   create: BusinessIdeaCreateWithoutCreatedByInput!
 }
 
-input BusinessIdeaWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [BusinessIdeaWhereInput!]
+type BusinessIdeaVote {
+  id: ID!
+  votedBy: User!
+  votedBusinessIdea: BusinessIdea!
+  vote: String
+}
+
+type BusinessIdeaVoteConnection {
+  pageInfo: PageInfo!
+  edges: [BusinessIdeaVoteEdge]!
+  aggregate: AggregateBusinessIdeaVote!
+}
+
+input BusinessIdeaVoteCreateInput {
   id: ID
+  votedBy: UserCreateOneInput!
+  votedBusinessIdea: BusinessIdeaCreateOneWithoutBusinessIdeaVoteInput!
+  vote: String
+}
 
-  """
-  All values that are not equal to given value.
-  """
+input BusinessIdeaVoteCreateManyWithoutVotedBusinessIdeaInput {
+  create: [BusinessIdeaVoteCreateWithoutVotedBusinessIdeaInput!]
+  connect: [BusinessIdeaVoteWhereUniqueInput!]
+}
+
+input BusinessIdeaVoteCreateWithoutVotedBusinessIdeaInput {
+  id: ID
+  votedBy: UserCreateOneInput!
+  vote: String
+}
+
+type BusinessIdeaVoteEdge {
+  node: BusinessIdeaVote!
+  cursor: String!
+}
+
+enum BusinessIdeaVoteOrderByInput {
+  id_ASC
+  id_DESC
+  vote_ASC
+  vote_DESC
+}
+
+type BusinessIdeaVotePreviousValues {
+  id: ID!
+  vote: String
+}
+
+input BusinessIdeaVoteScalarWhereInput {
+  id: ID
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
+  vote: String
+  vote_not: String
+  vote_in: [String!]
+  vote_not_in: [String!]
+  vote_lt: String
+  vote_lte: String
+  vote_gt: String
+  vote_gte: String
+  vote_contains: String
+  vote_not_contains: String
+  vote_starts_with: String
+  vote_not_starts_with: String
+  vote_ends_with: String
+  vote_not_ends_with: String
+  AND: [BusinessIdeaVoteScalarWhereInput!]
+  OR: [BusinessIdeaVoteScalarWhereInput!]
+  NOT: [BusinessIdeaVoteScalarWhereInput!]
+}
+
+type BusinessIdeaVoteSubscriptionPayload {
+  mutation: MutationType!
+  node: BusinessIdeaVote
+  updatedFields: [String!]
+  previousValues: BusinessIdeaVotePreviousValues
+}
+
+input BusinessIdeaVoteSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: BusinessIdeaVoteWhereInput
+  AND: [BusinessIdeaVoteSubscriptionWhereInput!]
+  OR: [BusinessIdeaVoteSubscriptionWhereInput!]
+  NOT: [BusinessIdeaVoteSubscriptionWhereInput!]
+}
+
+input BusinessIdeaVoteUpdateInput {
+  votedBy: UserUpdateOneRequiredInput
+  votedBusinessIdea: BusinessIdeaUpdateOneRequiredWithoutBusinessIdeaVoteInput
+  vote: String
+}
+
+input BusinessIdeaVoteUpdateManyDataInput {
+  vote: String
+}
+
+input BusinessIdeaVoteUpdateManyMutationInput {
+  vote: String
+}
+
+input BusinessIdeaVoteUpdateManyWithoutVotedBusinessIdeaInput {
+  create: [BusinessIdeaVoteCreateWithoutVotedBusinessIdeaInput!]
+  delete: [BusinessIdeaVoteWhereUniqueInput!]
+  connect: [BusinessIdeaVoteWhereUniqueInput!]
+  set: [BusinessIdeaVoteWhereUniqueInput!]
+  disconnect: [BusinessIdeaVoteWhereUniqueInput!]
+  update: [BusinessIdeaVoteUpdateWithWhereUniqueWithoutVotedBusinessIdeaInput!]
+  upsert: [BusinessIdeaVoteUpsertWithWhereUniqueWithoutVotedBusinessIdeaInput!]
+  deleteMany: [BusinessIdeaVoteScalarWhereInput!]
+  updateMany: [BusinessIdeaVoteUpdateManyWithWhereNestedInput!]
+}
+
+input BusinessIdeaVoteUpdateManyWithWhereNestedInput {
+  where: BusinessIdeaVoteScalarWhereInput!
+  data: BusinessIdeaVoteUpdateManyDataInput!
+}
+
+input BusinessIdeaVoteUpdateWithoutVotedBusinessIdeaDataInput {
+  votedBy: UserUpdateOneRequiredInput
+  vote: String
+}
+
+input BusinessIdeaVoteUpdateWithWhereUniqueWithoutVotedBusinessIdeaInput {
+  where: BusinessIdeaVoteWhereUniqueInput!
+  data: BusinessIdeaVoteUpdateWithoutVotedBusinessIdeaDataInput!
+}
+
+input BusinessIdeaVoteUpsertWithWhereUniqueWithoutVotedBusinessIdeaInput {
+  where: BusinessIdeaVoteWhereUniqueInput!
+  update: BusinessIdeaVoteUpdateWithoutVotedBusinessIdeaDataInput!
+  create: BusinessIdeaVoteCreateWithoutVotedBusinessIdeaInput!
+}
+
+input BusinessIdeaVoteWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  votedBy: UserWhereInput
+  votedBusinessIdea: BusinessIdeaWhereInput
+  vote: String
+  vote_not: String
+  vote_in: [String!]
+  vote_not_in: [String!]
+  vote_lt: String
+  vote_lte: String
+  vote_gt: String
+  vote_gte: String
+  vote_contains: String
+  vote_not_contains: String
+  vote_starts_with: String
+  vote_not_starts_with: String
+  vote_ends_with: String
+  vote_not_ends_with: String
+  AND: [BusinessIdeaVoteWhereInput!]
+  OR: [BusinessIdeaVoteWhereInput!]
+  NOT: [BusinessIdeaVoteWhereInput!]
+}
+
+input BusinessIdeaVoteWhereUniqueInput {
+  id: ID
+}
+
+input BusinessIdeaWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdBy: UserWhereInput
   createdAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   createdAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   createdAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   createdAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   createdAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   createdAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   createdAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   createdAt_gte: DateTime
   updatedAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   updatedAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   updatedAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   updatedAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   updatedAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   updatedAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   updatedAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   updatedAt_gte: DateTime
   idea: String
-
-  """
-  All values that are not equal to given value.
-  """
   idea_not: String
-
-  """
-  All values that are contained in given list.
-  """
   idea_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   idea_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   idea_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   idea_lte: String
-
-  """
-  All values greater than the given value.
-  """
   idea_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   idea_gte: String
-
-  """
-  All values containing the given string.
-  """
   idea_contains: String
-
-  """
-  All values not containing the given string.
-  """
   idea_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   idea_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   idea_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   idea_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   idea_not_ends_with: String
   problem: String
-
-  """
-  All values that are not equal to given value.
-  """
   problem_not: String
-
-  """
-  All values that are contained in given list.
-  """
   problem_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   problem_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   problem_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   problem_lte: String
-
-  """
-  All values greater than the given value.
-  """
   problem_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   problem_gte: String
-
-  """
-  All values containing the given string.
-  """
   problem_contains: String
-
-  """
-  All values not containing the given string.
-  """
   problem_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   problem_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   problem_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   problem_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   problem_not_ends_with: String
   solution: String
-
-  """
-  All values that are not equal to given value.
-  """
   solution_not: String
-
-  """
-  All values that are contained in given list.
-  """
   solution_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   solution_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   solution_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   solution_lte: String
-
-  """
-  All values greater than the given value.
-  """
   solution_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   solution_gte: String
-
-  """
-  All values containing the given string.
-  """
   solution_contains: String
-
-  """
-  All values not containing the given string.
-  """
   solution_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   solution_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   solution_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   solution_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   solution_not_ends_with: String
   customer: String
-
-  """
-  All values that are not equal to given value.
-  """
   customer_not: String
-
-  """
-  All values that are contained in given list.
-  """
   customer_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   customer_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   customer_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   customer_lte: String
-
-  """
-  All values greater than the given value.
-  """
   customer_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   customer_gte: String
-
-  """
-  All values containing the given string.
-  """
   customer_contains: String
-
-  """
-  All values not containing the given string.
-  """
   customer_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   customer_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   customer_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   customer_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   customer_not_ends_with: String
   value: String
-
-  """
-  All values that are not equal to given value.
-  """
   value_not: String
-
-  """
-  All values that are contained in given list.
-  """
   value_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   value_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   value_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   value_lte: String
-
-  """
-  All values greater than the given value.
-  """
   value_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   value_gte: String
-
-  """
-  All values containing the given string.
-  """
   value_contains: String
-
-  """
-  All values not containing the given string.
-  """
   value_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   value_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   value_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   value_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   value_not_ends_with: String
-  createdBy: UserWhereInput
+  status: Boolean
+  status_not: Boolean
+  businessIdeaVote_every: BusinessIdeaVoteWhereInput
+  businessIdeaVote_some: BusinessIdeaVoteWhereInput
+  businessIdeaVote_none: BusinessIdeaVoteWhereInput
+  AND: [BusinessIdeaWhereInput!]
+  OR: [BusinessIdeaWhereInput!]
+  NOT: [BusinessIdeaWhereInput!]
 }
 
 input BusinessIdeaWhereUniqueInput {
@@ -2723,139 +1402,153 @@ input BusinessIdeaWhereUniqueInput {
 
 scalar DateTime
 
-"""
-The `Long` scalar type represents non-fractional signed whole numeric values.
-Long can represent values between -(2^63) and 2^63 - 1.
-"""
 scalar Long
 
 type Mutation {
   createAnswer(data: AnswerCreateInput!): Answer!
-  createBookMark(data: BookMarkCreateInput!): BookMark!
-  createQuestionView(data: QuestionViewCreateInput!): QuestionView!
-  createQuestionVote(data: QuestionVoteCreateInput!): QuestionVote!
-  createAnswerVote(data: AnswerVoteCreateInput!): AnswerVote!
-  createBusinessIdea(data: BusinessIdeaCreateInput!): BusinessIdea!
-  createQuestion(data: QuestionCreateInput!): Question!
-  createTag(data: TagCreateInput!): Tag!
-  createUser(data: UserCreateInput!): User!
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
-  updateBookMark(
-    data: BookMarkUpdateInput!
-    where: BookMarkWhereUniqueInput!
-  ): BookMark
-  updateQuestionView(
-    data: QuestionViewUpdateInput!
-    where: QuestionViewWhereUniqueInput!
-  ): QuestionView
-  updateQuestionVote(
-    data: QuestionVoteUpdateInput!
-    where: QuestionVoteWhereUniqueInput!
-  ): QuestionVote
-  updateAnswerVote(
-    data: AnswerVoteUpdateInput!
-    where: AnswerVoteWhereUniqueInput!
-  ): AnswerVote
-  updateBusinessIdea(
-    data: BusinessIdeaUpdateInput!
-    where: BusinessIdeaWhereUniqueInput!
-  ): BusinessIdea
-  updateQuestion(
-    data: QuestionUpdateInput!
-    where: QuestionWhereUniqueInput!
-  ): Question
-  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deleteAnswer(where: AnswerWhereUniqueInput!): Answer
-  deleteBookMark(where: BookMarkWhereUniqueInput!): BookMark
-  deleteQuestionView(where: QuestionViewWhereUniqueInput!): QuestionView
-  deleteQuestionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
-  deleteAnswerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
-  deleteBusinessIdea(where: BusinessIdeaWhereUniqueInput!): BusinessIdea
-  deleteQuestion(where: QuestionWhereUniqueInput!): Question
-  deleteTag(where: TagWhereUniqueInput!): Tag
-  deleteUser(where: UserWhereUniqueInput!): User
+  updateManyAnswers(
+    data: AnswerUpdateManyMutationInput!
+    where: AnswerWhereInput
+  ): BatchPayload!
   upsertAnswer(
     where: AnswerWhereUniqueInput!
     create: AnswerCreateInput!
     update: AnswerUpdateInput!
   ): Answer!
-  upsertBookMark(
-    where: BookMarkWhereUniqueInput!
-    create: BookMarkCreateInput!
-    update: BookMarkUpdateInput!
-  ): BookMark!
-  upsertQuestionView(
-    where: QuestionViewWhereUniqueInput!
-    create: QuestionViewCreateInput!
-    update: QuestionViewUpdateInput!
-  ): QuestionView!
-  upsertQuestionVote(
-    where: QuestionVoteWhereUniqueInput!
-    create: QuestionVoteCreateInput!
-    update: QuestionVoteUpdateInput!
-  ): QuestionVote!
+  deleteAnswer(where: AnswerWhereUniqueInput!): Answer
+  deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
+  createAnswerVote(data: AnswerVoteCreateInput!): AnswerVote!
+  updateAnswerVote(
+    data: AnswerVoteUpdateInput!
+    where: AnswerVoteWhereUniqueInput!
+  ): AnswerVote
+  updateManyAnswerVotes(
+    data: AnswerVoteUpdateManyMutationInput!
+    where: AnswerVoteWhereInput
+  ): BatchPayload!
   upsertAnswerVote(
     where: AnswerVoteWhereUniqueInput!
     create: AnswerVoteCreateInput!
     update: AnswerVoteUpdateInput!
   ): AnswerVote!
+  deleteAnswerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
+  deleteManyAnswerVotes(where: AnswerVoteWhereInput): BatchPayload!
+  createBookMark(data: BookMarkCreateInput!): BookMark!
+  updateBookMark(
+    data: BookMarkUpdateInput!
+    where: BookMarkWhereUniqueInput!
+  ): BookMark
+  upsertBookMark(
+    where: BookMarkWhereUniqueInput!
+    create: BookMarkCreateInput!
+    update: BookMarkUpdateInput!
+  ): BookMark!
+  deleteBookMark(where: BookMarkWhereUniqueInput!): BookMark
+  deleteManyBookMarks(where: BookMarkWhereInput): BatchPayload!
+  createBusinessIdea(data: BusinessIdeaCreateInput!): BusinessIdea!
+  updateBusinessIdea(
+    data: BusinessIdeaUpdateInput!
+    where: BusinessIdeaWhereUniqueInput!
+  ): BusinessIdea
+  updateManyBusinessIdeas(
+    data: BusinessIdeaUpdateManyMutationInput!
+    where: BusinessIdeaWhereInput
+  ): BatchPayload!
   upsertBusinessIdea(
     where: BusinessIdeaWhereUniqueInput!
     create: BusinessIdeaCreateInput!
     update: BusinessIdeaUpdateInput!
   ): BusinessIdea!
+  deleteBusinessIdea(where: BusinessIdeaWhereUniqueInput!): BusinessIdea
+  deleteManyBusinessIdeas(where: BusinessIdeaWhereInput): BatchPayload!
+  createBusinessIdeaVote(data: BusinessIdeaVoteCreateInput!): BusinessIdeaVote!
+  updateBusinessIdeaVote(
+    data: BusinessIdeaVoteUpdateInput!
+    where: BusinessIdeaVoteWhereUniqueInput!
+  ): BusinessIdeaVote
+  updateManyBusinessIdeaVotes(
+    data: BusinessIdeaVoteUpdateManyMutationInput!
+    where: BusinessIdeaVoteWhereInput
+  ): BatchPayload!
+  upsertBusinessIdeaVote(
+    where: BusinessIdeaVoteWhereUniqueInput!
+    create: BusinessIdeaVoteCreateInput!
+    update: BusinessIdeaVoteUpdateInput!
+  ): BusinessIdeaVote!
+  deleteBusinessIdeaVote(
+    where: BusinessIdeaVoteWhereUniqueInput!
+  ): BusinessIdeaVote
+  deleteManyBusinessIdeaVotes(where: BusinessIdeaVoteWhereInput): BatchPayload!
+  createQuestion(data: QuestionCreateInput!): Question!
+  updateQuestion(
+    data: QuestionUpdateInput!
+    where: QuestionWhereUniqueInput!
+  ): Question
+  updateManyQuestions(
+    data: QuestionUpdateManyMutationInput!
+    where: QuestionWhereInput
+  ): BatchPayload!
   upsertQuestion(
     where: QuestionWhereUniqueInput!
     create: QuestionCreateInput!
     update: QuestionUpdateInput!
   ): Question!
+  deleteQuestion(where: QuestionWhereUniqueInput!): Question
+  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
+  createQuestionView(data: QuestionViewCreateInput!): QuestionView!
+  updateQuestionView(
+    data: QuestionViewUpdateInput!
+    where: QuestionViewWhereUniqueInput!
+  ): QuestionView
+  upsertQuestionView(
+    where: QuestionViewWhereUniqueInput!
+    create: QuestionViewCreateInput!
+    update: QuestionViewUpdateInput!
+  ): QuestionView!
+  deleteQuestionView(where: QuestionViewWhereUniqueInput!): QuestionView
+  deleteManyQuestionViews(where: QuestionViewWhereInput): BatchPayload!
+  createQuestionVote(data: QuestionVoteCreateInput!): QuestionVote!
+  updateQuestionVote(
+    data: QuestionVoteUpdateInput!
+    where: QuestionVoteWhereUniqueInput!
+  ): QuestionVote
+  updateManyQuestionVotes(
+    data: QuestionVoteUpdateManyMutationInput!
+    where: QuestionVoteWhereInput
+  ): BatchPayload!
+  upsertQuestionVote(
+    where: QuestionVoteWhereUniqueInput!
+    create: QuestionVoteCreateInput!
+    update: QuestionVoteUpdateInput!
+  ): QuestionVote!
+  deleteQuestionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
+  deleteManyQuestionVotes(where: QuestionVoteWhereInput): BatchPayload!
+  createTag(data: TagCreateInput!): Tag!
+  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
+  updateManyTags(
+    data: TagUpdateManyMutationInput!
+    where: TagWhereInput
+  ): BatchPayload!
   upsertTag(
     where: TagWhereUniqueInput!
     create: TagCreateInput!
     update: TagUpdateInput!
   ): Tag!
+  deleteTag(where: TagWhereUniqueInput!): Tag
+  deleteManyTags(where: TagWhereInput): BatchPayload!
+  createUser(data: UserCreateInput!): User!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateManyUsers(
+    data: UserUpdateManyMutationInput!
+    where: UserWhereInput
+  ): BatchPayload!
   upsertUser(
     where: UserWhereUniqueInput!
     create: UserCreateInput!
     update: UserUpdateInput!
   ): User!
-  updateManyAnswers(
-    data: AnswerUpdateManyMutationInput!
-    where: AnswerWhereInput
-  ): BatchPayload!
-  updateManyQuestionVotes(
-    data: QuestionVoteUpdateManyMutationInput!
-    where: QuestionVoteWhereInput
-  ): BatchPayload!
-  updateManyAnswerVotes(
-    data: AnswerVoteUpdateManyMutationInput!
-    where: AnswerVoteWhereInput
-  ): BatchPayload!
-  updateManyBusinessIdeas(
-    data: BusinessIdeaUpdateManyMutationInput!
-    where: BusinessIdeaWhereInput
-  ): BatchPayload!
-  updateManyQuestions(
-    data: QuestionUpdateManyMutationInput!
-    where: QuestionWhereInput
-  ): BatchPayload!
-  updateManyTags(
-    data: TagUpdateManyMutationInput!
-    where: TagWhereInput
-  ): BatchPayload!
-  updateManyUsers(
-    data: UserUpdateManyMutationInput!
-    where: UserWhereInput
-  ): BatchPayload!
-  deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
-  deleteManyBookMarks(where: BookMarkWhereInput): BatchPayload!
-  deleteManyQuestionViews(where: QuestionViewWhereInput): BatchPayload!
-  deleteManyQuestionVotes(where: QuestionVoteWhereInput): BatchPayload!
-  deleteManyAnswerVotes(where: AnswerVoteWhereInput): BatchPayload!
-  deleteManyBusinessIdeas(where: BusinessIdeaWhereInput): BatchPayload!
-  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
-  deleteManyTags(where: TagWhereInput): BatchPayload!
+  deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
@@ -2865,38 +1558,14 @@ enum MutationType {
   DELETED
 }
 
-"""
-An object with an ID
-"""
 interface Node {
-  """
-  The id of the object.
-  """
   id: ID!
 }
 
-"""
-Information about pagination in a connection.
-"""
 type PageInfo {
-  """
-  When paginating forwards, are there more items?
-  """
   hasNextPage: Boolean!
-
-  """
-  When paginating backwards, are there more items?
-  """
   hasPreviousPage: Boolean!
-
-  """
-  When paginating backwards, the cursor to continue.
-  """
   startCursor: String
-
-  """
-  When paginating forwards, the cursor to continue.
-  """
   endCursor: String
 }
 
@@ -2908,6 +1577,7 @@ enum Permission {
 }
 
 type Query {
+  answer(where: AnswerWhereUniqueInput!): Answer
   answers(
     where: AnswerWhereInput
     orderBy: AnswerOrderByInput
@@ -2917,87 +1587,6 @@ type Query {
     first: Int
     last: Int
   ): [Answer]!
-  bookMarks(
-    where: BookMarkWhereInput
-    orderBy: BookMarkOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [BookMark]!
-  questionViews(
-    where: QuestionViewWhereInput
-    orderBy: QuestionViewOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [QuestionView]!
-  questionVotes(
-    where: QuestionVoteWhereInput
-    orderBy: QuestionVoteOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [QuestionVote]!
-  answerVotes(
-    where: AnswerVoteWhereInput
-    orderBy: AnswerVoteOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [AnswerVote]!
-  businessIdeas(
-    where: BusinessIdeaWhereInput
-    orderBy: BusinessIdeaOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [BusinessIdea]!
-  questions(
-    where: QuestionWhereInput
-    orderBy: QuestionOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Question]!
-  tags(
-    where: TagWhereInput
-    orderBy: TagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Tag]!
-  users(
-    where: UserWhereInput
-    orderBy: UserOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [User]!
-  answer(where: AnswerWhereUniqueInput!): Answer
-  bookMark(where: BookMarkWhereUniqueInput!): BookMark
-  questionView(where: QuestionViewWhereUniqueInput!): QuestionView
-  questionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
-  answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
-  businessIdea(where: BusinessIdeaWhereUniqueInput!): BusinessIdea
-  question(where: QuestionWhereUniqueInput!): Question
-  tag(where: TagWhereUniqueInput!): Tag
-  user(where: UserWhereUniqueInput!): User
   answersConnection(
     where: AnswerWhereInput
     orderBy: AnswerOrderByInput
@@ -3007,33 +1596,16 @@ type Query {
     first: Int
     last: Int
   ): AnswerConnection!
-  bookMarksConnection(
-    where: BookMarkWhereInput
-    orderBy: BookMarkOrderByInput
+  answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
+  answerVotes(
+    where: AnswerVoteWhereInput
+    orderBy: AnswerVoteOrderByInput
     skip: Int
     after: String
     before: String
     first: Int
     last: Int
-  ): BookMarkConnection!
-  questionViewsConnection(
-    where: QuestionViewWhereInput
-    orderBy: QuestionViewOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): QuestionViewConnection!
-  questionVotesConnection(
-    where: QuestionVoteWhereInput
-    orderBy: QuestionVoteOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): QuestionVoteConnection!
+  ): [AnswerVote]!
   answerVotesConnection(
     where: AnswerVoteWhereInput
     orderBy: AnswerVoteOrderByInput
@@ -3043,6 +1615,35 @@ type Query {
     first: Int
     last: Int
   ): AnswerVoteConnection!
+  bookMark(where: BookMarkWhereUniqueInput!): BookMark
+  bookMarks(
+    where: BookMarkWhereInput
+    orderBy: BookMarkOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [BookMark]!
+  bookMarksConnection(
+    where: BookMarkWhereInput
+    orderBy: BookMarkOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): BookMarkConnection!
+  businessIdea(where: BusinessIdeaWhereUniqueInput!): BusinessIdea
+  businessIdeas(
+    where: BusinessIdeaWhereInput
+    orderBy: BusinessIdeaOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [BusinessIdea]!
   businessIdeasConnection(
     where: BusinessIdeaWhereInput
     orderBy: BusinessIdeaOrderByInput
@@ -3052,6 +1653,35 @@ type Query {
     first: Int
     last: Int
   ): BusinessIdeaConnection!
+  businessIdeaVote(where: BusinessIdeaVoteWhereUniqueInput!): BusinessIdeaVote
+  businessIdeaVotes(
+    where: BusinessIdeaVoteWhereInput
+    orderBy: BusinessIdeaVoteOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [BusinessIdeaVote]!
+  businessIdeaVotesConnection(
+    where: BusinessIdeaVoteWhereInput
+    orderBy: BusinessIdeaVoteOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): BusinessIdeaVoteConnection!
+  question(where: QuestionWhereUniqueInput!): Question
+  questions(
+    where: QuestionWhereInput
+    orderBy: QuestionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Question]!
   questionsConnection(
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
@@ -3061,6 +1691,54 @@ type Query {
     first: Int
     last: Int
   ): QuestionConnection!
+  questionView(where: QuestionViewWhereUniqueInput!): QuestionView
+  questionViews(
+    where: QuestionViewWhereInput
+    orderBy: QuestionViewOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [QuestionView]!
+  questionViewsConnection(
+    where: QuestionViewWhereInput
+    orderBy: QuestionViewOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): QuestionViewConnection!
+  questionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
+  questionVotes(
+    where: QuestionVoteWhereInput
+    orderBy: QuestionVoteOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [QuestionVote]!
+  questionVotesConnection(
+    where: QuestionVoteWhereInput
+    orderBy: QuestionVoteOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): QuestionVoteConnection!
+  tag(where: TagWhereUniqueInput!): Tag
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag]!
   tagsConnection(
     where: TagWhereInput
     orderBy: TagOrderByInput
@@ -3070,6 +1748,16 @@ type Query {
     first: Int
     last: Int
   ): TagConnection!
+  user(where: UserWhereUniqueInput!): User
+  users(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [User]!
   usersConnection(
     where: UserWhereInput
     orderBy: UserOrderByInput
@@ -3079,19 +1767,10 @@ type Query {
     first: Int
     last: Int
   ): UserConnection!
-
-  """
-  Fetches an object given its ID
-  """
-  node(
-    """
-    The ID of an object
-    """
-    id: ID!
-  ): Node
+  node(id: ID!): Node
 }
 
-type Question implements Node {
+type Question {
   id: ID!
   tags(
     where: TagWhereInput
@@ -3146,33 +1825,23 @@ type Question implements Node {
   searchTermFoundIn: String
 }
 
-"""
-A connection to a list of items.
-"""
 type QuestionConnection {
-  """
-  Information to aid in pagination.
-  """
   pageInfo: PageInfo!
-
-  """
-  A list of edges.
-  """
   edges: [QuestionEdge]!
   aggregate: AggregateQuestion!
 }
 
 input QuestionCreateInput {
   id: ID
+  tags: TagCreateManyInput
   title: String!
   description: String!
-  approval: Boolean
-  searchTermFoundIn: String
-  tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
+  approval: Boolean
   answers: AnswerCreateManyWithoutAnsweredToInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
   bookMark: BookMarkCreateManyWithoutQuestionsInput
+  searchTermFoundIn: String
 }
 
 input QuestionCreateManyWithoutAnswersInput {
@@ -3202,64 +1871,54 @@ input QuestionCreateOneWithoutQuestionVoteInput {
 
 input QuestionCreateWithoutAnswersInput {
   id: ID
+  tags: TagCreateManyInput
   title: String!
   description: String!
-  approval: Boolean
-  searchTermFoundIn: String
-  tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
+  approval: Boolean
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
   bookMark: BookMarkCreateManyWithoutQuestionsInput
+  searchTermFoundIn: String
 }
 
 input QuestionCreateWithoutAskedByInput {
   id: ID
+  tags: TagCreateManyInput
   title: String!
   description: String!
   approval: Boolean
-  searchTermFoundIn: String
-  tags: TagCreateManyInput
   answers: AnswerCreateManyWithoutAnsweredToInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
   bookMark: BookMarkCreateManyWithoutQuestionsInput
+  searchTermFoundIn: String
 }
 
 input QuestionCreateWithoutBookMarkInput {
   id: ID
+  tags: TagCreateManyInput
   title: String!
   description: String!
-  approval: Boolean
-  searchTermFoundIn: String
-  tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
+  approval: Boolean
   answers: AnswerCreateManyWithoutAnsweredToInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
+  searchTermFoundIn: String
 }
 
 input QuestionCreateWithoutQuestionVoteInput {
   id: ID
+  tags: TagCreateManyInput
   title: String!
   description: String!
-  approval: Boolean
-  searchTermFoundIn: String
-  tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
+  approval: Boolean
   answers: AnswerCreateManyWithoutAnsweredToInput
   bookMark: BookMarkCreateManyWithoutQuestionsInput
+  searchTermFoundIn: String
 }
 
-"""
-An edge in a connection.
-"""
 type QuestionEdge {
-  """
-  The item at the end of the edge.
-  """
   node: Question!
-
-  """
-  A cursor for use in pagination.
-  """
   cursor: String!
 }
 
@@ -3291,362 +1950,83 @@ type QuestionPreviousValues {
 }
 
 input QuestionScalarWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [QuestionScalarWhereInput!]
-
-  """
-  Logical OR on all given filters.
-  """
-  OR: [QuestionScalarWhereInput!]
-
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [QuestionScalarWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
   title: String
-
-  """
-  All values that are not equal to given value.
-  """
   title_not: String
-
-  """
-  All values that are contained in given list.
-  """
   title_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   title_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   title_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   title_lte: String
-
-  """
-  All values greater than the given value.
-  """
   title_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   title_gte: String
-
-  """
-  All values containing the given string.
-  """
   title_contains: String
-
-  """
-  All values not containing the given string.
-  """
   title_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   title_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   title_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   title_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   title_not_ends_with: String
   description: String
-
-  """
-  All values that are not equal to given value.
-  """
   description_not: String
-
-  """
-  All values that are contained in given list.
-  """
   description_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   description_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   description_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   description_lte: String
-
-  """
-  All values greater than the given value.
-  """
   description_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   description_gte: String
-
-  """
-  All values containing the given string.
-  """
   description_contains: String
-
-  """
-  All values not containing the given string.
-  """
   description_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   description_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   description_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   description_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   description_not_ends_with: String
   createdAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   createdAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   createdAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   createdAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   createdAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   createdAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   createdAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   createdAt_gte: DateTime
   updatedAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   updatedAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   updatedAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   updatedAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   updatedAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   updatedAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   updatedAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   updatedAt_gte: DateTime
   approval: Boolean
-
-  """
-  All values that are not equal to given value.
-  """
   approval_not: Boolean
   searchTermFoundIn: String
-
-  """
-  All values that are not equal to given value.
-  """
   searchTermFoundIn_not: String
-
-  """
-  All values that are contained in given list.
-  """
   searchTermFoundIn_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   searchTermFoundIn_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   searchTermFoundIn_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   searchTermFoundIn_lte: String
-
-  """
-  All values greater than the given value.
-  """
   searchTermFoundIn_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   searchTermFoundIn_gte: String
-
-  """
-  All values containing the given string.
-  """
   searchTermFoundIn_contains: String
-
-  """
-  All values not containing the given string.
-  """
   searchTermFoundIn_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   searchTermFoundIn_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   searchTermFoundIn_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   searchTermFoundIn_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   searchTermFoundIn_not_ends_with: String
+  AND: [QuestionScalarWhereInput!]
+  OR: [QuestionScalarWhereInput!]
+  NOT: [QuestionScalarWhereInput!]
 }
 
 type QuestionSubscriptionPayload {
@@ -3657,55 +2037,38 @@ type QuestionSubscriptionPayload {
 }
 
 input QuestionSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [QuestionSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: QuestionWhereInput
+  AND: [QuestionSubscriptionWhereInput!]
+  OR: [QuestionSubscriptionWhereInput!]
+  NOT: [QuestionSubscriptionWhereInput!]
 }
 
 input QuestionUpdateDataInput {
+  tags: TagUpdateManyInput
   title: String
   description: String
-  approval: Boolean
-  searchTermFoundIn: String
-  tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
+  approval: Boolean
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
   bookMark: BookMarkUpdateManyWithoutQuestionsInput
+  searchTermFoundIn: String
 }
 
 input QuestionUpdateInput {
+  tags: TagUpdateManyInput
   title: String
   description: String
-  approval: Boolean
-  searchTermFoundIn: String
-  tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
+  approval: Boolean
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
   bookMark: BookMarkUpdateManyWithoutQuestionsInput
+  searchTermFoundIn: String
 }
 
 input QuestionUpdateManyDataInput {
@@ -3724,38 +2087,38 @@ input QuestionUpdateManyMutationInput {
 
 input QuestionUpdateManyWithoutAnswersInput {
   create: [QuestionCreateWithoutAnswersInput!]
+  delete: [QuestionWhereUniqueInput!]
   connect: [QuestionWhereUniqueInput!]
   set: [QuestionWhereUniqueInput!]
   disconnect: [QuestionWhereUniqueInput!]
-  delete: [QuestionWhereUniqueInput!]
   update: [QuestionUpdateWithWhereUniqueWithoutAnswersInput!]
-  updateMany: [QuestionUpdateManyWithWhereNestedInput!]
-  deleteMany: [QuestionScalarWhereInput!]
   upsert: [QuestionUpsertWithWhereUniqueWithoutAnswersInput!]
+  deleteMany: [QuestionScalarWhereInput!]
+  updateMany: [QuestionUpdateManyWithWhereNestedInput!]
 }
 
 input QuestionUpdateManyWithoutAskedByInput {
   create: [QuestionCreateWithoutAskedByInput!]
+  delete: [QuestionWhereUniqueInput!]
   connect: [QuestionWhereUniqueInput!]
   set: [QuestionWhereUniqueInput!]
   disconnect: [QuestionWhereUniqueInput!]
-  delete: [QuestionWhereUniqueInput!]
   update: [QuestionUpdateWithWhereUniqueWithoutAskedByInput!]
-  updateMany: [QuestionUpdateManyWithWhereNestedInput!]
-  deleteMany: [QuestionScalarWhereInput!]
   upsert: [QuestionUpsertWithWhereUniqueWithoutAskedByInput!]
+  deleteMany: [QuestionScalarWhereInput!]
+  updateMany: [QuestionUpdateManyWithWhereNestedInput!]
 }
 
 input QuestionUpdateManyWithoutBookMarkInput {
   create: [QuestionCreateWithoutBookMarkInput!]
+  delete: [QuestionWhereUniqueInput!]
   connect: [QuestionWhereUniqueInput!]
   set: [QuestionWhereUniqueInput!]
   disconnect: [QuestionWhereUniqueInput!]
-  delete: [QuestionWhereUniqueInput!]
   update: [QuestionUpdateWithWhereUniqueWithoutBookMarkInput!]
-  updateMany: [QuestionUpdateManyWithWhereNestedInput!]
-  deleteMany: [QuestionScalarWhereInput!]
   upsert: [QuestionUpsertWithWhereUniqueWithoutBookMarkInput!]
+  deleteMany: [QuestionScalarWhereInput!]
+  updateMany: [QuestionUpdateManyWithWhereNestedInput!]
 }
 
 input QuestionUpdateManyWithWhereNestedInput {
@@ -3765,60 +2128,60 @@ input QuestionUpdateManyWithWhereNestedInput {
 
 input QuestionUpdateOneRequiredInput {
   create: QuestionCreateInput
-  connect: QuestionWhereUniqueInput
   update: QuestionUpdateDataInput
   upsert: QuestionUpsertNestedInput
+  connect: QuestionWhereUniqueInput
 }
 
 input QuestionUpdateOneRequiredWithoutQuestionVoteInput {
   create: QuestionCreateWithoutQuestionVoteInput
-  connect: QuestionWhereUniqueInput
   update: QuestionUpdateWithoutQuestionVoteDataInput
   upsert: QuestionUpsertWithoutQuestionVoteInput
+  connect: QuestionWhereUniqueInput
 }
 
 input QuestionUpdateWithoutAnswersDataInput {
+  tags: TagUpdateManyInput
   title: String
   description: String
-  approval: Boolean
-  searchTermFoundIn: String
-  tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
+  approval: Boolean
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
   bookMark: BookMarkUpdateManyWithoutQuestionsInput
+  searchTermFoundIn: String
 }
 
 input QuestionUpdateWithoutAskedByDataInput {
+  tags: TagUpdateManyInput
   title: String
   description: String
   approval: Boolean
-  searchTermFoundIn: String
-  tags: TagUpdateManyInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
   bookMark: BookMarkUpdateManyWithoutQuestionsInput
+  searchTermFoundIn: String
 }
 
 input QuestionUpdateWithoutBookMarkDataInput {
+  tags: TagUpdateManyInput
   title: String
   description: String
-  approval: Boolean
-  searchTermFoundIn: String
-  tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
+  approval: Boolean
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
+  searchTermFoundIn: String
 }
 
 input QuestionUpdateWithoutQuestionVoteDataInput {
+  tags: TagUpdateManyInput
   title: String
   description: String
-  approval: Boolean
-  searchTermFoundIn: String
-  tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
+  approval: Boolean
   answers: AnswerUpdateManyWithoutAnsweredToInput
   bookMark: BookMarkUpdateManyWithoutQuestionsInput
+  searchTermFoundIn: String
 }
 
 input QuestionUpdateWithWhereUniqueWithoutAnswersInput {
@@ -3864,24 +2227,14 @@ input QuestionUpsertWithWhereUniqueWithoutBookMarkInput {
   create: QuestionCreateWithoutBookMarkInput!
 }
 
-type QuestionView implements Node {
+type QuestionView {
   id: ID!
   viewedBy: User!
   viewedQuestion: Question!
 }
 
-"""
-A connection to a list of items.
-"""
 type QuestionViewConnection {
-  """
-  Information to aid in pagination.
-  """
   pageInfo: PageInfo!
-
-  """
-  A list of edges.
-  """
   edges: [QuestionViewEdge]!
   aggregate: AggregateQuestionView!
 }
@@ -3892,18 +2245,8 @@ input QuestionViewCreateInput {
   viewedQuestion: QuestionCreateOneInput!
 }
 
-"""
-An edge in a connection.
-"""
 type QuestionViewEdge {
-  """
-  The item at the end of the edge.
-  """
   node: QuestionView!
-
-  """
-  A cursor for use in pagination.
-  """
   cursor: String!
 }
 
@@ -3924,31 +2267,14 @@ type QuestionViewSubscriptionPayload {
 }
 
 input QuestionViewSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [QuestionViewSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: QuestionViewWhereInput
+  AND: [QuestionViewSubscriptionWhereInput!]
+  OR: [QuestionViewSubscriptionWhereInput!]
+  NOT: [QuestionViewSubscriptionWhereInput!]
 }
 
 input QuestionViewUpdateInput {
@@ -3957,112 +2283,49 @@ input QuestionViewUpdateInput {
 }
 
 input QuestionViewWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [QuestionViewWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
   viewedBy: UserWhereInput
   viewedQuestion: QuestionWhereInput
+  AND: [QuestionViewWhereInput!]
+  OR: [QuestionViewWhereInput!]
+  NOT: [QuestionViewWhereInput!]
 }
 
 input QuestionViewWhereUniqueInput {
   id: ID
 }
 
-type QuestionVote implements Node {
+type QuestionVote {
   id: ID!
   votedBy: User!
   votedQuestion: Question!
   vote: String
 }
 
-"""
-A connection to a list of items.
-"""
 type QuestionVoteConnection {
-  """
-  Information to aid in pagination.
-  """
   pageInfo: PageInfo!
-
-  """
-  A list of edges.
-  """
   edges: [QuestionVoteEdge]!
   aggregate: AggregateQuestionVote!
 }
 
 input QuestionVoteCreateInput {
   id: ID
-  vote: String
   votedBy: UserCreateOneInput!
   votedQuestion: QuestionCreateOneWithoutQuestionVoteInput!
+  vote: String
 }
 
 input QuestionVoteCreateManyWithoutVotedQuestionInput {
@@ -4072,22 +2335,12 @@ input QuestionVoteCreateManyWithoutVotedQuestionInput {
 
 input QuestionVoteCreateWithoutVotedQuestionInput {
   id: ID
-  vote: String
   votedBy: UserCreateOneInput!
+  vote: String
 }
 
-"""
-An edge in a connection.
-"""
 type QuestionVoteEdge {
-  """
-  The item at the end of the edge.
-  """
   node: QuestionVote!
-
-  """
-  A cursor for use in pagination.
-  """
   cursor: String!
 }
 
@@ -4104,152 +2357,37 @@ type QuestionVotePreviousValues {
 }
 
 input QuestionVoteScalarWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [QuestionVoteScalarWhereInput!]
-
-  """
-  Logical OR on all given filters.
-  """
-  OR: [QuestionVoteScalarWhereInput!]
-
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [QuestionVoteScalarWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
   vote: String
-
-  """
-  All values that are not equal to given value.
-  """
   vote_not: String
-
-  """
-  All values that are contained in given list.
-  """
   vote_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   vote_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   vote_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   vote_lte: String
-
-  """
-  All values greater than the given value.
-  """
   vote_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   vote_gte: String
-
-  """
-  All values containing the given string.
-  """
   vote_contains: String
-
-  """
-  All values not containing the given string.
-  """
   vote_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   vote_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   vote_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   vote_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   vote_not_ends_with: String
+  AND: [QuestionVoteScalarWhereInput!]
+  OR: [QuestionVoteScalarWhereInput!]
+  NOT: [QuestionVoteScalarWhereInput!]
 }
 
 type QuestionVoteSubscriptionPayload {
@@ -4260,37 +2398,20 @@ type QuestionVoteSubscriptionPayload {
 }
 
 input QuestionVoteSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [QuestionVoteSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: QuestionVoteWhereInput
+  AND: [QuestionVoteSubscriptionWhereInput!]
+  OR: [QuestionVoteSubscriptionWhereInput!]
+  NOT: [QuestionVoteSubscriptionWhereInput!]
 }
 
 input QuestionVoteUpdateInput {
-  vote: String
   votedBy: UserUpdateOneRequiredInput
   votedQuestion: QuestionUpdateOneRequiredWithoutQuestionVoteInput
+  vote: String
 }
 
 input QuestionVoteUpdateManyDataInput {
@@ -4303,14 +2424,14 @@ input QuestionVoteUpdateManyMutationInput {
 
 input QuestionVoteUpdateManyWithoutVotedQuestionInput {
   create: [QuestionVoteCreateWithoutVotedQuestionInput!]
+  delete: [QuestionVoteWhereUniqueInput!]
   connect: [QuestionVoteWhereUniqueInput!]
   set: [QuestionVoteWhereUniqueInput!]
   disconnect: [QuestionVoteWhereUniqueInput!]
-  delete: [QuestionVoteWhereUniqueInput!]
   update: [QuestionVoteUpdateWithWhereUniqueWithoutVotedQuestionInput!]
-  updateMany: [QuestionVoteUpdateManyWithWhereNestedInput!]
-  deleteMany: [QuestionVoteScalarWhereInput!]
   upsert: [QuestionVoteUpsertWithWhereUniqueWithoutVotedQuestionInput!]
+  deleteMany: [QuestionVoteScalarWhereInput!]
+  updateMany: [QuestionVoteUpdateManyWithWhereNestedInput!]
 }
 
 input QuestionVoteUpdateManyWithWhereNestedInput {
@@ -4319,8 +2440,8 @@ input QuestionVoteUpdateManyWithWhereNestedInput {
 }
 
 input QuestionVoteUpdateWithoutVotedQuestionDataInput {
-  vote: String
   votedBy: UserUpdateOneRequiredInput
+  vote: String
 }
 
 input QuestionVoteUpdateWithWhereUniqueWithoutVotedQuestionInput {
@@ -4335,144 +2456,39 @@ input QuestionVoteUpsertWithWhereUniqueWithoutVotedQuestionInput {
 }
 
 input QuestionVoteWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [QuestionVoteWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
-  vote: String
-
-  """
-  All values that are not equal to given value.
-  """
-  vote_not: String
-
-  """
-  All values that are contained in given list.
-  """
-  vote_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
-  vote_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
-  vote_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
-  vote_lte: String
-
-  """
-  All values greater than the given value.
-  """
-  vote_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
-  vote_gte: String
-
-  """
-  All values containing the given string.
-  """
-  vote_contains: String
-
-  """
-  All values not containing the given string.
-  """
-  vote_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
-  vote_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
-  vote_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
-  vote_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
-  vote_not_ends_with: String
   votedBy: UserWhereInput
   votedQuestion: QuestionWhereInput
+  vote: String
+  vote_not: String
+  vote_in: [String!]
+  vote_not_in: [String!]
+  vote_lt: String
+  vote_lte: String
+  vote_gt: String
+  vote_gte: String
+  vote_contains: String
+  vote_not_contains: String
+  vote_starts_with: String
+  vote_not_starts_with: String
+  vote_ends_with: String
+  vote_not_ends_with: String
+  AND: [QuestionVoteWhereInput!]
+  OR: [QuestionVoteWhereInput!]
+  NOT: [QuestionVoteWhereInput!]
 }
 
 input QuestionVoteWhereUniqueInput {
@@ -4480,357 +2496,98 @@ input QuestionVoteWhereUniqueInput {
 }
 
 input QuestionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [QuestionWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
+  tags_every: TagWhereInput
+  tags_some: TagWhereInput
+  tags_none: TagWhereInput
   title: String
-
-  """
-  All values that are not equal to given value.
-  """
   title_not: String
-
-  """
-  All values that are contained in given list.
-  """
   title_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   title_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   title_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   title_lte: String
-
-  """
-  All values greater than the given value.
-  """
   title_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   title_gte: String
-
-  """
-  All values containing the given string.
-  """
   title_contains: String
-
-  """
-  All values not containing the given string.
-  """
   title_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   title_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   title_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   title_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   title_not_ends_with: String
   description: String
-
-  """
-  All values that are not equal to given value.
-  """
   description_not: String
-
-  """
-  All values that are contained in given list.
-  """
   description_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   description_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   description_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   description_lte: String
-
-  """
-  All values greater than the given value.
-  """
   description_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   description_gte: String
-
-  """
-  All values containing the given string.
-  """
   description_contains: String
-
-  """
-  All values not containing the given string.
-  """
   description_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   description_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   description_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   description_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   description_not_ends_with: String
   createdAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   createdAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   createdAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   createdAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   createdAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   createdAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   createdAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   createdAt_gte: DateTime
   updatedAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   updatedAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   updatedAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   updatedAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   updatedAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   updatedAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   updatedAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   updatedAt_gte: DateTime
-  approval: Boolean
-
-  """
-  All values that are not equal to given value.
-  """
-  approval_not: Boolean
-  searchTermFoundIn: String
-
-  """
-  All values that are not equal to given value.
-  """
-  searchTermFoundIn_not: String
-
-  """
-  All values that are contained in given list.
-  """
-  searchTermFoundIn_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
-  searchTermFoundIn_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
-  searchTermFoundIn_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
-  searchTermFoundIn_lte: String
-
-  """
-  All values greater than the given value.
-  """
-  searchTermFoundIn_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
-  searchTermFoundIn_gte: String
-
-  """
-  All values containing the given string.
-  """
-  searchTermFoundIn_contains: String
-
-  """
-  All values not containing the given string.
-  """
-  searchTermFoundIn_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
-  searchTermFoundIn_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
-  searchTermFoundIn_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
-  searchTermFoundIn_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
-  searchTermFoundIn_not_ends_with: String
-  tags_some: TagWhereInput
+  askedBy_every: UserWhereInput
   askedBy_some: UserWhereInput
+  askedBy_none: UserWhereInput
+  approval: Boolean
+  approval_not: Boolean
+  answers_every: AnswerWhereInput
   answers_some: AnswerWhereInput
+  answers_none: AnswerWhereInput
+  questionVote_every: QuestionVoteWhereInput
   questionVote_some: QuestionVoteWhereInput
+  questionVote_none: QuestionVoteWhereInput
+  bookMark_every: BookMarkWhereInput
   bookMark_some: BookMarkWhereInput
+  bookMark_none: BookMarkWhereInput
+  searchTermFoundIn: String
+  searchTermFoundIn_not: String
+  searchTermFoundIn_in: [String!]
+  searchTermFoundIn_not_in: [String!]
+  searchTermFoundIn_lt: String
+  searchTermFoundIn_lte: String
+  searchTermFoundIn_gt: String
+  searchTermFoundIn_gte: String
+  searchTermFoundIn_contains: String
+  searchTermFoundIn_not_contains: String
+  searchTermFoundIn_starts_with: String
+  searchTermFoundIn_not_starts_with: String
+  searchTermFoundIn_ends_with: String
+  searchTermFoundIn_not_ends_with: String
+  AND: [QuestionWhereInput!]
+  OR: [QuestionWhereInput!]
+  NOT: [QuestionWhereInput!]
 }
 
 input QuestionWhereUniqueInput {
@@ -4839,41 +2596,34 @@ input QuestionWhereUniqueInput {
 
 type Subscription {
   answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
+  answerVote(
+    where: AnswerVoteSubscriptionWhereInput
+  ): AnswerVoteSubscriptionPayload
   bookMark(where: BookMarkSubscriptionWhereInput): BookMarkSubscriptionPayload
+  businessIdea(
+    where: BusinessIdeaSubscriptionWhereInput
+  ): BusinessIdeaSubscriptionPayload
+  businessIdeaVote(
+    where: BusinessIdeaVoteSubscriptionWhereInput
+  ): BusinessIdeaVoteSubscriptionPayload
+  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   questionView(
     where: QuestionViewSubscriptionWhereInput
   ): QuestionViewSubscriptionPayload
   questionVote(
     where: QuestionVoteSubscriptionWhereInput
   ): QuestionVoteSubscriptionPayload
-  answerVote(
-    where: AnswerVoteSubscriptionWhereInput
-  ): AnswerVoteSubscriptionPayload
-  businessIdea(
-    where: BusinessIdeaSubscriptionWhereInput
-  ): BusinessIdeaSubscriptionPayload
-  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
-type Tag implements Node {
+type Tag {
   id: ID!
   name: String!
 }
 
-"""
-A connection to a list of items.
-"""
 type TagConnection {
-  """
-  Information to aid in pagination.
-  """
   pageInfo: PageInfo!
-
-  """
-  A list of edges.
-  """
   edges: [TagEdge]!
   aggregate: AggregateTag!
 }
@@ -4888,18 +2638,8 @@ input TagCreateManyInput {
   connect: [TagWhereUniqueInput!]
 }
 
-"""
-An edge in a connection.
-"""
 type TagEdge {
-  """
-  The item at the end of the edge.
-  """
   node: Tag!
-
-  """
-  A cursor for use in pagination.
-  """
   cursor: String!
 }
 
@@ -4916,152 +2656,37 @@ type TagPreviousValues {
 }
 
 input TagScalarWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [TagScalarWhereInput!]
-
-  """
-  Logical OR on all given filters.
-  """
-  OR: [TagScalarWhereInput!]
-
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [TagScalarWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
   name: String
-
-  """
-  All values that are not equal to given value.
-  """
   name_not: String
-
-  """
-  All values that are contained in given list.
-  """
   name_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   name_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   name_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   name_lte: String
-
-  """
-  All values greater than the given value.
-  """
   name_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   name_gte: String
-
-  """
-  All values containing the given string.
-  """
   name_contains: String
-
-  """
-  All values not containing the given string.
-  """
   name_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   name_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   name_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   name_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   name_not_ends_with: String
+  AND: [TagScalarWhereInput!]
+  OR: [TagScalarWhereInput!]
+  NOT: [TagScalarWhereInput!]
 }
 
 type TagSubscriptionPayload {
@@ -5072,31 +2697,14 @@ type TagSubscriptionPayload {
 }
 
 input TagSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [TagSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: TagWhereInput
+  AND: [TagSubscriptionWhereInput!]
+  OR: [TagSubscriptionWhereInput!]
+  NOT: [TagSubscriptionWhereInput!]
 }
 
 input TagUpdateDataInput {
@@ -5113,14 +2721,14 @@ input TagUpdateManyDataInput {
 
 input TagUpdateManyInput {
   create: [TagCreateInput!]
+  update: [TagUpdateWithWhereUniqueNestedInput!]
+  upsert: [TagUpsertWithWhereUniqueNestedInput!]
+  delete: [TagWhereUniqueInput!]
   connect: [TagWhereUniqueInput!]
   set: [TagWhereUniqueInput!]
   disconnect: [TagWhereUniqueInput!]
-  delete: [TagWhereUniqueInput!]
-  update: [TagUpdateWithWhereUniqueNestedInput!]
-  updateMany: [TagUpdateManyWithWhereNestedInput!]
   deleteMany: [TagScalarWhereInput!]
-  upsert: [TagUpsertWithWhereUniqueNestedInput!]
+  updateMany: [TagUpdateManyWithWhereNestedInput!]
 }
 
 input TagUpdateManyMutationInput {
@@ -5144,142 +2752,37 @@ input TagUpsertWithWhereUniqueNestedInput {
 }
 
 input TagWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [TagWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
   name: String
-
-  """
-  All values that are not equal to given value.
-  """
   name_not: String
-
-  """
-  All values that are contained in given list.
-  """
   name_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   name_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   name_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   name_lte: String
-
-  """
-  All values greater than the given value.
-  """
   name_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   name_gte: String
-
-  """
-  All values containing the given string.
-  """
   name_contains: String
-
-  """
-  All values not containing the given string.
-  """
   name_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   name_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   name_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   name_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   name_not_ends_with: String
+  AND: [TagWhereInput!]
+  OR: [TagWhereInput!]
+  NOT: [TagWhereInput!]
 }
 
 input TagWhereUniqueInput {
@@ -5287,7 +2790,7 @@ input TagWhereUniqueInput {
   name: String
 }
 
-type User implements Node {
+type User {
   id: ID!
   name: String!
   email: String!
@@ -5349,18 +2852,8 @@ type User implements Node {
   ): [Tag!]
 }
 
-"""
-A connection to a list of items.
-"""
 type UserConnection {
-  """
-  Information to aid in pagination.
-  """
   pageInfo: PageInfo!
-
-  """
-  A list of edges.
-  """
   edges: [UserEdge]!
   aggregate: AggregateUser!
 }
@@ -5490,18 +2983,8 @@ input UserCreateWithoutMyQuestionsInput {
   tags: TagCreateManyInput
 }
 
-"""
-An edge in a connection.
-"""
 type UserEdge {
-  """
-  The item at the end of the edge.
-  """
   node: User!
-
-  """
-  A cursor for use in pagination.
-  """
   cursor: String!
 }
 
@@ -5552,788 +3035,173 @@ type UserPreviousValues {
 }
 
 input UserScalarWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [UserScalarWhereInput!]
-
-  """
-  Logical OR on all given filters.
-  """
-  OR: [UserScalarWhereInput!]
-
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [UserScalarWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
   name: String
-
-  """
-  All values that are not equal to given value.
-  """
   name_not: String
-
-  """
-  All values that are contained in given list.
-  """
   name_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   name_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   name_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   name_lte: String
-
-  """
-  All values greater than the given value.
-  """
   name_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   name_gte: String
-
-  """
-  All values containing the given string.
-  """
   name_contains: String
-
-  """
-  All values not containing the given string.
-  """
   name_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   name_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   name_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   name_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   name_not_ends_with: String
   email: String
-
-  """
-  All values that are not equal to given value.
-  """
   email_not: String
-
-  """
-  All values that are contained in given list.
-  """
   email_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   email_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   email_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   email_lte: String
-
-  """
-  All values greater than the given value.
-  """
   email_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   email_gte: String
-
-  """
-  All values containing the given string.
-  """
   email_contains: String
-
-  """
-  All values not containing the given string.
-  """
   email_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   email_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   email_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   email_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   email_not_ends_with: String
   display: String
-
-  """
-  All values that are not equal to given value.
-  """
   display_not: String
-
-  """
-  All values that are contained in given list.
-  """
   display_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   display_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   display_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   display_lte: String
-
-  """
-  All values greater than the given value.
-  """
   display_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   display_gte: String
-
-  """
-  All values containing the given string.
-  """
   display_contains: String
-
-  """
-  All values not containing the given string.
-  """
   display_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   display_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   display_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   display_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   display_not_ends_with: String
   createdAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   createdAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   createdAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   createdAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   createdAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   createdAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   createdAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   createdAt_gte: DateTime
   updatedAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   updatedAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   updatedAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   updatedAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   updatedAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   updatedAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   updatedAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   updatedAt_gte: DateTime
   image: String
-
-  """
-  All values that are not equal to given value.
-  """
   image_not: String
-
-  """
-  All values that are contained in given list.
-  """
   image_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   image_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   image_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   image_lte: String
-
-  """
-  All values greater than the given value.
-  """
   image_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   image_gte: String
-
-  """
-  All values containing the given string.
-  """
   image_contains: String
-
-  """
-  All values not containing the given string.
-  """
   image_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   image_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   image_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   image_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   image_not_ends_with: String
   location: String
-
-  """
-  All values that are not equal to given value.
-  """
   location_not: String
-
-  """
-  All values that are contained in given list.
-  """
   location_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   location_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   location_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   location_lte: String
-
-  """
-  All values greater than the given value.
-  """
   location_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   location_gte: String
-
-  """
-  All values containing the given string.
-  """
   location_contains: String
-
-  """
-  All values not containing the given string.
-  """
   location_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   location_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   location_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   location_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   location_not_ends_with: String
   about: String
-
-  """
-  All values that are not equal to given value.
-  """
   about_not: String
-
-  """
-  All values that are contained in given list.
-  """
   about_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   about_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   about_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   about_lte: String
-
-  """
-  All values greater than the given value.
-  """
   about_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   about_gte: String
-
-  """
-  All values containing the given string.
-  """
   about_contains: String
-
-  """
-  All values not containing the given string.
-  """
   about_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   about_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   about_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   about_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   about_not_ends_with: String
   industry: String
-
-  """
-  All values that are not equal to given value.
-  """
   industry_not: String
-
-  """
-  All values that are contained in given list.
-  """
   industry_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   industry_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   industry_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   industry_lte: String
-
-  """
-  All values greater than the given value.
-  """
   industry_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   industry_gte: String
-
-  """
-  All values containing the given string.
-  """
   industry_contains: String
-
-  """
-  All values not containing the given string.
-  """
   industry_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   industry_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   industry_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   industry_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   industry_not_ends_with: String
   password: String
-
-  """
-  All values that are not equal to given value.
-  """
   password_not: String
-
-  """
-  All values that are contained in given list.
-  """
   password_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   password_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   password_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   password_lte: String
-
-  """
-  All values greater than the given value.
-  """
   password_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   password_gte: String
-
-  """
-  All values containing the given string.
-  """
   password_contains: String
-
-  """
-  All values not containing the given string.
-  """
   password_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   password_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   password_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   password_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   password_not_ends_with: String
   resetToken: String
-
-  """
-  All values that are not equal to given value.
-  """
   resetToken_not: String
-
-  """
-  All values that are contained in given list.
-  """
   resetToken_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   resetToken_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   resetToken_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   resetToken_lte: String
-
-  """
-  All values greater than the given value.
-  """
   resetToken_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   resetToken_gte: String
-
-  """
-  All values containing the given string.
-  """
   resetToken_contains: String
-
-  """
-  All values not containing the given string.
-  """
   resetToken_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   resetToken_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   resetToken_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   resetToken_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   resetToken_not_ends_with: String
   resetTokenExpiry: Float
-
-  """
-  All values that are not equal to given value.
-  """
   resetTokenExpiry_not: Float
-
-  """
-  All values that are contained in given list.
-  """
   resetTokenExpiry_in: [Float!]
-
-  """
-  All values that are not contained in given list.
-  """
   resetTokenExpiry_not_in: [Float!]
-
-  """
-  All values less than the given value.
-  """
   resetTokenExpiry_lt: Float
-
-  """
-  All values less than or equal the given value.
-  """
   resetTokenExpiry_lte: Float
-
-  """
-  All values greater than the given value.
-  """
   resetTokenExpiry_gt: Float
-
-  """
-  All values greater than or equal the given value.
-  """
   resetTokenExpiry_gte: Float
+  AND: [UserScalarWhereInput!]
+  OR: [UserScalarWhereInput!]
+  NOT: [UserScalarWhereInput!]
 }
 
 type UserSubscriptionPayload {
@@ -6344,31 +3212,14 @@ type UserSubscriptionPayload {
 }
 
 input UserSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [UserSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: UserWhereInput
+  AND: [UserSubscriptionWhereInput!]
+  OR: [UserSubscriptionWhereInput!]
+  NOT: [UserSubscriptionWhereInput!]
 }
 
 input UserUpdateDataInput {
@@ -6439,14 +3290,14 @@ input UserUpdateManyMutationInput {
 
 input UserUpdateManyWithoutMyQuestionsInput {
   create: [UserCreateWithoutMyQuestionsInput!]
+  delete: [UserWhereUniqueInput!]
   connect: [UserWhereUniqueInput!]
   set: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
-  delete: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutMyQuestionsInput!]
-  updateMany: [UserUpdateManyWithWhereNestedInput!]
-  deleteMany: [UserScalarWhereInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutMyQuestionsInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
 
 input UserUpdateManyWithWhereNestedInput {
@@ -6456,30 +3307,30 @@ input UserUpdateManyWithWhereNestedInput {
 
 input UserUpdateOneRequiredInput {
   create: UserCreateInput
-  connect: UserWhereUniqueInput
   update: UserUpdateDataInput
   upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredWithoutBusinessIdeasInput {
   create: UserCreateWithoutBusinessIdeasInput
-  connect: UserWhereUniqueInput
   update: UserUpdateWithoutBusinessIdeasDataInput
   upsert: UserUpsertWithoutBusinessIdeasInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredWithoutMyAnswersInput {
   create: UserCreateWithoutMyAnswersInput
-  connect: UserWhereUniqueInput
   update: UserUpdateWithoutMyAnswersDataInput
   upsert: UserUpsertWithoutMyAnswersInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredWithoutMyBookMarksInput {
   create: UserCreateWithoutMyBookMarksInput
-  connect: UserWhereUniqueInput
   update: UserUpdateWithoutMyBookMarksDataInput
   upsert: UserUpsertWithoutMyBookMarksInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdatepermissionsInput {
@@ -6590,783 +3441,188 @@ input UserUpsertWithWhereUniqueWithoutMyQuestionsInput {
 }
 
 input UserWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [UserWhereInput!]
   id: ID
-
-  """
-  All values that are not equal to given value.
-  """
   id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
   id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
   id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
   id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
   id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
   id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
   id_gte: ID
-
-  """
-  All values containing the given string.
-  """
   id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
   id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
   id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
   id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
   id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
   id_not_ends_with: ID
   name: String
-
-  """
-  All values that are not equal to given value.
-  """
   name_not: String
-
-  """
-  All values that are contained in given list.
-  """
   name_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   name_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   name_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   name_lte: String
-
-  """
-  All values greater than the given value.
-  """
   name_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   name_gte: String
-
-  """
-  All values containing the given string.
-  """
   name_contains: String
-
-  """
-  All values not containing the given string.
-  """
   name_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   name_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   name_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   name_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   name_not_ends_with: String
   email: String
-
-  """
-  All values that are not equal to given value.
-  """
   email_not: String
-
-  """
-  All values that are contained in given list.
-  """
   email_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   email_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   email_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   email_lte: String
-
-  """
-  All values greater than the given value.
-  """
   email_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   email_gte: String
-
-  """
-  All values containing the given string.
-  """
   email_contains: String
-
-  """
-  All values not containing the given string.
-  """
   email_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   email_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   email_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   email_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   email_not_ends_with: String
   display: String
-
-  """
-  All values that are not equal to given value.
-  """
   display_not: String
-
-  """
-  All values that are contained in given list.
-  """
   display_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   display_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   display_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   display_lte: String
-
-  """
-  All values greater than the given value.
-  """
   display_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   display_gte: String
-
-  """
-  All values containing the given string.
-  """
   display_contains: String
-
-  """
-  All values not containing the given string.
-  """
   display_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   display_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   display_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   display_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   display_not_ends_with: String
   createdAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   createdAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   createdAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   createdAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   createdAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   createdAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   createdAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   createdAt_gte: DateTime
   updatedAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
   updatedAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
   updatedAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
   updatedAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
   updatedAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
   updatedAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
   updatedAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
   updatedAt_gte: DateTime
   image: String
-
-  """
-  All values that are not equal to given value.
-  """
   image_not: String
-
-  """
-  All values that are contained in given list.
-  """
   image_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   image_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   image_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   image_lte: String
-
-  """
-  All values greater than the given value.
-  """
   image_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   image_gte: String
-
-  """
-  All values containing the given string.
-  """
   image_contains: String
-
-  """
-  All values not containing the given string.
-  """
   image_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   image_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   image_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   image_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   image_not_ends_with: String
   location: String
-
-  """
-  All values that are not equal to given value.
-  """
   location_not: String
-
-  """
-  All values that are contained in given list.
-  """
   location_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   location_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   location_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   location_lte: String
-
-  """
-  All values greater than the given value.
-  """
   location_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   location_gte: String
-
-  """
-  All values containing the given string.
-  """
   location_contains: String
-
-  """
-  All values not containing the given string.
-  """
   location_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   location_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   location_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   location_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   location_not_ends_with: String
   about: String
-
-  """
-  All values that are not equal to given value.
-  """
   about_not: String
-
-  """
-  All values that are contained in given list.
-  """
   about_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   about_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   about_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   about_lte: String
-
-  """
-  All values greater than the given value.
-  """
   about_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   about_gte: String
-
-  """
-  All values containing the given string.
-  """
   about_contains: String
-
-  """
-  All values not containing the given string.
-  """
   about_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   about_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   about_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   about_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   about_not_ends_with: String
   industry: String
-
-  """
-  All values that are not equal to given value.
-  """
   industry_not: String
-
-  """
-  All values that are contained in given list.
-  """
   industry_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   industry_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   industry_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   industry_lte: String
-
-  """
-  All values greater than the given value.
-  """
   industry_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   industry_gte: String
-
-  """
-  All values containing the given string.
-  """
   industry_contains: String
-
-  """
-  All values not containing the given string.
-  """
   industry_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   industry_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   industry_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   industry_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   industry_not_ends_with: String
   password: String
-
-  """
-  All values that are not equal to given value.
-  """
   password_not: String
-
-  """
-  All values that are contained in given list.
-  """
   password_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   password_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   password_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   password_lte: String
-
-  """
-  All values greater than the given value.
-  """
   password_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   password_gte: String
-
-  """
-  All values containing the given string.
-  """
   password_contains: String
-
-  """
-  All values not containing the given string.
-  """
   password_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   password_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   password_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   password_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   password_not_ends_with: String
   resetToken: String
-
-  """
-  All values that are not equal to given value.
-  """
   resetToken_not: String
-
-  """
-  All values that are contained in given list.
-  """
   resetToken_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
   resetToken_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
   resetToken_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
   resetToken_lte: String
-
-  """
-  All values greater than the given value.
-  """
   resetToken_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
   resetToken_gte: String
-
-  """
-  All values containing the given string.
-  """
   resetToken_contains: String
-
-  """
-  All values not containing the given string.
-  """
   resetToken_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
   resetToken_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
   resetToken_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
   resetToken_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
   resetToken_not_ends_with: String
   resetTokenExpiry: Float
-
-  """
-  All values that are not equal to given value.
-  """
   resetTokenExpiry_not: Float
-
-  """
-  All values that are contained in given list.
-  """
   resetTokenExpiry_in: [Float!]
-
-  """
-  All values that are not contained in given list.
-  """
   resetTokenExpiry_not_in: [Float!]
-
-  """
-  All values less than the given value.
-  """
   resetTokenExpiry_lt: Float
-
-  """
-  All values less than or equal the given value.
-  """
   resetTokenExpiry_lte: Float
-
-  """
-  All values greater than the given value.
-  """
   resetTokenExpiry_gt: Float
-
-  """
-  All values greater than or equal the given value.
-  """
   resetTokenExpiry_gte: Float
+  myQuestions_every: QuestionWhereInput
   myQuestions_some: QuestionWhereInput
+  myQuestions_none: QuestionWhereInput
+  myAnswers_every: AnswerWhereInput
   myAnswers_some: AnswerWhereInput
+  myAnswers_none: AnswerWhereInput
+  myBookMarks_every: BookMarkWhereInput
   myBookMarks_some: BookMarkWhereInput
+  myBookMarks_none: BookMarkWhereInput
+  businessIdeas_every: BusinessIdeaWhereInput
   businessIdeas_some: BusinessIdeaWhereInput
+  businessIdeas_none: BusinessIdeaWhereInput
+  tags_every: TagWhereInput
   tags_some: TagWhereInput
+  tags_none: TagWhereInput
+  AND: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  NOT: [UserWhereInput!]
 }
 
 input UserWhereUniqueInput {
