@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Fri Nov 15 2019 11:04:45 GMT+0200 (EET)
+# timestamp: Mon Dec 16 2019 18:11:47 GMT+0200 (EET)
 
 type AggregateAnswer {
   count: Int!
@@ -14,6 +14,10 @@ type AggregateBookMark {
 }
 
 type AggregateBusinessIdea {
+  count: Int!
+}
+
+type AggregateNotification {
   count: Int!
 }
 
@@ -2736,8 +2740,9 @@ type Mutation {
   createQuestionVote(data: QuestionVoteCreateInput!): QuestionVote!
   createAnswerVote(data: AnswerVoteCreateInput!): AnswerVote!
   createBusinessIdea(data: BusinessIdeaCreateInput!): BusinessIdea!
-  createQuestion(data: QuestionCreateInput!): Question!
+  createNotification(data: NotificationCreateInput!): Notification!
   createTag(data: TagCreateInput!): Tag!
+  createQuestion(data: QuestionCreateInput!): Question!
   createUser(data: UserCreateInput!): User!
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateBookMark(
@@ -2760,11 +2765,15 @@ type Mutation {
     data: BusinessIdeaUpdateInput!
     where: BusinessIdeaWhereUniqueInput!
   ): BusinessIdea
+  updateNotification(
+    data: NotificationUpdateInput!
+    where: NotificationWhereUniqueInput!
+  ): Notification
+  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
   updateQuestion(
     data: QuestionUpdateInput!
     where: QuestionWhereUniqueInput!
   ): Question
-  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteBookMark(where: BookMarkWhereUniqueInput!): BookMark
@@ -2772,8 +2781,9 @@ type Mutation {
   deleteQuestionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
   deleteAnswerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
   deleteBusinessIdea(where: BusinessIdeaWhereUniqueInput!): BusinessIdea
-  deleteQuestion(where: QuestionWhereUniqueInput!): Question
+  deleteNotification(where: NotificationWhereUniqueInput!): Notification
   deleteTag(where: TagWhereUniqueInput!): Tag
+  deleteQuestion(where: QuestionWhereUniqueInput!): Question
   deleteUser(where: UserWhereUniqueInput!): User
   upsertAnswer(
     where: AnswerWhereUniqueInput!
@@ -2805,16 +2815,21 @@ type Mutation {
     create: BusinessIdeaCreateInput!
     update: BusinessIdeaUpdateInput!
   ): BusinessIdea!
-  upsertQuestion(
-    where: QuestionWhereUniqueInput!
-    create: QuestionCreateInput!
-    update: QuestionUpdateInput!
-  ): Question!
+  upsertNotification(
+    where: NotificationWhereUniqueInput!
+    create: NotificationCreateInput!
+    update: NotificationUpdateInput!
+  ): Notification!
   upsertTag(
     where: TagWhereUniqueInput!
     create: TagCreateInput!
     update: TagUpdateInput!
   ): Tag!
+  upsertQuestion(
+    where: QuestionWhereUniqueInput!
+    create: QuestionCreateInput!
+    update: QuestionUpdateInput!
+  ): Question!
   upsertUser(
     where: UserWhereUniqueInput!
     create: UserCreateInput!
@@ -2836,13 +2851,17 @@ type Mutation {
     data: BusinessIdeaUpdateManyMutationInput!
     where: BusinessIdeaWhereInput
   ): BatchPayload!
-  updateManyQuestions(
-    data: QuestionUpdateManyMutationInput!
-    where: QuestionWhereInput
+  updateManyNotifications(
+    data: NotificationUpdateManyMutationInput!
+    where: NotificationWhereInput
   ): BatchPayload!
   updateManyTags(
     data: TagUpdateManyMutationInput!
     where: TagWhereInput
+  ): BatchPayload!
+  updateManyQuestions(
+    data: QuestionUpdateManyMutationInput!
+    where: QuestionWhereInput
   ): BatchPayload!
   updateManyUsers(
     data: UserUpdateManyMutationInput!
@@ -2854,8 +2873,9 @@ type Mutation {
   deleteManyQuestionVotes(where: QuestionVoteWhereInput): BatchPayload!
   deleteManyAnswerVotes(where: AnswerVoteWhereInput): BatchPayload!
   deleteManyBusinessIdeas(where: BusinessIdeaWhereInput): BatchPayload!
-  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
+  deleteManyNotifications(where: NotificationWhereInput): BatchPayload!
   deleteManyTags(where: TagWhereInput): BatchPayload!
+  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
@@ -2873,6 +2893,504 @@ interface Node {
   The id of the object.
   """
   id: ID!
+}
+
+type Notification implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  forUser: User!
+  question: Question!
+  wasSeen: Boolean
+  wasClicked: Boolean
+}
+
+"""
+A connection to a list of items.
+"""
+type NotificationConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [NotificationEdge]!
+  aggregate: AggregateNotification!
+}
+
+input NotificationCreateInput {
+  id: ID
+  wasSeen: Boolean
+  wasClicked: Boolean
+  forUser: UserCreateOneWithoutMyNotificationsInput!
+  question: QuestionCreateOneInput!
+}
+
+input NotificationCreateManyWithoutForUserInput {
+  create: [NotificationCreateWithoutForUserInput!]
+  connect: [NotificationWhereUniqueInput!]
+}
+
+input NotificationCreateWithoutForUserInput {
+  id: ID
+  wasSeen: Boolean
+  wasClicked: Boolean
+  question: QuestionCreateOneInput!
+}
+
+"""
+An edge in a connection.
+"""
+type NotificationEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Notification!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum NotificationOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  wasSeen_ASC
+  wasSeen_DESC
+  wasClicked_ASC
+  wasClicked_DESC
+}
+
+type NotificationPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  wasSeen: Boolean
+  wasClicked: Boolean
+}
+
+input NotificationScalarWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [NotificationScalarWhereInput!]
+
+  """
+  Logical OR on all given filters.
+  """
+  OR: [NotificationScalarWhereInput!]
+
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [NotificationScalarWhereInput!]
+  id: ID
+
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  wasSeen: Boolean
+
+  """
+  All values that are not equal to given value.
+  """
+  wasSeen_not: Boolean
+  wasClicked: Boolean
+
+  """
+  All values that are not equal to given value.
+  """
+  wasClicked_not: Boolean
+}
+
+type NotificationSubscriptionPayload {
+  mutation: MutationType!
+  node: Notification
+  updatedFields: [String!]
+  previousValues: NotificationPreviousValues
+}
+
+input NotificationSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [NotificationSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: NotificationWhereInput
+}
+
+input NotificationUpdateInput {
+  wasSeen: Boolean
+  wasClicked: Boolean
+  forUser: UserUpdateOneRequiredWithoutMyNotificationsInput
+  question: QuestionUpdateOneRequiredInput
+}
+
+input NotificationUpdateManyDataInput {
+  wasSeen: Boolean
+  wasClicked: Boolean
+}
+
+input NotificationUpdateManyMutationInput {
+  wasSeen: Boolean
+  wasClicked: Boolean
+}
+
+input NotificationUpdateManyWithoutForUserInput {
+  create: [NotificationCreateWithoutForUserInput!]
+  connect: [NotificationWhereUniqueInput!]
+  set: [NotificationWhereUniqueInput!]
+  disconnect: [NotificationWhereUniqueInput!]
+  delete: [NotificationWhereUniqueInput!]
+  update: [NotificationUpdateWithWhereUniqueWithoutForUserInput!]
+  updateMany: [NotificationUpdateManyWithWhereNestedInput!]
+  deleteMany: [NotificationScalarWhereInput!]
+  upsert: [NotificationUpsertWithWhereUniqueWithoutForUserInput!]
+}
+
+input NotificationUpdateManyWithWhereNestedInput {
+  where: NotificationScalarWhereInput!
+  data: NotificationUpdateManyDataInput!
+}
+
+input NotificationUpdateWithoutForUserDataInput {
+  wasSeen: Boolean
+  wasClicked: Boolean
+  question: QuestionUpdateOneRequiredInput
+}
+
+input NotificationUpdateWithWhereUniqueWithoutForUserInput {
+  where: NotificationWhereUniqueInput!
+  data: NotificationUpdateWithoutForUserDataInput!
+}
+
+input NotificationUpsertWithWhereUniqueWithoutForUserInput {
+  where: NotificationWhereUniqueInput!
+  update: NotificationUpdateWithoutForUserDataInput!
+  create: NotificationCreateWithoutForUserInput!
+}
+
+input NotificationWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [NotificationWhereInput!]
+  id: ID
+
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  wasSeen: Boolean
+
+  """
+  All values that are not equal to given value.
+  """
+  wasSeen_not: Boolean
+  wasClicked: Boolean
+
+  """
+  All values that are not equal to given value.
+  """
+  wasClicked_not: Boolean
+  forUser: UserWhereInput
+  question: QuestionWhereInput
+}
+
+input NotificationWhereUniqueInput {
+  id: ID
 }
 
 """
@@ -2962,15 +3480,15 @@ type Query {
     first: Int
     last: Int
   ): [BusinessIdea]!
-  questions(
-    where: QuestionWhereInput
-    orderBy: QuestionOrderByInput
+  notifications(
+    where: NotificationWhereInput
+    orderBy: NotificationOrderByInput
     skip: Int
     after: String
     before: String
     first: Int
     last: Int
-  ): [Question]!
+  ): [Notification]!
   tags(
     where: TagWhereInput
     orderBy: TagOrderByInput
@@ -2980,6 +3498,15 @@ type Query {
     first: Int
     last: Int
   ): [Tag]!
+  questions(
+    where: QuestionWhereInput
+    orderBy: QuestionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Question]!
   users(
     where: UserWhereInput
     orderBy: UserOrderByInput
@@ -2995,8 +3522,9 @@ type Query {
   questionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
   answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
   businessIdea(where: BusinessIdeaWhereUniqueInput!): BusinessIdea
-  question(where: QuestionWhereUniqueInput!): Question
+  notification(where: NotificationWhereUniqueInput!): Notification
   tag(where: TagWhereUniqueInput!): Tag
+  question(where: QuestionWhereUniqueInput!): Question
   user(where: UserWhereUniqueInput!): User
   answersConnection(
     where: AnswerWhereInput
@@ -3052,15 +3580,15 @@ type Query {
     first: Int
     last: Int
   ): BusinessIdeaConnection!
-  questionsConnection(
-    where: QuestionWhereInput
-    orderBy: QuestionOrderByInput
+  notificationsConnection(
+    where: NotificationWhereInput
+    orderBy: NotificationOrderByInput
     skip: Int
     after: String
     before: String
     first: Int
     last: Int
-  ): QuestionConnection!
+  ): NotificationConnection!
   tagsConnection(
     where: TagWhereInput
     orderBy: TagOrderByInput
@@ -3070,6 +3598,15 @@ type Query {
     first: Int
     last: Int
   ): TagConnection!
+  questionsConnection(
+    where: QuestionWhereInput
+    orderBy: QuestionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): QuestionConnection!
   usersConnection(
     where: UserWhereInput
     orderBy: UserOrderByInput
@@ -4852,8 +5389,11 @@ type Subscription {
   businessIdea(
     where: BusinessIdeaSubscriptionWhereInput
   ): BusinessIdeaSubscriptionPayload
-  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
+  notification(
+    where: NotificationSubscriptionWhereInput
+  ): NotificationSubscriptionPayload
   tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
+  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -5347,6 +5887,15 @@ type User implements Node {
     first: Int
     last: Int
   ): [Tag!]
+  myNotifications(
+    where: NotificationWhereInput
+    orderBy: NotificationOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Notification!]
 }
 
 """
@@ -5383,6 +5932,7 @@ input UserCreateInput {
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
+  myNotifications: NotificationCreateManyWithoutForUserInput
 }
 
 input UserCreateManyWithoutMyQuestionsInput {
@@ -5410,6 +5960,11 @@ input UserCreateOneWithoutMyBookMarksInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutMyNotificationsInput {
+  create: UserCreateWithoutMyNotificationsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreatepermissionsInput {
   set: [Permission!]
 }
@@ -5431,6 +5986,7 @@ input UserCreateWithoutBusinessIdeasInput {
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   tags: TagCreateManyInput
+  myNotifications: NotificationCreateManyWithoutForUserInput
 }
 
 input UserCreateWithoutMyAnswersInput {
@@ -5450,6 +6006,7 @@ input UserCreateWithoutMyAnswersInput {
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
+  myNotifications: NotificationCreateManyWithoutForUserInput
 }
 
 input UserCreateWithoutMyBookMarksInput {
@@ -5467,6 +6024,27 @@ input UserCreateWithoutMyBookMarksInput {
   permissions: UserCreatepermissionsInput
   myQuestions: QuestionCreateManyWithoutAskedByInput
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
+  businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
+  tags: TagCreateManyInput
+  myNotifications: NotificationCreateManyWithoutForUserInput
+}
+
+input UserCreateWithoutMyNotificationsInput {
+  id: ID
+  name: String!
+  email: String!
+  display: String!
+  image: String
+  location: String
+  about: String
+  industry: String
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  myQuestions: QuestionCreateManyWithoutAskedByInput
+  myAnswers: AnswerCreateManyWithoutAnsweredByInput
+  myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
 }
@@ -5488,6 +6066,7 @@ input UserCreateWithoutMyQuestionsInput {
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
+  myNotifications: NotificationCreateManyWithoutForUserInput
 }
 
 """
@@ -6388,6 +6967,7 @@ input UserUpdateDataInput {
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
+  myNotifications: NotificationUpdateManyWithoutForUserInput
 }
 
 input UserUpdateInput {
@@ -6407,6 +6987,7 @@ input UserUpdateInput {
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
+  myNotifications: NotificationUpdateManyWithoutForUserInput
 }
 
 input UserUpdateManyDataInput {
@@ -6482,6 +7063,13 @@ input UserUpdateOneRequiredWithoutMyBookMarksInput {
   upsert: UserUpsertWithoutMyBookMarksInput
 }
 
+input UserUpdateOneRequiredWithoutMyNotificationsInput {
+  create: UserCreateWithoutMyNotificationsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutMyNotificationsDataInput
+  upsert: UserUpsertWithoutMyNotificationsInput
+}
+
 input UserUpdatepermissionsInput {
   set: [Permission!]
 }
@@ -6502,6 +7090,7 @@ input UserUpdateWithoutBusinessIdeasDataInput {
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   tags: TagUpdateManyInput
+  myNotifications: NotificationUpdateManyWithoutForUserInput
 }
 
 input UserUpdateWithoutMyAnswersDataInput {
@@ -6520,6 +7109,7 @@ input UserUpdateWithoutMyAnswersDataInput {
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
+  myNotifications: NotificationUpdateManyWithoutForUserInput
 }
 
 input UserUpdateWithoutMyBookMarksDataInput {
@@ -6536,6 +7126,26 @@ input UserUpdateWithoutMyBookMarksDataInput {
   permissions: UserUpdatepermissionsInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
+  businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
+  tags: TagUpdateManyInput
+  myNotifications: NotificationUpdateManyWithoutForUserInput
+}
+
+input UserUpdateWithoutMyNotificationsDataInput {
+  name: String
+  email: String
+  display: String
+  image: String
+  location: String
+  about: String
+  industry: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  myQuestions: QuestionUpdateManyWithoutAskedByInput
+  myAnswers: AnswerUpdateManyWithoutAnsweredByInput
+  myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
 }
@@ -6556,6 +7166,7 @@ input UserUpdateWithoutMyQuestionsDataInput {
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
+  myNotifications: NotificationUpdateManyWithoutForUserInput
 }
 
 input UserUpdateWithWhereUniqueWithoutMyQuestionsInput {
@@ -6581,6 +7192,11 @@ input UserUpsertWithoutMyAnswersInput {
 input UserUpsertWithoutMyBookMarksInput {
   update: UserUpdateWithoutMyBookMarksDataInput!
   create: UserCreateWithoutMyBookMarksInput!
+}
+
+input UserUpsertWithoutMyNotificationsInput {
+  update: UserUpdateWithoutMyNotificationsDataInput!
+  create: UserCreateWithoutMyNotificationsInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutMyQuestionsInput {
@@ -7367,6 +7983,7 @@ input UserWhereInput {
   myBookMarks_some: BookMarkWhereInput
   businessIdeas_some: BusinessIdeaWhereInput
   tags_some: TagWhereInput
+  myNotifications_some: NotificationWhereInput
 }
 
 input UserWhereUniqueInput {

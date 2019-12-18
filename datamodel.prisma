@@ -28,6 +28,7 @@ type User {
   myBookMarks: [BookMark!]
   businessIdeas: [BusinessIdea!]! @relation(link: INLINE)
   tags: [Tag!]! @relation(link: INLINE)
+  myNotifications: [Notification!]! @relation(link: INLINE)
 }
 
 type Question {
@@ -98,4 +99,14 @@ problem: String
 solution: String
 customer: String
 value: String
+}
+
+type Notification {
+  id: ID! @id @unique
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  forUser: User!
+  question: Question! @relation(link: INLINE)
+  wasSeen: Boolean
+  wasClicked: Boolean
 }

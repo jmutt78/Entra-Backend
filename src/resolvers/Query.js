@@ -291,6 +291,7 @@ const getPrefix = ({ title, askedBy, answers }, querySource) => {
 };
 
 const Query = {
+  notifications: forwardTo('db'),
   me(parent, args, ctx, info) {
     // check if there is a current user ID
     if (!ctx.request.userId) {

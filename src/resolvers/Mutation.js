@@ -19,6 +19,9 @@ const crypto = require('crypto');
 const env = process.env.NODE_ENV || 'development';
 const domain = env === 'production' ? 'entra.io' : undefined;
 
+// const JUSTIN_EMAIL='jmcintosh@entra.io';
+const JUSTIN_EMAIL = 'musca.alexandru@gmail.com';
+
 const Mutations = {
   //--------------------Signup Mutation--------------------//
   async signup(parent, args, ctx, info) {
@@ -89,11 +92,11 @@ const Mutations = {
     });
 
     const mailRes = await transport.sendMail({
-      from: 'jmcintosh@entra.io',
+      from: JUSTIN_EMAIL,
       to: user.email,
       bcc: [
         'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
-        'jmcintosh@entra.io'
+        JUSTIN_EMAIL
       ],
       subject: 'Welcome to Entra!',
       html: welcomeEmail(`${args.name}`)
@@ -128,11 +131,11 @@ const Mutations = {
         info
       );
       const mailRes = await transport.sendMail({
-        from: 'jmcintosh@entra.io',
+        from: JUSTIN_EMAIL,
         to: user.email,
         bcc: [
           'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
-          'jmcintosh@entra.io'
+          JUSTIN_EMAIL
         ],
         subject: 'Welcome to Entra!',
         html: welcomeEmail(`${args.name}`)
@@ -174,11 +177,11 @@ const Mutations = {
         info
       );
       const mailRes = await transport.sendMail({
-        from: 'jmcintosh@entra.io',
+        from: JUSTIN_EMAIL,
         to: user.email,
         bcc: [
           'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
-          'jmcintosh@entra.io'
+          JUSTIN_EMAIL
         ],
         subject: 'Welcome to Entra!',
         html: welcomeEmail(`${args.name}`)
@@ -240,11 +243,11 @@ const Mutations = {
     );
     if (!user) {
       const mailRes = await transport.sendMail({
-        from: 'jmcintosh@entra.io',
+        from: JUSTIN_EMAIL,
         to: email,
         bcc: [
           'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
-          'jmcintosh@entra.io'
+          JUSTIN_EMAIL
         ],
         subject: 'Welcome to Entra!',
         html: welcomeEmail(`${name}`)
@@ -320,7 +323,7 @@ const Mutations = {
     });
 
     const mailRes = await transport.sendMail({
-      from: 'jmcintosh@entra.io',
+      from: JUSTIN_EMAIL,
       to: user.email,
       subject: 'Your Password Reset Token',
       html: resetEmail(
@@ -474,8 +477,8 @@ const Mutations = {
     );
 
     const mailRes = await transport.sendMail({
-      from: 'jmcintosh@entra.io',
-      to: 'jmcintosh@entra.io',
+      from: JUSTIN_EMAIL,
+      to: JUSTIN_EMAIL,
       subject: 'New Question!',
       html: makeANiceEmail(`${ctx.request.userId}`, `${args.title}`)
     });
@@ -766,24 +769,84 @@ const Mutations = {
     );
   },
 
+  updateNotification: async (parent, args, ctx, info) => {
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error('You must be logged in to do that!');
+    }
+    const { id, wasSeen, wasClicked } = args;
+    const notification = await ctx.db.query.notification(
+      {
+        where: {
+          id
+        }
+      },
+      info
+    );
+    delete notification.id;
+    notification.wasSeen = wasSeen;
+    notification.wasClicked = wasClicked;
+    return await ctx.db.mutation.updateNotification({
+      data: notification,
+      where: {
+        id
+      }
+    });
+  },
+
   createAnswer: async (parent, args, ctx, info) => {
-    if (!ctx.request.userId) {
+    const { userId } = ctx.request;
+    const {
+      body,
+      approval,
+      questionId,
+      currentUserName,
+      authorEmail,
+      authorId
+    } = args;
+    if (!userId) {
       throw new Error('You must be logged in to do that!');
     }
 
-    const newAnswer = await ctx.db.mutation.createAnswer({
-      data: {
-        body: args.body,
-        approval: args.approval,
-        answeredBy: { connect: { id: ctx.request.userId } },
-        answeredTo: { connect: { id: args.questionId } }
+    const question = await ctx.db.query.questions({
+      where: {
+        id: questionId
       }
     });
-    const mailRes = await transport.sendMail({
-      from: 'jmcintosh@entra.io',
-      to: 'jmcintosh@entra.io',
+    const newAnswer = await ctx.db.mutation.createAnswer({
+      data: {
+        body: body,
+        approval: approval,
+        answeredBy: { connect: { id: userId } },
+        answeredTo: { connect: { id: questionId } }
+      }
+    });
+    console.log('HERE----', authorId);
+    const newNotification = await ctx.db.mutation.createNotification({
+      data: {
+        wasSeen: false,
+        wasClicked: false,
+        question: {
+          connect: {
+            id: questionId
+          }
+        },
+        forUser: {
+          connect: {
+            id: authorId
+          }
+        }
+      }
+    });
+    console.log(newNotification);
+
+    const { title, description } = question[0];
+
+    mailRes = await transport.sendMail({
+      from: JUSTIN_EMAIL,
+      to: JUSTIN_EMAIL,
       subject: 'New Answer!',
-      html: answeredQuestion(`${ctx.request.userId}`, `${args.body}`)
+      html: answeredQuestion(`${userId}`, `${body}`)
     });
     return newAnswer;
   },
@@ -989,8 +1052,8 @@ const Mutations = {
     );
 
     const mailRes = await transport.sendMail({
-      from: 'jmcintosh@entra.io',
-      to: 'jmcintosh@entra.io',
+      from: JUSTIN_EMAIL,
+      to: JUSTIN_EMAIL,
       subject: 'New business idea!',
       html: makeANiceEmail(`${ctx.request.userId}`, `${args.idea}`)
     });

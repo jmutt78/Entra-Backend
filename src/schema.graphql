@@ -16,7 +16,14 @@ type Mutation {
   deleteAnswerVote(id: ID!): AnswerVote
   deleteQuestion(id: ID!): Question
   createBookMark(questionId: ID!): BookMark!
-  createAnswer(body: String!, questionId: ID!, approval: Boolean): Answer!
+  createAnswer(
+    body: String!
+    questionId: ID!
+    approval: Boolean
+    currentUserName: String
+    authorEmail: String
+    authorId: ID!
+  ): Answer!
   createTag(name: String!): Tag!
   signup(
     email: String!
@@ -75,12 +82,18 @@ type Mutation {
     customer: String
     value: String
   ): BusinessIdea!
+  updateNotification(
+    id: ID!
+    wasSeen: Boolean
+    wasClicked: Boolean
+  ): Notification!
 }
 
 type Query {
   me: User
   user(id: ID!): User
   users: [User]!
+  notifications: [Notification]!
   tags(
     first: Int
     where: TagWhereInput
@@ -188,6 +201,7 @@ type User {
     last: Int
   ): [Tag!]
   businessIdeas: [BusinessIdea!]!
+  myNotifications: [Notification!]!
 }
 
 type Badges {
@@ -299,4 +313,15 @@ type BusinessIdea implements Node {
 type Tag {
   id: ID!
   name: String!
+}
+
+type Notification {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  forUser: User!
+  byUser: User!
+  question: Question!
+  wasSeen: Boolean
+  wasClicked: Boolean
 }
