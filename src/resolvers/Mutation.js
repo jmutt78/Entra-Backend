@@ -93,7 +93,8 @@ const Mutations = {
       to: user.email,
       bcc: [
         'fa7d6d3352d7d8eaa07e789fd889a4e9@inbound.postmarkapp.com',
-        'jmcintosh@entra.io'
+        'jmcintosh@entra.io',
+        'us4-7dfe95f860-4ffbd78e14@inbound.mailchimp.com'
       ],
       subject: 'Welcome to Entra!',
       html: welcomeEmail(`${args.name}`)
