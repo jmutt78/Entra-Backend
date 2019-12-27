@@ -991,12 +991,12 @@ const Mutations = {
       info
     );
 
-    // const mailRes = await transport.sendMail({
-    //   from: 'jmcintosh@entra.io',
-    //   to: 'jmcintosh@entra.io',
-    //   subject: 'New business Idea!',
-    //   html: makeANiceEmail(`${ctx.request.userId}`, `${args.idea}`)
-    // });
+    const mailRes = await transport.sendMail({
+      from: 'jmcintosh@entra.io',
+      to: 'jmcintosh@entra.io',
+      subject: 'New business Idea!',
+      html: makeANiceEmail(`${ctx.request.userId}`, `${args.idea}`)
+    });
 
     return businessIdea;
   },
@@ -1019,6 +1019,12 @@ const Mutations = {
     if (!businessIdea) {
       throw new Error('Idea already deleted');
     }
+    await ctx.db.mutation.deleteManyBusinessIdeaVotes(
+      {
+        where: { votedBusinessIdea: { id: args.id } }
+      },
+      null
+    );
 
     return ctx.db.mutation.deleteBusinessIdea({ where }, info);
   },
