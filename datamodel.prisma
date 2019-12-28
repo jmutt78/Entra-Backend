@@ -27,6 +27,8 @@ type User {
   myBookMarks: [BookMark!]
   businessIdeas: [BusinessIdea!]! @relation(link: INLINE)
   tags: [Tag!]! @relation(link: INLINE)
+  master: [Mastery]
+  points: Int
 }
 
 type Question {
@@ -106,4 +108,14 @@ type BusinessIdeaVote {
   votedBy: User! @relation(link: INLINE)
   votedBusinessIdea: BusinessIdea! @relation(link: INLINE)
   vote: String
+}
+
+type Mastery {
+id: ID! @id @unique
+user: User! @relation(link: INLINE)
+level1: Boolean
+level2: Boolean
+level3: Boolean
+level4: Boolean
+
 }

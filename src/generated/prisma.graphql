@@ -18,6 +18,10 @@ type AggregateBusinessIdeaVote {
   count: Int!
 }
 
+type AggregateMastery {
+  count: Int!
+}
+
 type AggregateQuestion {
   count: Int!
 }
@@ -1404,6 +1408,205 @@ scalar DateTime
 
 scalar Long
 
+type Mastery {
+  id: ID!
+  user: User!
+  level1: Boolean
+  level2: Boolean
+  level3: Boolean
+  level4: Boolean
+}
+
+type MasteryConnection {
+  pageInfo: PageInfo!
+  edges: [MasteryEdge]!
+  aggregate: AggregateMastery!
+}
+
+input MasteryCreateInput {
+  id: ID
+  user: UserCreateOneWithoutMasterInput!
+  level1: Boolean
+  level2: Boolean
+  level3: Boolean
+  level4: Boolean
+}
+
+input MasteryCreateManyWithoutUserInput {
+  create: [MasteryCreateWithoutUserInput!]
+  connect: [MasteryWhereUniqueInput!]
+}
+
+input MasteryCreateWithoutUserInput {
+  id: ID
+  level1: Boolean
+  level2: Boolean
+  level3: Boolean
+  level4: Boolean
+}
+
+type MasteryEdge {
+  node: Mastery!
+  cursor: String!
+}
+
+enum MasteryOrderByInput {
+  id_ASC
+  id_DESC
+  level1_ASC
+  level1_DESC
+  level2_ASC
+  level2_DESC
+  level3_ASC
+  level3_DESC
+  level4_ASC
+  level4_DESC
+}
+
+type MasteryPreviousValues {
+  id: ID!
+  level1: Boolean
+  level2: Boolean
+  level3: Boolean
+  level4: Boolean
+}
+
+input MasteryScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  level1: Boolean
+  level1_not: Boolean
+  level2: Boolean
+  level2_not: Boolean
+  level3: Boolean
+  level3_not: Boolean
+  level4: Boolean
+  level4_not: Boolean
+  AND: [MasteryScalarWhereInput!]
+  OR: [MasteryScalarWhereInput!]
+  NOT: [MasteryScalarWhereInput!]
+}
+
+type MasterySubscriptionPayload {
+  mutation: MutationType!
+  node: Mastery
+  updatedFields: [String!]
+  previousValues: MasteryPreviousValues
+}
+
+input MasterySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: MasteryWhereInput
+  AND: [MasterySubscriptionWhereInput!]
+  OR: [MasterySubscriptionWhereInput!]
+  NOT: [MasterySubscriptionWhereInput!]
+}
+
+input MasteryUpdateInput {
+  user: UserUpdateOneRequiredWithoutMasterInput
+  level1: Boolean
+  level2: Boolean
+  level3: Boolean
+  level4: Boolean
+}
+
+input MasteryUpdateManyDataInput {
+  level1: Boolean
+  level2: Boolean
+  level3: Boolean
+  level4: Boolean
+}
+
+input MasteryUpdateManyMutationInput {
+  level1: Boolean
+  level2: Boolean
+  level3: Boolean
+  level4: Boolean
+}
+
+input MasteryUpdateManyWithoutUserInput {
+  create: [MasteryCreateWithoutUserInput!]
+  delete: [MasteryWhereUniqueInput!]
+  connect: [MasteryWhereUniqueInput!]
+  set: [MasteryWhereUniqueInput!]
+  disconnect: [MasteryWhereUniqueInput!]
+  update: [MasteryUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [MasteryUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [MasteryScalarWhereInput!]
+  updateMany: [MasteryUpdateManyWithWhereNestedInput!]
+}
+
+input MasteryUpdateManyWithWhereNestedInput {
+  where: MasteryScalarWhereInput!
+  data: MasteryUpdateManyDataInput!
+}
+
+input MasteryUpdateWithoutUserDataInput {
+  level1: Boolean
+  level2: Boolean
+  level3: Boolean
+  level4: Boolean
+}
+
+input MasteryUpdateWithWhereUniqueWithoutUserInput {
+  where: MasteryWhereUniqueInput!
+  data: MasteryUpdateWithoutUserDataInput!
+}
+
+input MasteryUpsertWithWhereUniqueWithoutUserInput {
+  where: MasteryWhereUniqueInput!
+  update: MasteryUpdateWithoutUserDataInput!
+  create: MasteryCreateWithoutUserInput!
+}
+
+input MasteryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  user: UserWhereInput
+  level1: Boolean
+  level1_not: Boolean
+  level2: Boolean
+  level2_not: Boolean
+  level3: Boolean
+  level3_not: Boolean
+  level4: Boolean
+  level4_not: Boolean
+  AND: [MasteryWhereInput!]
+  OR: [MasteryWhereInput!]
+  NOT: [MasteryWhereInput!]
+}
+
+input MasteryWhereUniqueInput {
+  id: ID
+}
+
 type Mutation {
   createAnswer(data: AnswerCreateInput!): Answer!
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
@@ -1480,6 +1683,22 @@ type Mutation {
     where: BusinessIdeaVoteWhereUniqueInput!
   ): BusinessIdeaVote
   deleteManyBusinessIdeaVotes(where: BusinessIdeaVoteWhereInput): BatchPayload!
+  createMastery(data: MasteryCreateInput!): Mastery!
+  updateMastery(
+    data: MasteryUpdateInput!
+    where: MasteryWhereUniqueInput!
+  ): Mastery
+  updateManyMasteries(
+    data: MasteryUpdateManyMutationInput!
+    where: MasteryWhereInput
+  ): BatchPayload!
+  upsertMastery(
+    where: MasteryWhereUniqueInput!
+    create: MasteryCreateInput!
+    update: MasteryUpdateInput!
+  ): Mastery!
+  deleteMastery(where: MasteryWhereUniqueInput!): Mastery
+  deleteManyMasteries(where: MasteryWhereInput): BatchPayload!
   createQuestion(data: QuestionCreateInput!): Question!
   updateQuestion(
     data: QuestionUpdateInput!
@@ -1672,6 +1891,25 @@ type Query {
     first: Int
     last: Int
   ): BusinessIdeaVoteConnection!
+  mastery(where: MasteryWhereUniqueInput!): Mastery
+  masteries(
+    where: MasteryWhereInput
+    orderBy: MasteryOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Mastery]!
+  masteriesConnection(
+    where: MasteryWhereInput
+    orderBy: MasteryOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): MasteryConnection!
   question(where: QuestionWhereUniqueInput!): Question
   questions(
     where: QuestionWhereInput
@@ -2606,6 +2844,7 @@ type Subscription {
   businessIdeaVote(
     where: BusinessIdeaVoteSubscriptionWhereInput
   ): BusinessIdeaVoteSubscriptionPayload
+  mastery(where: MasterySubscriptionWhereInput): MasterySubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   questionView(
     where: QuestionViewSubscriptionWhereInput
@@ -2850,6 +3089,16 @@ type User {
     first: Int
     last: Int
   ): [Tag!]
+  master(
+    where: MasteryWhereInput
+    orderBy: MasteryOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Mastery!]
+  points: Int
 }
 
 type UserConnection {
@@ -2876,6 +3125,8 @@ input UserCreateInput {
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
+  master: MasteryCreateManyWithoutUserInput
+  points: Int
 }
 
 input UserCreateManyWithoutMyQuestionsInput {
@@ -2890,6 +3141,11 @@ input UserCreateOneInput {
 
 input UserCreateOneWithoutBusinessIdeasInput {
   create: UserCreateWithoutBusinessIdeasInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutMasterInput {
+  create: UserCreateWithoutMasterInput
   connect: UserWhereUniqueInput
 }
 
@@ -2924,6 +3180,29 @@ input UserCreateWithoutBusinessIdeasInput {
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   tags: TagCreateManyInput
+  master: MasteryCreateManyWithoutUserInput
+  points: Int
+}
+
+input UserCreateWithoutMasterInput {
+  id: ID
+  name: String!
+  email: String!
+  display: String!
+  image: String
+  location: String
+  about: String
+  industry: String
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  myQuestions: QuestionCreateManyWithoutAskedByInput
+  myAnswers: AnswerCreateManyWithoutAnsweredByInput
+  myBookMarks: BookMarkCreateManyWithoutMarkedByInput
+  businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
+  tags: TagCreateManyInput
+  points: Int
 }
 
 input UserCreateWithoutMyAnswersInput {
@@ -2943,6 +3222,8 @@ input UserCreateWithoutMyAnswersInput {
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
+  master: MasteryCreateManyWithoutUserInput
+  points: Int
 }
 
 input UserCreateWithoutMyBookMarksInput {
@@ -2962,6 +3243,8 @@ input UserCreateWithoutMyBookMarksInput {
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
+  master: MasteryCreateManyWithoutUserInput
+  points: Int
 }
 
 input UserCreateWithoutMyQuestionsInput {
@@ -2981,6 +3264,8 @@ input UserCreateWithoutMyQuestionsInput {
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
+  master: MasteryCreateManyWithoutUserInput
+  points: Int
 }
 
 type UserEdge {
@@ -3015,6 +3300,8 @@ enum UserOrderByInput {
   resetToken_DESC
   resetTokenExpiry_ASC
   resetTokenExpiry_DESC
+  points_ASC
+  points_DESC
 }
 
 type UserPreviousValues {
@@ -3032,6 +3319,7 @@ type UserPreviousValues {
   resetToken: String
   resetTokenExpiry: Float
   permissions: [Permission!]!
+  points: Int
 }
 
 input UserScalarWhereInput {
@@ -3199,6 +3487,14 @@ input UserScalarWhereInput {
   resetTokenExpiry_lte: Float
   resetTokenExpiry_gt: Float
   resetTokenExpiry_gte: Float
+  points: Int
+  points_not: Int
+  points_in: [Int!]
+  points_not_in: [Int!]
+  points_lt: Int
+  points_lte: Int
+  points_gt: Int
+  points_gte: Int
   AND: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   NOT: [UserScalarWhereInput!]
@@ -3239,6 +3535,8 @@ input UserUpdateDataInput {
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
+  master: MasteryUpdateManyWithoutUserInput
+  points: Int
 }
 
 input UserUpdateInput {
@@ -3258,6 +3556,8 @@ input UserUpdateInput {
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
+  master: MasteryUpdateManyWithoutUserInput
+  points: Int
 }
 
 input UserUpdateManyDataInput {
@@ -3272,6 +3572,7 @@ input UserUpdateManyDataInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
+  points: Int
 }
 
 input UserUpdateManyMutationInput {
@@ -3286,6 +3587,7 @@ input UserUpdateManyMutationInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
+  points: Int
 }
 
 input UserUpdateManyWithoutMyQuestionsInput {
@@ -3316,6 +3618,13 @@ input UserUpdateOneRequiredWithoutBusinessIdeasInput {
   create: UserCreateWithoutBusinessIdeasInput
   update: UserUpdateWithoutBusinessIdeasDataInput
   upsert: UserUpsertWithoutBusinessIdeasInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutMasterInput {
+  create: UserCreateWithoutMasterInput
+  update: UserUpdateWithoutMasterDataInput
+  upsert: UserUpsertWithoutMasterInput
   connect: UserWhereUniqueInput
 }
 
@@ -3353,6 +3662,28 @@ input UserUpdateWithoutBusinessIdeasDataInput {
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   tags: TagUpdateManyInput
+  master: MasteryUpdateManyWithoutUserInput
+  points: Int
+}
+
+input UserUpdateWithoutMasterDataInput {
+  name: String
+  email: String
+  display: String
+  image: String
+  location: String
+  about: String
+  industry: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  myQuestions: QuestionUpdateManyWithoutAskedByInput
+  myAnswers: AnswerUpdateManyWithoutAnsweredByInput
+  myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
+  businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
+  tags: TagUpdateManyInput
+  points: Int
 }
 
 input UserUpdateWithoutMyAnswersDataInput {
@@ -3371,6 +3702,8 @@ input UserUpdateWithoutMyAnswersDataInput {
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
+  master: MasteryUpdateManyWithoutUserInput
+  points: Int
 }
 
 input UserUpdateWithoutMyBookMarksDataInput {
@@ -3389,6 +3722,8 @@ input UserUpdateWithoutMyBookMarksDataInput {
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
+  master: MasteryUpdateManyWithoutUserInput
+  points: Int
 }
 
 input UserUpdateWithoutMyQuestionsDataInput {
@@ -3407,6 +3742,8 @@ input UserUpdateWithoutMyQuestionsDataInput {
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
+  master: MasteryUpdateManyWithoutUserInput
+  points: Int
 }
 
 input UserUpdateWithWhereUniqueWithoutMyQuestionsInput {
@@ -3422,6 +3759,11 @@ input UserUpsertNestedInput {
 input UserUpsertWithoutBusinessIdeasInput {
   update: UserUpdateWithoutBusinessIdeasDataInput!
   create: UserCreateWithoutBusinessIdeasInput!
+}
+
+input UserUpsertWithoutMasterInput {
+  update: UserUpdateWithoutMasterDataInput!
+  create: UserCreateWithoutMasterInput!
 }
 
 input UserUpsertWithoutMyAnswersInput {
@@ -3620,6 +3962,17 @@ input UserWhereInput {
   tags_every: TagWhereInput
   tags_some: TagWhereInput
   tags_none: TagWhereInput
+  master_every: MasteryWhereInput
+  master_some: MasteryWhereInput
+  master_none: MasteryWhereInput
+  points: Int
+  points_not: Int
+  points_in: [Int!]
+  points_not_in: [Int!]
+  points_lt: Int
+  points_lte: Int
+  points_gt: Int
+  points_gte: Int
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
