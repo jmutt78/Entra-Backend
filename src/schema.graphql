@@ -191,8 +191,15 @@ type User {
     last: Int
   ): [Tag!]
   businessIdeas: [BusinessIdea!]!
-  master: Mastery
+  mastery: Mastery
   points: Int
+}
+
+type Mastery {
+  level1: Boolean
+  level2: Boolean
+  level3: Boolean
+  level4: Boolean
 }
 
 type Badges {
@@ -308,15 +315,4 @@ type BusinessIdea implements Node {
 type Tag {
   id: ID!
   name: String!
-}
-
-type Mastery {
-  id: ID!
-  user: User!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  level1: Boolean
-  level2: Boolean
-  level3: Boolean
-  level4: Boolean
 }
