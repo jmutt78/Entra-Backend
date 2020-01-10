@@ -12,7 +12,7 @@ const Mastery = {
   }`
     );
 
-    const islevelOne = user[0].points >= 300;
+    const islevelOne = user[0].points >= 500;
 
     return islevelOne;
   },
@@ -29,7 +29,7 @@ const Mastery = {
   }`
     );
 
-    const islevelTwo = user[0].points >= 500;
+    const islevelTwo = user[0].points >= 1000;
 
     return islevelTwo;
   },
@@ -46,7 +46,7 @@ const Mastery = {
   }`
     );
 
-    const islevelThree = user[0].points >= 1000;
+    const islevelThree = user[0].points >= 1500;
 
     return islevelThree;
   },

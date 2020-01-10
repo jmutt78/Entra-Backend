@@ -28,6 +28,13 @@ type User {
   businessIdeas: [BusinessIdea!]! @relation(link: INLINE)
   tags: [Tag!]! @relation(link: INLINE)
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 type Question {

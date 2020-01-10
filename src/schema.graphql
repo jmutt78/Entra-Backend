@@ -43,14 +43,21 @@ type Mutation {
   createBusinessIdeaVote(ideaId: ID!, vote: String): BusinessIdeaVote
   updateUser(
     id: ID!
-    email: String!
-    name: String!
-    display: String!
+    email: String
+    name: String
+    display: String
     image: String
     location: String
     about: String
     tags: [TagInput!]
     industry: String
+    website: String
+    instagram: String
+    twitter: String
+    linkedIn: String
+    facebook: String
+    shareEmail: Boolean
+    shareSocial: Boolean
   ): User!
   updateQuestion(
     id: ID!
@@ -192,7 +199,14 @@ type User {
   ): [Tag!]
   businessIdeas: [BusinessIdea!]!
   mastery: Mastery
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
   points: Int
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 type Mastery {

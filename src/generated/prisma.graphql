@@ -2851,6 +2851,13 @@ type User {
     last: Int
   ): [Tag!]
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 type UserConnection {
@@ -2878,6 +2885,13 @@ input UserCreateInput {
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserCreateManyWithoutMyQuestionsInput {
@@ -2927,6 +2941,13 @@ input UserCreateWithoutBusinessIdeasInput {
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   tags: TagCreateManyInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserCreateWithoutMyAnswersInput {
@@ -2947,6 +2968,13 @@ input UserCreateWithoutMyAnswersInput {
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserCreateWithoutMyBookMarksInput {
@@ -2967,6 +2995,13 @@ input UserCreateWithoutMyBookMarksInput {
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserCreateWithoutMyQuestionsInput {
@@ -2987,6 +3022,13 @@ input UserCreateWithoutMyQuestionsInput {
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 type UserEdge {
@@ -3023,6 +3065,20 @@ enum UserOrderByInput {
   resetTokenExpiry_DESC
   points_ASC
   points_DESC
+  website_ASC
+  website_DESC
+  instagram_ASC
+  instagram_DESC
+  twitter_ASC
+  twitter_DESC
+  linkedIn_ASC
+  linkedIn_DESC
+  facebook_ASC
+  facebook_DESC
+  shareEmail_ASC
+  shareEmail_DESC
+  shareSocial_ASC
+  shareSocial_DESC
 }
 
 type UserPreviousValues {
@@ -3041,6 +3097,13 @@ type UserPreviousValues {
   resetTokenExpiry: Float
   permissions: [Permission!]!
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserScalarWhereInput {
@@ -3216,6 +3279,80 @@ input UserScalarWhereInput {
   points_lte: Int
   points_gt: Int
   points_gte: Int
+  website: String
+  website_not: String
+  website_in: [String!]
+  website_not_in: [String!]
+  website_lt: String
+  website_lte: String
+  website_gt: String
+  website_gte: String
+  website_contains: String
+  website_not_contains: String
+  website_starts_with: String
+  website_not_starts_with: String
+  website_ends_with: String
+  website_not_ends_with: String
+  instagram: String
+  instagram_not: String
+  instagram_in: [String!]
+  instagram_not_in: [String!]
+  instagram_lt: String
+  instagram_lte: String
+  instagram_gt: String
+  instagram_gte: String
+  instagram_contains: String
+  instagram_not_contains: String
+  instagram_starts_with: String
+  instagram_not_starts_with: String
+  instagram_ends_with: String
+  instagram_not_ends_with: String
+  twitter: String
+  twitter_not: String
+  twitter_in: [String!]
+  twitter_not_in: [String!]
+  twitter_lt: String
+  twitter_lte: String
+  twitter_gt: String
+  twitter_gte: String
+  twitter_contains: String
+  twitter_not_contains: String
+  twitter_starts_with: String
+  twitter_not_starts_with: String
+  twitter_ends_with: String
+  twitter_not_ends_with: String
+  linkedIn: String
+  linkedIn_not: String
+  linkedIn_in: [String!]
+  linkedIn_not_in: [String!]
+  linkedIn_lt: String
+  linkedIn_lte: String
+  linkedIn_gt: String
+  linkedIn_gte: String
+  linkedIn_contains: String
+  linkedIn_not_contains: String
+  linkedIn_starts_with: String
+  linkedIn_not_starts_with: String
+  linkedIn_ends_with: String
+  linkedIn_not_ends_with: String
+  facebook: String
+  facebook_not: String
+  facebook_in: [String!]
+  facebook_not_in: [String!]
+  facebook_lt: String
+  facebook_lte: String
+  facebook_gt: String
+  facebook_gte: String
+  facebook_contains: String
+  facebook_not_contains: String
+  facebook_starts_with: String
+  facebook_not_starts_with: String
+  facebook_ends_with: String
+  facebook_not_ends_with: String
+  shareEmail: Boolean
+  shareEmail_not: Boolean
+  shareSocial: Boolean
+  shareSocial_not: Boolean
   AND: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   NOT: [UserScalarWhereInput!]
@@ -3257,6 +3394,13 @@ input UserUpdateDataInput {
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserUpdateInput {
@@ -3277,6 +3421,13 @@ input UserUpdateInput {
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserUpdateManyDataInput {
@@ -3292,6 +3443,13 @@ input UserUpdateManyDataInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserUpdateManyMutationInput {
@@ -3307,6 +3465,13 @@ input UserUpdateManyMutationInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserUpdateManyWithoutMyQuestionsInput {
@@ -3375,6 +3540,13 @@ input UserUpdateWithoutBusinessIdeasDataInput {
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   tags: TagUpdateManyInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserUpdateWithoutMyAnswersDataInput {
@@ -3394,6 +3566,13 @@ input UserUpdateWithoutMyAnswersDataInput {
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserUpdateWithoutMyBookMarksDataInput {
@@ -3413,6 +3592,13 @@ input UserUpdateWithoutMyBookMarksDataInput {
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserUpdateWithoutMyQuestionsDataInput {
@@ -3432,6 +3618,13 @@ input UserUpdateWithoutMyQuestionsDataInput {
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
   points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 input UserUpdateWithWhereUniqueWithoutMyQuestionsInput {
@@ -3653,6 +3846,80 @@ input UserWhereInput {
   points_lte: Int
   points_gt: Int
   points_gte: Int
+  website: String
+  website_not: String
+  website_in: [String!]
+  website_not_in: [String!]
+  website_lt: String
+  website_lte: String
+  website_gt: String
+  website_gte: String
+  website_contains: String
+  website_not_contains: String
+  website_starts_with: String
+  website_not_starts_with: String
+  website_ends_with: String
+  website_not_ends_with: String
+  instagram: String
+  instagram_not: String
+  instagram_in: [String!]
+  instagram_not_in: [String!]
+  instagram_lt: String
+  instagram_lte: String
+  instagram_gt: String
+  instagram_gte: String
+  instagram_contains: String
+  instagram_not_contains: String
+  instagram_starts_with: String
+  instagram_not_starts_with: String
+  instagram_ends_with: String
+  instagram_not_ends_with: String
+  twitter: String
+  twitter_not: String
+  twitter_in: [String!]
+  twitter_not_in: [String!]
+  twitter_lt: String
+  twitter_lte: String
+  twitter_gt: String
+  twitter_gte: String
+  twitter_contains: String
+  twitter_not_contains: String
+  twitter_starts_with: String
+  twitter_not_starts_with: String
+  twitter_ends_with: String
+  twitter_not_ends_with: String
+  linkedIn: String
+  linkedIn_not: String
+  linkedIn_in: [String!]
+  linkedIn_not_in: [String!]
+  linkedIn_lt: String
+  linkedIn_lte: String
+  linkedIn_gt: String
+  linkedIn_gte: String
+  linkedIn_contains: String
+  linkedIn_not_contains: String
+  linkedIn_starts_with: String
+  linkedIn_not_starts_with: String
+  linkedIn_ends_with: String
+  linkedIn_not_ends_with: String
+  facebook: String
+  facebook_not: String
+  facebook_in: [String!]
+  facebook_not_in: [String!]
+  facebook_lt: String
+  facebook_lte: String
+  facebook_gt: String
+  facebook_gte: String
+  facebook_contains: String
+  facebook_not_contains: String
+  facebook_starts_with: String
+  facebook_not_starts_with: String
+  facebook_ends_with: String
+  facebook_not_ends_with: String
+  shareEmail: Boolean
+  shareEmail_not: Boolean
+  shareSocial: Boolean
+  shareSocial_not: Boolean
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
