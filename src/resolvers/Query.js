@@ -319,12 +319,24 @@ const Query = {
       throw new Error('you must be signed in!');
     }
 
-    // 2. Check if the user has the permissions to query all the users
-    hasPermission(ctx.request.user, ['ADMIN', 'PERMISSIONUPDATE']);
+    if (args.filter === 'leaderboard') {
+      let leaderUsers = await ctx.db.query.users(
+        {
+          where: {
+            points_gte: 500
+          }
+        },
+        info
+      );
 
-    // 2. if they do, query all the users!
-    return ctx.db.query.users({}, info);
+      return leaderUsers;
+    }
+    hasPermission(ctx.request.user, ['ADMIN', 'PERMISSIONUPDATE']);
+    if (hasPermission) {
+      return ctx.db.query.users({}, info);
+    }
   },
+
   async searchQuestions(parent, args, ctx, info) {
     const { limit, offset = 0, noDuplicates = false } = args;
     const conditions = args.where.AND;

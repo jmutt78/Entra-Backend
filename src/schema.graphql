@@ -89,7 +89,11 @@ type Mutation {
 type Query {
   me: User
   user(id: ID!): User
-  users: [User]!
+  users(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    filter: String
+  ): [User]!
   tags(
     first: Int
     where: TagWhereInput
