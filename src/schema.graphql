@@ -18,6 +18,7 @@ type Mutation {
   createBookMark(questionId: ID!): BookMark!
   createAnswer(body: String!, questionId: ID!, approval: Boolean): Answer!
   createTag(name: String!): Tag!
+  createBounty(id: ID!, bountyPoints: Int): Question!
   signup(
     email: String!
     password: String!
@@ -298,6 +299,7 @@ type Question implements Node {
   questionVote: [QuestionVote]
   bookMark: [BookMark]
   searchTermFoundIn: String
+  bountyPoints: Int
 }
 
 type BookMark implements Node {

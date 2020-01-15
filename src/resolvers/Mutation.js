@@ -789,6 +789,67 @@ const Mutations = {
     );
   },
 
+  async createBounty(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in to do that!');
+    }
+    const question = await ctx.db.query.question(
+      {
+        where: { id: args.id }
+      },
+      `{ id
+        createdAt
+        bountyPoints
+        askedBy { id }}`
+    );
+
+    const currentUser = await ctx.db.query.user(
+      {
+        where: {
+          id: ctx.request.userId
+        }
+      },
+      `{ id
+        points
+    }`
+    );
+
+    const ownsQuestion = question.askedBy[0].id === ctx.request.userId;
+    const hasPermissions = ctx.request.user.permissions.some(permission =>
+      ['ADMIN', 'MODERATOR'].includes(permission)
+    );
+
+    if (!ownsQuestion && !hasPermissions) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    if (currentUser.points < args.points) {
+      throw new Error("You don't have enough points!");
+    }
+
+    const res = await ctx.db.mutation.updateUser({
+      where: { id: currentUser.id },
+      data: { points: currentUser.points - args.points }
+    });
+
+    const updates = {
+      ...args
+    };
+    // remove the ID from the updates
+    delete updates.id;
+    // run the update method
+    return ctx.db.mutation.updateQuestion(
+      {
+        data: updates,
+
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
+
   //--------------------Answers--------------------//
   async createAnswerVote(parent, args, ctx, info) {
     let answerVote;

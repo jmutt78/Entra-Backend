@@ -1822,6 +1822,7 @@ type Question {
     first: Int
     last: Int
   ): [BookMark!]
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -1841,6 +1842,7 @@ input QuestionCreateInput {
   answers: AnswerCreateManyWithoutAnsweredToInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
   bookMark: BookMarkCreateManyWithoutQuestionsInput
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -1878,6 +1880,7 @@ input QuestionCreateWithoutAnswersInput {
   approval: Boolean
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
   bookMark: BookMarkCreateManyWithoutQuestionsInput
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -1890,6 +1893,7 @@ input QuestionCreateWithoutAskedByInput {
   answers: AnswerCreateManyWithoutAnsweredToInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
   bookMark: BookMarkCreateManyWithoutQuestionsInput
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -1902,6 +1906,7 @@ input QuestionCreateWithoutBookMarkInput {
   approval: Boolean
   answers: AnswerCreateManyWithoutAnsweredToInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -1914,6 +1919,7 @@ input QuestionCreateWithoutQuestionVoteInput {
   approval: Boolean
   answers: AnswerCreateManyWithoutAnsweredToInput
   bookMark: BookMarkCreateManyWithoutQuestionsInput
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -1935,6 +1941,8 @@ enum QuestionOrderByInput {
   updatedAt_DESC
   approval_ASC
   approval_DESC
+  bountyPoints_ASC
+  bountyPoints_DESC
   searchTermFoundIn_ASC
   searchTermFoundIn_DESC
 }
@@ -1946,6 +1954,7 @@ type QuestionPreviousValues {
   createdAt: DateTime!
   updatedAt: DateTime!
   approval: Boolean
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -2010,6 +2019,14 @@ input QuestionScalarWhereInput {
   updatedAt_gte: DateTime
   approval: Boolean
   approval_not: Boolean
+  bountyPoints: Int
+  bountyPoints_not: Int
+  bountyPoints_in: [Int!]
+  bountyPoints_not_in: [Int!]
+  bountyPoints_lt: Int
+  bountyPoints_lte: Int
+  bountyPoints_gt: Int
+  bountyPoints_gte: Int
   searchTermFoundIn: String
   searchTermFoundIn_not: String
   searchTermFoundIn_in: [String!]
@@ -2056,6 +2073,7 @@ input QuestionUpdateDataInput {
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
   bookMark: BookMarkUpdateManyWithoutQuestionsInput
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -2068,6 +2086,7 @@ input QuestionUpdateInput {
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
   bookMark: BookMarkUpdateManyWithoutQuestionsInput
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -2075,6 +2094,7 @@ input QuestionUpdateManyDataInput {
   title: String
   description: String
   approval: Boolean
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -2082,6 +2102,7 @@ input QuestionUpdateManyMutationInput {
   title: String
   description: String
   approval: Boolean
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -2148,6 +2169,7 @@ input QuestionUpdateWithoutAnswersDataInput {
   approval: Boolean
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
   bookMark: BookMarkUpdateManyWithoutQuestionsInput
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -2159,6 +2181,7 @@ input QuestionUpdateWithoutAskedByDataInput {
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
   bookMark: BookMarkUpdateManyWithoutQuestionsInput
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -2170,6 +2193,7 @@ input QuestionUpdateWithoutBookMarkDataInput {
   approval: Boolean
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -2181,6 +2205,7 @@ input QuestionUpdateWithoutQuestionVoteDataInput {
   approval: Boolean
   answers: AnswerUpdateManyWithoutAnsweredToInput
   bookMark: BookMarkUpdateManyWithoutQuestionsInput
+  bountyPoints: Int
   searchTermFoundIn: String
 }
 
@@ -2571,6 +2596,14 @@ input QuestionWhereInput {
   bookMark_every: BookMarkWhereInput
   bookMark_some: BookMarkWhereInput
   bookMark_none: BookMarkWhereInput
+  bountyPoints: Int
+  bountyPoints_not: Int
+  bountyPoints_in: [Int!]
+  bountyPoints_not_in: [Int!]
+  bountyPoints_lt: Int
+  bountyPoints_lte: Int
+  bountyPoints_gt: Int
+  bountyPoints_gte: Int
   searchTermFoundIn: String
   searchTermFoundIn_not: String
   searchTermFoundIn_in: [String!]

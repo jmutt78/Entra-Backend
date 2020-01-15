@@ -49,6 +49,7 @@ approval: Boolean
 answers: [Answer!]! @relation(link: INLINE)
 questionVote: [QuestionVote]
 bookMark: [BookMark]
+bountyPoints: Int
 searchTermFoundIn: String
 }
 
