@@ -822,14 +822,14 @@ const Mutations = {
     if (!ownsQuestion && !hasPermissions) {
       throw new Error("You don't have permission to do that!");
     }
-
-    if (currentUser.points < args.points) {
+    console.log(currentUser.points < args.bountyPoints);
+    if (currentUser.points < args.bountyPoints) {
       throw new Error("You don't have enough points!");
     }
 
     const res = await ctx.db.mutation.updateUser({
       where: { id: currentUser.id },
-      data: { points: currentUser.points - args.points }
+      data: { points: currentUser.points - args.bountyPoints }
     });
 
     const updates = {
@@ -1079,11 +1079,14 @@ const Mutations = {
           id: args.id
         }
       },
-      `{ id body answeredBy { id, points } answeredTo { id askedBy { id }}}`
+      `{ id body answeredBy { id, points } answeredTo { id, bountyPoints, askedBy { id, points }}}`
     );
 
+    const bountyPoints = answer.answeredTo[0].bountyPoints;
+    const questionId = answer.answeredTo[0].id;
     const selectedUserPoints = answer.answeredBy.points;
     const selectedUserId = answer.answeredBy.id;
+    const questionUser = answer.answeredTo[0].askedBy[0];
 
     if (answer.answeredTo[0].askedBy[0].id !== ctx.request.userId) {
       throw new Error('Answer can be approved only by question author');
@@ -1098,26 +1101,27 @@ const Mutations = {
       }
     });
 
-    const currentUser = await ctx.db.query.user(
-      {
-        where: {
-          id: ctx.request.userId
-        }
-      },
-      `{ id
-        points
-    }`
-    );
-
     const res = await ctx.db.mutation.updateUser({
-      where: { id: currentUser.id },
-      data: { points: currentUser.points + 5 }
+      where: { id: questionUser.id },
+      data: { points: questionUser.points + 5 }
     });
 
-    const resSelected = await ctx.db.mutation.updateUser({
-      where: { id: selectedUserId },
-      data: { points: selectedUserPoints + 30 }
-    });
+    if (bountyPoints !== null) {
+      const resSelected = await ctx.db.mutation.updateUser({
+        where: { id: selectedUserId },
+        data: { points: selectedUserPoints + 30 + bountyPoints }
+      });
+
+      const resQuestion = await ctx.db.mutation.updateQuestion({
+        where: { id: questionId },
+        data: { bountyPoints: null }
+      });
+    } else {
+      const resSelected = await ctx.db.mutation.updateUser({
+        where: { id: selectedUserId },
+        data: { points: selectedUserPoints + 30 }
+      });
+    }
 
     return ctx.db.mutation.updateAnswer(
       {
