@@ -87,13 +87,15 @@ type Mutation {
     wasSeen: Boolean
     wasClicked: Boolean
   ): Notification!
+  updateAllNotificationWasSeen(where: NotificationWhereInput): Boolean!
+  emailNotificationsToggle(questionId: ID!): Boolean!
 }
 
 type Query {
   me: User
   user(id: ID!): User
   users: [User]!
-  notifications: [Notification]!
+  notifications(where: NotificationWhereInput): [Notification]!
   tags(
     first: Int
     where: TagWhereInput
@@ -282,6 +284,7 @@ type Question implements Node {
   questionVote: [QuestionVote]
   bookMark: [BookMark]
   searchTermFoundIn: String
+  notifyByEmail: Boolean
 }
 
 type BookMark implements Node {
@@ -320,8 +323,7 @@ type Notification {
   createdAt: DateTime!
   updatedAt: DateTime!
   forUser: User!
-  byUser: User!
-  question: Question!
+  answer: Answer!
   wasSeen: Boolean
   wasClicked: Boolean
 }

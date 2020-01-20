@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Mon Dec 16 2019 18:11:47 GMT+0200 (EET)
+# timestamp: Wed Jan 15 2020 18:35:17 GMT+0200 (EET)
 
 type AggregateAnswer {
   count: Int!
@@ -103,6 +103,11 @@ input AnswerCreateManyWithoutAnsweredByInput {
 input AnswerCreateManyWithoutAnsweredToInput {
   create: [AnswerCreateWithoutAnsweredToInput!]
   connect: [AnswerWhereUniqueInput!]
+}
+
+input AnswerCreateOneInput {
+  create: AnswerCreateInput
+  connect: AnswerWhereUniqueInput
 }
 
 input AnswerCreateOneWithoutAnswerVoteInput {
@@ -444,6 +449,15 @@ input AnswerSubscriptionWhereInput {
   node: AnswerWhereInput
 }
 
+input AnswerUpdateDataInput {
+  body: String
+  approval: Boolean
+  selected: Boolean
+  answeredBy: UserUpdateOneRequiredWithoutMyAnswersInput
+  answeredTo: QuestionUpdateManyWithoutAnswersInput
+  answerVote: AnswerVoteUpdateManyWithoutVotedAnswerInput
+}
+
 input AnswerUpdateInput {
   body: String
   approval: Boolean
@@ -494,6 +508,13 @@ input AnswerUpdateManyWithWhereNestedInput {
   data: AnswerUpdateManyDataInput!
 }
 
+input AnswerUpdateOneRequiredInput {
+  create: AnswerCreateInput
+  connect: AnswerWhereUniqueInput
+  update: AnswerUpdateDataInput
+  upsert: AnswerUpsertNestedInput
+}
+
 input AnswerUpdateOneRequiredWithoutAnswerVoteInput {
   create: AnswerCreateWithoutAnswerVoteInput
   connect: AnswerWhereUniqueInput
@@ -533,6 +554,11 @@ input AnswerUpdateWithWhereUniqueWithoutAnsweredByInput {
 input AnswerUpdateWithWhereUniqueWithoutAnsweredToInput {
   where: AnswerWhereUniqueInput!
   data: AnswerUpdateWithoutAnsweredToDataInput!
+}
+
+input AnswerUpsertNestedInput {
+  update: AnswerUpdateDataInput!
+  create: AnswerCreateInput!
 }
 
 input AnswerUpsertWithoutAnswerVoteInput {
@@ -2734,17 +2760,16 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createAnswer(data: AnswerCreateInput!): Answer!
   createBookMark(data: BookMarkCreateInput!): BookMark!
   createQuestionView(data: QuestionViewCreateInput!): QuestionView!
   createQuestionVote(data: QuestionVoteCreateInput!): QuestionVote!
   createAnswerVote(data: AnswerVoteCreateInput!): AnswerVote!
   createBusinessIdea(data: BusinessIdeaCreateInput!): BusinessIdea!
   createNotification(data: NotificationCreateInput!): Notification!
-  createTag(data: TagCreateInput!): Tag!
   createQuestion(data: QuestionCreateInput!): Question!
+  createAnswer(data: AnswerCreateInput!): Answer!
+  createTag(data: TagCreateInput!): Tag!
   createUser(data: UserCreateInput!): User!
-  updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateBookMark(
     data: BookMarkUpdateInput!
     where: BookMarkWhereUniqueInput!
@@ -2769,27 +2794,23 @@ type Mutation {
     data: NotificationUpdateInput!
     where: NotificationWhereUniqueInput!
   ): Notification
-  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
   updateQuestion(
     data: QuestionUpdateInput!
     where: QuestionWhereUniqueInput!
   ): Question
+  updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
+  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteBookMark(where: BookMarkWhereUniqueInput!): BookMark
   deleteQuestionView(where: QuestionViewWhereUniqueInput!): QuestionView
   deleteQuestionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
   deleteAnswerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
   deleteBusinessIdea(where: BusinessIdeaWhereUniqueInput!): BusinessIdea
   deleteNotification(where: NotificationWhereUniqueInput!): Notification
-  deleteTag(where: TagWhereUniqueInput!): Tag
   deleteQuestion(where: QuestionWhereUniqueInput!): Question
+  deleteAnswer(where: AnswerWhereUniqueInput!): Answer
+  deleteTag(where: TagWhereUniqueInput!): Tag
   deleteUser(where: UserWhereUniqueInput!): User
-  upsertAnswer(
-    where: AnswerWhereUniqueInput!
-    create: AnswerCreateInput!
-    update: AnswerUpdateInput!
-  ): Answer!
   upsertBookMark(
     where: BookMarkWhereUniqueInput!
     create: BookMarkCreateInput!
@@ -2820,25 +2841,26 @@ type Mutation {
     create: NotificationCreateInput!
     update: NotificationUpdateInput!
   ): Notification!
-  upsertTag(
-    where: TagWhereUniqueInput!
-    create: TagCreateInput!
-    update: TagUpdateInput!
-  ): Tag!
   upsertQuestion(
     where: QuestionWhereUniqueInput!
     create: QuestionCreateInput!
     update: QuestionUpdateInput!
   ): Question!
+  upsertAnswer(
+    where: AnswerWhereUniqueInput!
+    create: AnswerCreateInput!
+    update: AnswerUpdateInput!
+  ): Answer!
+  upsertTag(
+    where: TagWhereUniqueInput!
+    create: TagCreateInput!
+    update: TagUpdateInput!
+  ): Tag!
   upsertUser(
     where: UserWhereUniqueInput!
     create: UserCreateInput!
     update: UserUpdateInput!
   ): User!
-  updateManyAnswers(
-    data: AnswerUpdateManyMutationInput!
-    where: AnswerWhereInput
-  ): BatchPayload!
   updateManyQuestionVotes(
     data: QuestionVoteUpdateManyMutationInput!
     where: QuestionVoteWhereInput
@@ -2855,27 +2877,31 @@ type Mutation {
     data: NotificationUpdateManyMutationInput!
     where: NotificationWhereInput
   ): BatchPayload!
-  updateManyTags(
-    data: TagUpdateManyMutationInput!
-    where: TagWhereInput
-  ): BatchPayload!
   updateManyQuestions(
     data: QuestionUpdateManyMutationInput!
     where: QuestionWhereInput
+  ): BatchPayload!
+  updateManyAnswers(
+    data: AnswerUpdateManyMutationInput!
+    where: AnswerWhereInput
+  ): BatchPayload!
+  updateManyTags(
+    data: TagUpdateManyMutationInput!
+    where: TagWhereInput
   ): BatchPayload!
   updateManyUsers(
     data: UserUpdateManyMutationInput!
     where: UserWhereInput
   ): BatchPayload!
-  deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   deleteManyBookMarks(where: BookMarkWhereInput): BatchPayload!
   deleteManyQuestionViews(where: QuestionViewWhereInput): BatchPayload!
   deleteManyQuestionVotes(where: QuestionVoteWhereInput): BatchPayload!
   deleteManyAnswerVotes(where: AnswerVoteWhereInput): BatchPayload!
   deleteManyBusinessIdeas(where: BusinessIdeaWhereInput): BatchPayload!
   deleteManyNotifications(where: NotificationWhereInput): BatchPayload!
-  deleteManyTags(where: TagWhereInput): BatchPayload!
   deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
+  deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
+  deleteManyTags(where: TagWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
@@ -2900,7 +2926,7 @@ type Notification implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   forUser: User!
-  question: Question!
+  answer: Answer!
   wasSeen: Boolean
   wasClicked: Boolean
 }
@@ -2926,7 +2952,7 @@ input NotificationCreateInput {
   wasSeen: Boolean
   wasClicked: Boolean
   forUser: UserCreateOneWithoutMyNotificationsInput!
-  question: QuestionCreateOneInput!
+  answer: AnswerCreateOneInput!
 }
 
 input NotificationCreateManyWithoutForUserInput {
@@ -2938,7 +2964,7 @@ input NotificationCreateWithoutForUserInput {
   id: ID
   wasSeen: Boolean
   wasClicked: Boolean
-  question: QuestionCreateOneInput!
+  answer: AnswerCreateOneInput!
 }
 
 """
@@ -3183,7 +3209,7 @@ input NotificationUpdateInput {
   wasSeen: Boolean
   wasClicked: Boolean
   forUser: UserUpdateOneRequiredWithoutMyNotificationsInput
-  question: QuestionUpdateOneRequiredInput
+  answer: AnswerUpdateOneRequiredInput
 }
 
 input NotificationUpdateManyDataInput {
@@ -3216,7 +3242,7 @@ input NotificationUpdateManyWithWhereNestedInput {
 input NotificationUpdateWithoutForUserDataInput {
   wasSeen: Boolean
   wasClicked: Boolean
-  question: QuestionUpdateOneRequiredInput
+  answer: AnswerUpdateOneRequiredInput
 }
 
 input NotificationUpdateWithWhereUniqueWithoutForUserInput {
@@ -3386,7 +3412,7 @@ input NotificationWhereInput {
   """
   wasClicked_not: Boolean
   forUser: UserWhereInput
-  question: QuestionWhereInput
+  answer: AnswerWhereInput
 }
 
 input NotificationWhereUniqueInput {
@@ -3426,15 +3452,6 @@ enum Permission {
 }
 
 type Query {
-  answers(
-    where: AnswerWhereInput
-    orderBy: AnswerOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Answer]!
   bookMarks(
     where: BookMarkWhereInput
     orderBy: BookMarkOrderByInput
@@ -3489,15 +3506,6 @@ type Query {
     first: Int
     last: Int
   ): [Notification]!
-  tags(
-    where: TagWhereInput
-    orderBy: TagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Tag]!
   questions(
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
@@ -3507,6 +3515,24 @@ type Query {
     first: Int
     last: Int
   ): [Question]!
+  answers(
+    where: AnswerWhereInput
+    orderBy: AnswerOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Answer]!
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag]!
   users(
     where: UserWhereInput
     orderBy: UserOrderByInput
@@ -3516,25 +3542,16 @@ type Query {
     first: Int
     last: Int
   ): [User]!
-  answer(where: AnswerWhereUniqueInput!): Answer
   bookMark(where: BookMarkWhereUniqueInput!): BookMark
   questionView(where: QuestionViewWhereUniqueInput!): QuestionView
   questionVote(where: QuestionVoteWhereUniqueInput!): QuestionVote
   answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
   businessIdea(where: BusinessIdeaWhereUniqueInput!): BusinessIdea
   notification(where: NotificationWhereUniqueInput!): Notification
-  tag(where: TagWhereUniqueInput!): Tag
   question(where: QuestionWhereUniqueInput!): Question
+  answer(where: AnswerWhereUniqueInput!): Answer
+  tag(where: TagWhereUniqueInput!): Tag
   user(where: UserWhereUniqueInput!): User
-  answersConnection(
-    where: AnswerWhereInput
-    orderBy: AnswerOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): AnswerConnection!
   bookMarksConnection(
     where: BookMarkWhereInput
     orderBy: BookMarkOrderByInput
@@ -3589,15 +3606,6 @@ type Query {
     first: Int
     last: Int
   ): NotificationConnection!
-  tagsConnection(
-    where: TagWhereInput
-    orderBy: TagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): TagConnection!
   questionsConnection(
     where: QuestionWhereInput
     orderBy: QuestionOrderByInput
@@ -3607,6 +3615,24 @@ type Query {
     first: Int
     last: Int
   ): QuestionConnection!
+  answersConnection(
+    where: AnswerWhereInput
+    orderBy: AnswerOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AnswerConnection!
+  tagsConnection(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagConnection!
   usersConnection(
     where: UserWhereInput
     orderBy: UserOrderByInput
@@ -3681,6 +3707,7 @@ type Question implements Node {
     last: Int
   ): [BookMark!]
   searchTermFoundIn: String
+  notifyByEmail: Boolean
 }
 
 """
@@ -3705,6 +3732,7 @@ input QuestionCreateInput {
   description: String!
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
@@ -3743,6 +3771,7 @@ input QuestionCreateWithoutAnswersInput {
   description: String!
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
@@ -3755,6 +3784,7 @@ input QuestionCreateWithoutAskedByInput {
   description: String!
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
   tags: TagCreateManyInput
   answers: AnswerCreateManyWithoutAnsweredToInput
   questionVote: QuestionVoteCreateManyWithoutVotedQuestionInput
@@ -3767,6 +3797,7 @@ input QuestionCreateWithoutBookMarkInput {
   description: String!
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
@@ -3779,6 +3810,7 @@ input QuestionCreateWithoutQuestionVoteInput {
   description: String!
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
   tags: TagCreateManyInput
   askedBy: UserCreateManyWithoutMyQuestionsInput
   answers: AnswerCreateManyWithoutAnsweredToInput
@@ -3815,6 +3847,8 @@ enum QuestionOrderByInput {
   approval_DESC
   searchTermFoundIn_ASC
   searchTermFoundIn_DESC
+  notifyByEmail_ASC
+  notifyByEmail_DESC
 }
 
 type QuestionPreviousValues {
@@ -3825,6 +3859,7 @@ type QuestionPreviousValues {
   updatedAt: DateTime!
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
 }
 
 input QuestionScalarWhereInput {
@@ -4184,6 +4219,12 @@ input QuestionScalarWhereInput {
   All values not ending with the given string.
   """
   searchTermFoundIn_not_ends_with: String
+  notifyByEmail: Boolean
+
+  """
+  All values that are not equal to given value.
+  """
+  notifyByEmail_not: Boolean
 }
 
 type QuestionSubscriptionPayload {
@@ -4226,6 +4267,7 @@ input QuestionUpdateDataInput {
   description: String
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
@@ -4238,6 +4280,7 @@ input QuestionUpdateInput {
   description: String
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
@@ -4250,6 +4293,7 @@ input QuestionUpdateManyDataInput {
   description: String
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
 }
 
 input QuestionUpdateManyMutationInput {
@@ -4257,6 +4301,7 @@ input QuestionUpdateManyMutationInput {
   description: String
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
 }
 
 input QuestionUpdateManyWithoutAnswersInput {
@@ -4319,6 +4364,7 @@ input QuestionUpdateWithoutAnswersDataInput {
   description: String
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
@@ -4330,6 +4376,7 @@ input QuestionUpdateWithoutAskedByDataInput {
   description: String
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
   tags: TagUpdateManyInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
   questionVote: QuestionVoteUpdateManyWithoutVotedQuestionInput
@@ -4341,6 +4388,7 @@ input QuestionUpdateWithoutBookMarkDataInput {
   description: String
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
@@ -4352,6 +4400,7 @@ input QuestionUpdateWithoutQuestionVoteDataInput {
   description: String
   approval: Boolean
   searchTermFoundIn: String
+  notifyByEmail: Boolean
   tags: TagUpdateManyInput
   askedBy: UserUpdateManyWithoutMyQuestionsInput
   answers: AnswerUpdateManyWithoutAnsweredToInput
@@ -5363,6 +5412,12 @@ input QuestionWhereInput {
   All values not ending with the given string.
   """
   searchTermFoundIn_not_ends_with: String
+  notifyByEmail: Boolean
+
+  """
+  All values that are not equal to given value.
+  """
+  notifyByEmail_not: Boolean
   tags_some: TagWhereInput
   askedBy_some: UserWhereInput
   answers_some: AnswerWhereInput
@@ -5375,7 +5430,6 @@ input QuestionWhereUniqueInput {
 }
 
 type Subscription {
-  answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   bookMark(where: BookMarkSubscriptionWhereInput): BookMarkSubscriptionPayload
   questionView(
     where: QuestionViewSubscriptionWhereInput
@@ -5392,8 +5446,9 @@ type Subscription {
   notification(
     where: NotificationSubscriptionWhereInput
   ): NotificationSubscriptionPayload
-  tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
+  answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
+  tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 

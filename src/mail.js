@@ -23,17 +23,47 @@ const makeANiceEmail = (name, text) => `
   </div>
 `;
 
-const answeredQuestion = (name, text) => `
+const answeredQuestion = (title, body, id, answerAuthor) => `
   <div className="email" style="
-    border: 1px solid black;
+    width: 100%;
+    height: 100%;
     padding: 20px;
     font-family: sans-serif;
     line-height: 2;
     font-size: 20px;
+    background-color: #f2f4ef;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   ">
-    <h2>New Answer</h2>
-    <p>${text}</p>
-    <p>by ${name}</p>
+    <div style="padding: 12px 0 0 0;">
+      <a href="https://entra.io/all">
+        <img style="max-height: 50px; cursor: pointer;" alt="entra logo" src="https://bucket.mlcdn.com/a/1614/1614108/images/123210c54cace44c905d9980582846fca5fe59d6.jpeg/900967468b15bc0bba9c0cf23cd5b1682ae8900f.jpeg"/>
+      </a>
+    </div>
+    <h2 style="text-align: center;">
+      GOOD NEWS! YOU HAVE A NEW ANSWER
+    </h2>
+    <div className="q-container" style="
+      width: 100%;
+      background-color: #ffffff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    ">
+      <h3>${title}</h3>
+      <div className="q-content" stlye="
+        background-color: #f2f4ef;
+        width: 100%;
+        padding: 20px;
+      ">
+        <div className="q-body" style="margin: 0px;">${body}</div>
+      </div>
+      <a href="https://entra.io/question?id=${id}">
+        <p>View answer by ${answerAuthor}</p>
+      </a>
+    </div>
   </div>
 `;
 

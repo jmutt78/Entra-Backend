@@ -291,7 +291,18 @@ const getPrefix = ({ title, askedBy, answers }, querySource) => {
 };
 
 const Query = {
-  notifications: forwardTo('db'),
+  notifications: async (parent, args, ctx, info) => {
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error('you must be signed in!');
+    }
+    const notifications = await ctx.query.db.notifications();
+    const myNotifications = notifications.filter(
+      n => n.answer.answeredTo[0].askedBy.id === userId
+    );
+    return myNotifications;
+  },
+
   me(parent, args, ctx, info) {
     // check if there is a current user ID
     if (!ctx.request.userId) {

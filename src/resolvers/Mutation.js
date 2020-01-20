@@ -19,8 +19,7 @@ const crypto = require('crypto');
 const env = process.env.NODE_ENV || 'development';
 const domain = env === 'production' ? 'entra.io' : undefined;
 
-// const JUSTIN_EMAIL='jmcintosh@entra.io';
-const JUSTIN_EMAIL = 'musca.alexandru@gmail.com';
+const JUSTIN_EMAIL = 'jmcintosh@entra.io';
 
 const Mutations = {
   //--------------------Signup Mutation--------------------//
@@ -470,7 +469,8 @@ const Mutations = {
           },
 
           ...args,
-          tags: { connect: args.tags }
+          tags: { connect: args.tags },
+          notifyByEmail: true
         }
       },
       info
@@ -794,8 +794,73 @@ const Mutations = {
     });
   },
 
+  updateAllNotificationWasSeen: async (parent, args, ctx, info) => {
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error('You must be logged in to do that!');
+    }
+    const notifications = await ctx.db.query.notifications({
+      where: {
+        forUser: {
+          id: userId
+        }
+      }
+    });
+    notifications.map(n => {
+      n.wasSeen = true;
+    });
+    notifications.forEach(async n => {
+      const id = n.id;
+      delete n.id;
+      delete n.createdAt;
+      delete n.updatedAt;
+      const res = await ctx.db.mutation.updateNotification({
+        data: n,
+        where: {
+          id
+        }
+      });
+    });
+    return true;
+  },
+
+  emailNotificationsToggle: async (parent, args, ctx, info) => {
+    const { userId } = ctx.request;
+    const { questionId } = args;
+    const getFlagValue = current => {
+      if (current === null) {
+        return false;
+      }
+      return !current;
+    };
+    if (!userId) {
+      throw new Error('You must be logged in to do that!');
+    }
+    const question = await ctx.db.query.questions(
+      {
+        where: {
+          id: questionId
+        }
+      },
+      `{
+      notifyByEmail
+    }`
+    );
+    const res = await ctx.db.mutation.updateQuestion({
+      where: {
+        id: questionId
+      },
+      data: {
+        notifyByEmail: getFlagValue(question[0].notifyByEmail)
+      }
+    });
+    return true;
+  },
+
   createAnswer: async (parent, args, ctx, info) => {
     const { userId } = ctx.request;
+    // TODO: clean up these fields here and on client.
+    // before clean up check if all needed data is here, in answer and question
     const {
       body,
       approval,
@@ -808,11 +873,22 @@ const Mutations = {
       throw new Error('You must be logged in to do that!');
     }
 
-    const question = await ctx.db.query.questions({
-      where: {
-        id: questionId
+    const question = await ctx.db.query.questions(
+      {
+        where: {
+          id: questionId
+        }
       }
-    });
+      // ,`{ id
+      //     body
+      //     title
+      //     description
+      //     askedBy {
+      //       id
+      //       email
+      //     }
+      //   }`
+    );
     const newAnswer = await ctx.db.mutation.createAnswer({
       data: {
         body: body,
@@ -821,32 +897,34 @@ const Mutations = {
         answeredTo: { connect: { id: questionId } }
       }
     });
-    console.log('HERE----', authorId);
     const newNotification = await ctx.db.mutation.createNotification({
       data: {
         wasSeen: false,
         wasClicked: false,
-        question: {
-          connect: {
-            id: questionId
-          }
-        },
         forUser: {
           connect: {
             id: authorId
           }
+        },
+        answer: {
+          connect: {
+            id: newAnswer.id
+          }
         }
       }
     });
-    console.log(newNotification);
-
     const { title, description } = question[0];
 
-    mailRes = await transport.sendMail({
+    const mailRes = await transport.sendMail({
       from: JUSTIN_EMAIL,
-      to: JUSTIN_EMAIL,
+      to: authorEmail,
       subject: 'New Answer!',
-      html: answeredQuestion(`${userId}`, `${body}`)
+      html: answeredQuestion(
+        `${title}`,
+        `${description}`,
+        `${questionId}`,
+        `${currentUserName}`
+      )
     });
     return newAnswer;
   },
@@ -994,6 +1072,18 @@ const Mutations = {
         where: { votedAnswer: { id: args.id } }
       },
       null
+    );
+
+    const notifications = await ctx.db.query.notifications({
+      where: {
+        answer: {
+          id: args.id
+        }
+      }
+    });
+    await ctx.db.mutation.deleteNotification(
+      { where: { id: notifications[0].id } },
+      info
     );
 
     return ctx.db.mutation.deleteAnswer({ where }, info);

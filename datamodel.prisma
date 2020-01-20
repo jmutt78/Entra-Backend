@@ -44,6 +44,7 @@ answers: [Answer!]! @relation(link: INLINE)
 questionVote: [QuestionVote]
 bookMark: [BookMark]
 searchTermFoundIn: String
+notifyByEmail: Boolean
 }
 
 type Tag {
@@ -106,7 +107,7 @@ type Notification {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   forUser: User!
-  question: Question! @relation(link: INLINE)
+  answer: Answer! @relation(link: INLINE)
   wasSeen: Boolean
   wasClicked: Boolean
 }
