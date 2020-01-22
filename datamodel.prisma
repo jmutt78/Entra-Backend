@@ -27,6 +27,14 @@ type User {
   myBookMarks: [BookMark!]
   businessIdeas: [BusinessIdea!]! @relation(link: INLINE)
   tags: [Tag!]! @relation(link: INLINE)
+  points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
 }
 
 type Question {
@@ -41,6 +49,7 @@ approval: Boolean
 answers: [Answer!]! @relation(link: INLINE)
 questionVote: [QuestionVote]
 bookMark: [BookMark]
+bountyPoints: Int
 searchTermFoundIn: String
 }
 

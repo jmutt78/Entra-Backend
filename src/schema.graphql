@@ -18,6 +18,7 @@ type Mutation {
   createBookMark(questionId: ID!): BookMark!
   createAnswer(body: String!, questionId: ID!, approval: Boolean): Answer!
   createTag(name: String!): Tag!
+  createBounty(id: ID!, bountyPoints: Int): Question!
   signup(
     email: String!
     password: String!
@@ -43,14 +44,21 @@ type Mutation {
   createBusinessIdeaVote(ideaId: ID!, vote: String): BusinessIdeaVote
   updateUser(
     id: ID!
-    email: String!
-    name: String!
-    display: String!
+    email: String
+    name: String
+    display: String
     image: String
     location: String
     about: String
     tags: [TagInput!]
     industry: String
+    website: String
+    instagram: String
+    twitter: String
+    linkedIn: String
+    facebook: String
+    shareEmail: Boolean
+    shareSocial: Boolean
   ): User!
   updateQuestion(
     id: ID!
@@ -82,7 +90,11 @@ type Mutation {
 type Query {
   me: User
   user(id: ID!): User
-  users: [User]!
+  users(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    filter: String
+  ): [User]!
   tags(
     first: Int
     where: TagWhereInput
@@ -191,6 +203,22 @@ type User {
     last: Int
   ): [Tag!]
   businessIdeas: [BusinessIdea!]!
+  mastery: Mastery
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  points: Int
+  shareEmail: Boolean
+  shareSocial: Boolean
+}
+
+type Mastery {
+  level1: Boolean
+  level2: Boolean
+  level3: Boolean
+  level4: Boolean
 }
 
 type Badges {
@@ -271,6 +299,7 @@ type Question implements Node {
   questionVote: [QuestionVote]
   bookMark: [BookMark]
   searchTermFoundIn: String
+  bountyPoints: Int
 }
 
 type BookMark implements Node {

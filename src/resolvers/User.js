@@ -1,5 +1,5 @@
 const User = {
-  badges(parent, args, ctx, info) {
+  mastery(parent, args, ctx, info) {
     return parent;
   }
 };
