@@ -85,6 +85,17 @@ type Mutation {
     value: String
     status: Boolean
   ): BusinessIdea!
+  createIntro(
+    introduction: String!
+    about: String!
+    challenges: String!
+    approval: Boolean
+  ): Intro!
+  createIntroComment(
+    body: String!
+    introId: ID!
+    approval: Boolean
+  ): IntroComment!
 }
 
 type Query {
@@ -191,6 +202,8 @@ type User {
   permissions: [Permission!]!
   myQuestions: [Question!]!
   myAnswers: [Answer!]!
+  myIntro: [Intro!]!
+  myComments: [IntroComment!]!
   badges: Badges
   myBookMarks: [BookMark!]
   tags(
@@ -335,4 +348,52 @@ type BusinessIdea implements Node {
 type Tag {
   id: ID!
   name: String!
+}
+
+type Intro implements Node {
+  id: ID!
+  introduction: String!
+  about: String!
+  challenges: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  approval: Boolean
+  postedBy(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [User!]
+  comments(
+    where: AnswerWhereInput
+    orderBy: AnswerOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [IntroComment!]
+  welcomeCount: Int
+  welcome: [IntroWelcome]
+}
+
+type IntroComment {
+  id: ID!
+  body: String!
+  commentBy: User!
+  approval: Boolean
+  commentTo(
+    where: IntroCommentWhereInput
+    orderBy: IntroCommentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Intro!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }

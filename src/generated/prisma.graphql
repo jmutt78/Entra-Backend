@@ -18,6 +18,18 @@ type AggregateBusinessIdeaVote {
   count: Int!
 }
 
+type AggregateIntro {
+  count: Int!
+}
+
+type AggregateIntroComment {
+  count: Int!
+}
+
+type AggregateIntroWelcome {
+  count: Int!
+}
+
 type AggregateQuestion {
   count: Int!
 }
@@ -1402,6 +1414,921 @@ input BusinessIdeaWhereUniqueInput {
 
 scalar DateTime
 
+type Intro {
+  id: ID!
+  introduction: String!
+  about: String!
+  challenges: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  postedBy(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [User!]
+  approval: Boolean
+  comments(
+    where: IntroCommentWhereInput
+    orderBy: IntroCommentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [IntroComment!]
+  welcome(
+    where: IntroWelcomeWhereInput
+    orderBy: IntroWelcomeOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [IntroWelcome!]
+}
+
+type IntroComment {
+  id: ID!
+  body: String!
+  commentBy: User!
+  commentTo(
+    where: IntroWhereInput
+    orderBy: IntroOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Intro!]
+  approval: Boolean
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type IntroCommentConnection {
+  pageInfo: PageInfo!
+  edges: [IntroCommentEdge]!
+  aggregate: AggregateIntroComment!
+}
+
+input IntroCommentCreateInput {
+  id: ID
+  body: String!
+  commentBy: UserCreateOneWithoutMyCommentsInput!
+  commentTo: IntroCreateManyWithoutCommentsInput
+  approval: Boolean
+}
+
+input IntroCommentCreateManyWithoutCommentByInput {
+  create: [IntroCommentCreateWithoutCommentByInput!]
+  connect: [IntroCommentWhereUniqueInput!]
+}
+
+input IntroCommentCreateManyWithoutCommentToInput {
+  create: [IntroCommentCreateWithoutCommentToInput!]
+  connect: [IntroCommentWhereUniqueInput!]
+}
+
+input IntroCommentCreateWithoutCommentByInput {
+  id: ID
+  body: String!
+  commentTo: IntroCreateManyWithoutCommentsInput
+  approval: Boolean
+}
+
+input IntroCommentCreateWithoutCommentToInput {
+  id: ID
+  body: String!
+  commentBy: UserCreateOneWithoutMyCommentsInput!
+  approval: Boolean
+}
+
+type IntroCommentEdge {
+  node: IntroComment!
+  cursor: String!
+}
+
+enum IntroCommentOrderByInput {
+  id_ASC
+  id_DESC
+  body_ASC
+  body_DESC
+  approval_ASC
+  approval_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type IntroCommentPreviousValues {
+  id: ID!
+  body: String!
+  approval: Boolean
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input IntroCommentScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  body: String
+  body_not: String
+  body_in: [String!]
+  body_not_in: [String!]
+  body_lt: String
+  body_lte: String
+  body_gt: String
+  body_gte: String
+  body_contains: String
+  body_not_contains: String
+  body_starts_with: String
+  body_not_starts_with: String
+  body_ends_with: String
+  body_not_ends_with: String
+  approval: Boolean
+  approval_not: Boolean
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [IntroCommentScalarWhereInput!]
+  OR: [IntroCommentScalarWhereInput!]
+  NOT: [IntroCommentScalarWhereInput!]
+}
+
+type IntroCommentSubscriptionPayload {
+  mutation: MutationType!
+  node: IntroComment
+  updatedFields: [String!]
+  previousValues: IntroCommentPreviousValues
+}
+
+input IntroCommentSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: IntroCommentWhereInput
+  AND: [IntroCommentSubscriptionWhereInput!]
+  OR: [IntroCommentSubscriptionWhereInput!]
+  NOT: [IntroCommentSubscriptionWhereInput!]
+}
+
+input IntroCommentUpdateInput {
+  body: String
+  commentBy: UserUpdateOneRequiredWithoutMyCommentsInput
+  commentTo: IntroUpdateManyWithoutCommentsInput
+  approval: Boolean
+}
+
+input IntroCommentUpdateManyDataInput {
+  body: String
+  approval: Boolean
+}
+
+input IntroCommentUpdateManyMutationInput {
+  body: String
+  approval: Boolean
+}
+
+input IntroCommentUpdateManyWithoutCommentByInput {
+  create: [IntroCommentCreateWithoutCommentByInput!]
+  delete: [IntroCommentWhereUniqueInput!]
+  connect: [IntroCommentWhereUniqueInput!]
+  set: [IntroCommentWhereUniqueInput!]
+  disconnect: [IntroCommentWhereUniqueInput!]
+  update: [IntroCommentUpdateWithWhereUniqueWithoutCommentByInput!]
+  upsert: [IntroCommentUpsertWithWhereUniqueWithoutCommentByInput!]
+  deleteMany: [IntroCommentScalarWhereInput!]
+  updateMany: [IntroCommentUpdateManyWithWhereNestedInput!]
+}
+
+input IntroCommentUpdateManyWithoutCommentToInput {
+  create: [IntroCommentCreateWithoutCommentToInput!]
+  delete: [IntroCommentWhereUniqueInput!]
+  connect: [IntroCommentWhereUniqueInput!]
+  set: [IntroCommentWhereUniqueInput!]
+  disconnect: [IntroCommentWhereUniqueInput!]
+  update: [IntroCommentUpdateWithWhereUniqueWithoutCommentToInput!]
+  upsert: [IntroCommentUpsertWithWhereUniqueWithoutCommentToInput!]
+  deleteMany: [IntroCommentScalarWhereInput!]
+  updateMany: [IntroCommentUpdateManyWithWhereNestedInput!]
+}
+
+input IntroCommentUpdateManyWithWhereNestedInput {
+  where: IntroCommentScalarWhereInput!
+  data: IntroCommentUpdateManyDataInput!
+}
+
+input IntroCommentUpdateWithoutCommentByDataInput {
+  body: String
+  commentTo: IntroUpdateManyWithoutCommentsInput
+  approval: Boolean
+}
+
+input IntroCommentUpdateWithoutCommentToDataInput {
+  body: String
+  commentBy: UserUpdateOneRequiredWithoutMyCommentsInput
+  approval: Boolean
+}
+
+input IntroCommentUpdateWithWhereUniqueWithoutCommentByInput {
+  where: IntroCommentWhereUniqueInput!
+  data: IntroCommentUpdateWithoutCommentByDataInput!
+}
+
+input IntroCommentUpdateWithWhereUniqueWithoutCommentToInput {
+  where: IntroCommentWhereUniqueInput!
+  data: IntroCommentUpdateWithoutCommentToDataInput!
+}
+
+input IntroCommentUpsertWithWhereUniqueWithoutCommentByInput {
+  where: IntroCommentWhereUniqueInput!
+  update: IntroCommentUpdateWithoutCommentByDataInput!
+  create: IntroCommentCreateWithoutCommentByInput!
+}
+
+input IntroCommentUpsertWithWhereUniqueWithoutCommentToInput {
+  where: IntroCommentWhereUniqueInput!
+  update: IntroCommentUpdateWithoutCommentToDataInput!
+  create: IntroCommentCreateWithoutCommentToInput!
+}
+
+input IntroCommentWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  body: String
+  body_not: String
+  body_in: [String!]
+  body_not_in: [String!]
+  body_lt: String
+  body_lte: String
+  body_gt: String
+  body_gte: String
+  body_contains: String
+  body_not_contains: String
+  body_starts_with: String
+  body_not_starts_with: String
+  body_ends_with: String
+  body_not_ends_with: String
+  commentBy: UserWhereInput
+  commentTo_every: IntroWhereInput
+  commentTo_some: IntroWhereInput
+  commentTo_none: IntroWhereInput
+  approval: Boolean
+  approval_not: Boolean
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [IntroCommentWhereInput!]
+  OR: [IntroCommentWhereInput!]
+  NOT: [IntroCommentWhereInput!]
+}
+
+input IntroCommentWhereUniqueInput {
+  id: ID
+}
+
+type IntroConnection {
+  pageInfo: PageInfo!
+  edges: [IntroEdge]!
+  aggregate: AggregateIntro!
+}
+
+input IntroCreateInput {
+  id: ID
+  introduction: String!
+  about: String!
+  challenges: String!
+  postedBy: UserCreateManyWithoutMyIntroInput
+  approval: Boolean
+  comments: IntroCommentCreateManyWithoutCommentToInput
+  welcome: IntroWelcomeCreateManyWithoutWelcomedIntroInput
+}
+
+input IntroCreateManyWithoutCommentsInput {
+  create: [IntroCreateWithoutCommentsInput!]
+  connect: [IntroWhereUniqueInput!]
+}
+
+input IntroCreateManyWithoutPostedByInput {
+  create: [IntroCreateWithoutPostedByInput!]
+  connect: [IntroWhereUniqueInput!]
+}
+
+input IntroCreateOneWithoutWelcomeInput {
+  create: IntroCreateWithoutWelcomeInput
+  connect: IntroWhereUniqueInput
+}
+
+input IntroCreateWithoutCommentsInput {
+  id: ID
+  introduction: String!
+  about: String!
+  challenges: String!
+  postedBy: UserCreateManyWithoutMyIntroInput
+  approval: Boolean
+  welcome: IntroWelcomeCreateManyWithoutWelcomedIntroInput
+}
+
+input IntroCreateWithoutPostedByInput {
+  id: ID
+  introduction: String!
+  about: String!
+  challenges: String!
+  approval: Boolean
+  comments: IntroCommentCreateManyWithoutCommentToInput
+  welcome: IntroWelcomeCreateManyWithoutWelcomedIntroInput
+}
+
+input IntroCreateWithoutWelcomeInput {
+  id: ID
+  introduction: String!
+  about: String!
+  challenges: String!
+  postedBy: UserCreateManyWithoutMyIntroInput
+  approval: Boolean
+  comments: IntroCommentCreateManyWithoutCommentToInput
+}
+
+type IntroEdge {
+  node: Intro!
+  cursor: String!
+}
+
+enum IntroOrderByInput {
+  id_ASC
+  id_DESC
+  introduction_ASC
+  introduction_DESC
+  about_ASC
+  about_DESC
+  challenges_ASC
+  challenges_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  approval_ASC
+  approval_DESC
+}
+
+type IntroPreviousValues {
+  id: ID!
+  introduction: String!
+  about: String!
+  challenges: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  approval: Boolean
+}
+
+input IntroScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  introduction: String
+  introduction_not: String
+  introduction_in: [String!]
+  introduction_not_in: [String!]
+  introduction_lt: String
+  introduction_lte: String
+  introduction_gt: String
+  introduction_gte: String
+  introduction_contains: String
+  introduction_not_contains: String
+  introduction_starts_with: String
+  introduction_not_starts_with: String
+  introduction_ends_with: String
+  introduction_not_ends_with: String
+  about: String
+  about_not: String
+  about_in: [String!]
+  about_not_in: [String!]
+  about_lt: String
+  about_lte: String
+  about_gt: String
+  about_gte: String
+  about_contains: String
+  about_not_contains: String
+  about_starts_with: String
+  about_not_starts_with: String
+  about_ends_with: String
+  about_not_ends_with: String
+  challenges: String
+  challenges_not: String
+  challenges_in: [String!]
+  challenges_not_in: [String!]
+  challenges_lt: String
+  challenges_lte: String
+  challenges_gt: String
+  challenges_gte: String
+  challenges_contains: String
+  challenges_not_contains: String
+  challenges_starts_with: String
+  challenges_not_starts_with: String
+  challenges_ends_with: String
+  challenges_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  approval: Boolean
+  approval_not: Boolean
+  AND: [IntroScalarWhereInput!]
+  OR: [IntroScalarWhereInput!]
+  NOT: [IntroScalarWhereInput!]
+}
+
+type IntroSubscriptionPayload {
+  mutation: MutationType!
+  node: Intro
+  updatedFields: [String!]
+  previousValues: IntroPreviousValues
+}
+
+input IntroSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: IntroWhereInput
+  AND: [IntroSubscriptionWhereInput!]
+  OR: [IntroSubscriptionWhereInput!]
+  NOT: [IntroSubscriptionWhereInput!]
+}
+
+input IntroUpdateInput {
+  introduction: String
+  about: String
+  challenges: String
+  postedBy: UserUpdateManyWithoutMyIntroInput
+  approval: Boolean
+  comments: IntroCommentUpdateManyWithoutCommentToInput
+  welcome: IntroWelcomeUpdateManyWithoutWelcomedIntroInput
+}
+
+input IntroUpdateManyDataInput {
+  introduction: String
+  about: String
+  challenges: String
+  approval: Boolean
+}
+
+input IntroUpdateManyMutationInput {
+  introduction: String
+  about: String
+  challenges: String
+  approval: Boolean
+}
+
+input IntroUpdateManyWithoutCommentsInput {
+  create: [IntroCreateWithoutCommentsInput!]
+  delete: [IntroWhereUniqueInput!]
+  connect: [IntroWhereUniqueInput!]
+  set: [IntroWhereUniqueInput!]
+  disconnect: [IntroWhereUniqueInput!]
+  update: [IntroUpdateWithWhereUniqueWithoutCommentsInput!]
+  upsert: [IntroUpsertWithWhereUniqueWithoutCommentsInput!]
+  deleteMany: [IntroScalarWhereInput!]
+  updateMany: [IntroUpdateManyWithWhereNestedInput!]
+}
+
+input IntroUpdateManyWithoutPostedByInput {
+  create: [IntroCreateWithoutPostedByInput!]
+  delete: [IntroWhereUniqueInput!]
+  connect: [IntroWhereUniqueInput!]
+  set: [IntroWhereUniqueInput!]
+  disconnect: [IntroWhereUniqueInput!]
+  update: [IntroUpdateWithWhereUniqueWithoutPostedByInput!]
+  upsert: [IntroUpsertWithWhereUniqueWithoutPostedByInput!]
+  deleteMany: [IntroScalarWhereInput!]
+  updateMany: [IntroUpdateManyWithWhereNestedInput!]
+}
+
+input IntroUpdateManyWithWhereNestedInput {
+  where: IntroScalarWhereInput!
+  data: IntroUpdateManyDataInput!
+}
+
+input IntroUpdateOneRequiredWithoutWelcomeInput {
+  create: IntroCreateWithoutWelcomeInput
+  update: IntroUpdateWithoutWelcomeDataInput
+  upsert: IntroUpsertWithoutWelcomeInput
+  connect: IntroWhereUniqueInput
+}
+
+input IntroUpdateWithoutCommentsDataInput {
+  introduction: String
+  about: String
+  challenges: String
+  postedBy: UserUpdateManyWithoutMyIntroInput
+  approval: Boolean
+  welcome: IntroWelcomeUpdateManyWithoutWelcomedIntroInput
+}
+
+input IntroUpdateWithoutPostedByDataInput {
+  introduction: String
+  about: String
+  challenges: String
+  approval: Boolean
+  comments: IntroCommentUpdateManyWithoutCommentToInput
+  welcome: IntroWelcomeUpdateManyWithoutWelcomedIntroInput
+}
+
+input IntroUpdateWithoutWelcomeDataInput {
+  introduction: String
+  about: String
+  challenges: String
+  postedBy: UserUpdateManyWithoutMyIntroInput
+  approval: Boolean
+  comments: IntroCommentUpdateManyWithoutCommentToInput
+}
+
+input IntroUpdateWithWhereUniqueWithoutCommentsInput {
+  where: IntroWhereUniqueInput!
+  data: IntroUpdateWithoutCommentsDataInput!
+}
+
+input IntroUpdateWithWhereUniqueWithoutPostedByInput {
+  where: IntroWhereUniqueInput!
+  data: IntroUpdateWithoutPostedByDataInput!
+}
+
+input IntroUpsertWithoutWelcomeInput {
+  update: IntroUpdateWithoutWelcomeDataInput!
+  create: IntroCreateWithoutWelcomeInput!
+}
+
+input IntroUpsertWithWhereUniqueWithoutCommentsInput {
+  where: IntroWhereUniqueInput!
+  update: IntroUpdateWithoutCommentsDataInput!
+  create: IntroCreateWithoutCommentsInput!
+}
+
+input IntroUpsertWithWhereUniqueWithoutPostedByInput {
+  where: IntroWhereUniqueInput!
+  update: IntroUpdateWithoutPostedByDataInput!
+  create: IntroCreateWithoutPostedByInput!
+}
+
+type IntroWelcome {
+  id: ID!
+  welcomedBy: User!
+  welcomedIntro: Intro!
+  welcome: String
+}
+
+type IntroWelcomeConnection {
+  pageInfo: PageInfo!
+  edges: [IntroWelcomeEdge]!
+  aggregate: AggregateIntroWelcome!
+}
+
+input IntroWelcomeCreateInput {
+  id: ID
+  welcomedBy: UserCreateOneInput!
+  welcomedIntro: IntroCreateOneWithoutWelcomeInput!
+  welcome: String
+}
+
+input IntroWelcomeCreateManyWithoutWelcomedIntroInput {
+  create: [IntroWelcomeCreateWithoutWelcomedIntroInput!]
+  connect: [IntroWelcomeWhereUniqueInput!]
+}
+
+input IntroWelcomeCreateWithoutWelcomedIntroInput {
+  id: ID
+  welcomedBy: UserCreateOneInput!
+  welcome: String
+}
+
+type IntroWelcomeEdge {
+  node: IntroWelcome!
+  cursor: String!
+}
+
+enum IntroWelcomeOrderByInput {
+  id_ASC
+  id_DESC
+  welcome_ASC
+  welcome_DESC
+}
+
+type IntroWelcomePreviousValues {
+  id: ID!
+  welcome: String
+}
+
+input IntroWelcomeScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  welcome: String
+  welcome_not: String
+  welcome_in: [String!]
+  welcome_not_in: [String!]
+  welcome_lt: String
+  welcome_lte: String
+  welcome_gt: String
+  welcome_gte: String
+  welcome_contains: String
+  welcome_not_contains: String
+  welcome_starts_with: String
+  welcome_not_starts_with: String
+  welcome_ends_with: String
+  welcome_not_ends_with: String
+  AND: [IntroWelcomeScalarWhereInput!]
+  OR: [IntroWelcomeScalarWhereInput!]
+  NOT: [IntroWelcomeScalarWhereInput!]
+}
+
+type IntroWelcomeSubscriptionPayload {
+  mutation: MutationType!
+  node: IntroWelcome
+  updatedFields: [String!]
+  previousValues: IntroWelcomePreviousValues
+}
+
+input IntroWelcomeSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: IntroWelcomeWhereInput
+  AND: [IntroWelcomeSubscriptionWhereInput!]
+  OR: [IntroWelcomeSubscriptionWhereInput!]
+  NOT: [IntroWelcomeSubscriptionWhereInput!]
+}
+
+input IntroWelcomeUpdateInput {
+  welcomedBy: UserUpdateOneRequiredInput
+  welcomedIntro: IntroUpdateOneRequiredWithoutWelcomeInput
+  welcome: String
+}
+
+input IntroWelcomeUpdateManyDataInput {
+  welcome: String
+}
+
+input IntroWelcomeUpdateManyMutationInput {
+  welcome: String
+}
+
+input IntroWelcomeUpdateManyWithoutWelcomedIntroInput {
+  create: [IntroWelcomeCreateWithoutWelcomedIntroInput!]
+  delete: [IntroWelcomeWhereUniqueInput!]
+  connect: [IntroWelcomeWhereUniqueInput!]
+  set: [IntroWelcomeWhereUniqueInput!]
+  disconnect: [IntroWelcomeWhereUniqueInput!]
+  update: [IntroWelcomeUpdateWithWhereUniqueWithoutWelcomedIntroInput!]
+  upsert: [IntroWelcomeUpsertWithWhereUniqueWithoutWelcomedIntroInput!]
+  deleteMany: [IntroWelcomeScalarWhereInput!]
+  updateMany: [IntroWelcomeUpdateManyWithWhereNestedInput!]
+}
+
+input IntroWelcomeUpdateManyWithWhereNestedInput {
+  where: IntroWelcomeScalarWhereInput!
+  data: IntroWelcomeUpdateManyDataInput!
+}
+
+input IntroWelcomeUpdateWithoutWelcomedIntroDataInput {
+  welcomedBy: UserUpdateOneRequiredInput
+  welcome: String
+}
+
+input IntroWelcomeUpdateWithWhereUniqueWithoutWelcomedIntroInput {
+  where: IntroWelcomeWhereUniqueInput!
+  data: IntroWelcomeUpdateWithoutWelcomedIntroDataInput!
+}
+
+input IntroWelcomeUpsertWithWhereUniqueWithoutWelcomedIntroInput {
+  where: IntroWelcomeWhereUniqueInput!
+  update: IntroWelcomeUpdateWithoutWelcomedIntroDataInput!
+  create: IntroWelcomeCreateWithoutWelcomedIntroInput!
+}
+
+input IntroWelcomeWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  welcomedBy: UserWhereInput
+  welcomedIntro: IntroWhereInput
+  welcome: String
+  welcome_not: String
+  welcome_in: [String!]
+  welcome_not_in: [String!]
+  welcome_lt: String
+  welcome_lte: String
+  welcome_gt: String
+  welcome_gte: String
+  welcome_contains: String
+  welcome_not_contains: String
+  welcome_starts_with: String
+  welcome_not_starts_with: String
+  welcome_ends_with: String
+  welcome_not_ends_with: String
+  AND: [IntroWelcomeWhereInput!]
+  OR: [IntroWelcomeWhereInput!]
+  NOT: [IntroWelcomeWhereInput!]
+}
+
+input IntroWelcomeWhereUniqueInput {
+  id: ID
+}
+
+input IntroWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  introduction: String
+  introduction_not: String
+  introduction_in: [String!]
+  introduction_not_in: [String!]
+  introduction_lt: String
+  introduction_lte: String
+  introduction_gt: String
+  introduction_gte: String
+  introduction_contains: String
+  introduction_not_contains: String
+  introduction_starts_with: String
+  introduction_not_starts_with: String
+  introduction_ends_with: String
+  introduction_not_ends_with: String
+  about: String
+  about_not: String
+  about_in: [String!]
+  about_not_in: [String!]
+  about_lt: String
+  about_lte: String
+  about_gt: String
+  about_gte: String
+  about_contains: String
+  about_not_contains: String
+  about_starts_with: String
+  about_not_starts_with: String
+  about_ends_with: String
+  about_not_ends_with: String
+  challenges: String
+  challenges_not: String
+  challenges_in: [String!]
+  challenges_not_in: [String!]
+  challenges_lt: String
+  challenges_lte: String
+  challenges_gt: String
+  challenges_gte: String
+  challenges_contains: String
+  challenges_not_contains: String
+  challenges_starts_with: String
+  challenges_not_starts_with: String
+  challenges_ends_with: String
+  challenges_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  postedBy_every: UserWhereInput
+  postedBy_some: UserWhereInput
+  postedBy_none: UserWhereInput
+  approval: Boolean
+  approval_not: Boolean
+  comments_every: IntroCommentWhereInput
+  comments_some: IntroCommentWhereInput
+  comments_none: IntroCommentWhereInput
+  welcome_every: IntroWelcomeWhereInput
+  welcome_some: IntroWelcomeWhereInput
+  welcome_none: IntroWelcomeWhereInput
+  AND: [IntroWhereInput!]
+  OR: [IntroWhereInput!]
+  NOT: [IntroWhereInput!]
+}
+
+input IntroWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Mutation {
@@ -1480,6 +2407,51 @@ type Mutation {
     where: BusinessIdeaVoteWhereUniqueInput!
   ): BusinessIdeaVote
   deleteManyBusinessIdeaVotes(where: BusinessIdeaVoteWhereInput): BatchPayload!
+  createIntro(data: IntroCreateInput!): Intro!
+  updateIntro(data: IntroUpdateInput!, where: IntroWhereUniqueInput!): Intro
+  updateManyIntroes(
+    data: IntroUpdateManyMutationInput!
+    where: IntroWhereInput
+  ): BatchPayload!
+  upsertIntro(
+    where: IntroWhereUniqueInput!
+    create: IntroCreateInput!
+    update: IntroUpdateInput!
+  ): Intro!
+  deleteIntro(where: IntroWhereUniqueInput!): Intro
+  deleteManyIntroes(where: IntroWhereInput): BatchPayload!
+  createIntroComment(data: IntroCommentCreateInput!): IntroComment!
+  updateIntroComment(
+    data: IntroCommentUpdateInput!
+    where: IntroCommentWhereUniqueInput!
+  ): IntroComment
+  updateManyIntroComments(
+    data: IntroCommentUpdateManyMutationInput!
+    where: IntroCommentWhereInput
+  ): BatchPayload!
+  upsertIntroComment(
+    where: IntroCommentWhereUniqueInput!
+    create: IntroCommentCreateInput!
+    update: IntroCommentUpdateInput!
+  ): IntroComment!
+  deleteIntroComment(where: IntroCommentWhereUniqueInput!): IntroComment
+  deleteManyIntroComments(where: IntroCommentWhereInput): BatchPayload!
+  createIntroWelcome(data: IntroWelcomeCreateInput!): IntroWelcome!
+  updateIntroWelcome(
+    data: IntroWelcomeUpdateInput!
+    where: IntroWelcomeWhereUniqueInput!
+  ): IntroWelcome
+  updateManyIntroWelcomes(
+    data: IntroWelcomeUpdateManyMutationInput!
+    where: IntroWelcomeWhereInput
+  ): BatchPayload!
+  upsertIntroWelcome(
+    where: IntroWelcomeWhereUniqueInput!
+    create: IntroWelcomeCreateInput!
+    update: IntroWelcomeUpdateInput!
+  ): IntroWelcome!
+  deleteIntroWelcome(where: IntroWelcomeWhereUniqueInput!): IntroWelcome
+  deleteManyIntroWelcomes(where: IntroWelcomeWhereInput): BatchPayload!
   createQuestion(data: QuestionCreateInput!): Question!
   updateQuestion(
     data: QuestionUpdateInput!
@@ -1672,6 +2644,63 @@ type Query {
     first: Int
     last: Int
   ): BusinessIdeaVoteConnection!
+  intro(where: IntroWhereUniqueInput!): Intro
+  introes(
+    where: IntroWhereInput
+    orderBy: IntroOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Intro]!
+  introesConnection(
+    where: IntroWhereInput
+    orderBy: IntroOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): IntroConnection!
+  introComment(where: IntroCommentWhereUniqueInput!): IntroComment
+  introComments(
+    where: IntroCommentWhereInput
+    orderBy: IntroCommentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [IntroComment]!
+  introCommentsConnection(
+    where: IntroCommentWhereInput
+    orderBy: IntroCommentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): IntroCommentConnection!
+  introWelcome(where: IntroWelcomeWhereUniqueInput!): IntroWelcome
+  introWelcomes(
+    where: IntroWelcomeWhereInput
+    orderBy: IntroWelcomeOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [IntroWelcome]!
+  introWelcomesConnection(
+    where: IntroWelcomeWhereInput
+    orderBy: IntroWelcomeOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): IntroWelcomeConnection!
   question(where: QuestionWhereUniqueInput!): Question
   questions(
     where: QuestionWhereInput
@@ -2639,6 +3668,13 @@ type Subscription {
   businessIdeaVote(
     where: BusinessIdeaVoteSubscriptionWhereInput
   ): BusinessIdeaVoteSubscriptionPayload
+  intro(where: IntroSubscriptionWhereInput): IntroSubscriptionPayload
+  introComment(
+    where: IntroCommentSubscriptionWhereInput
+  ): IntroCommentSubscriptionPayload
+  introWelcome(
+    where: IntroWelcomeSubscriptionWhereInput
+  ): IntroWelcomeSubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   questionView(
     where: QuestionViewSubscriptionWhereInput
@@ -2847,6 +3883,24 @@ type User {
     first: Int
     last: Int
   ): [Question!]
+  myIntro(
+    where: IntroWhereInput
+    orderBy: IntroOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Intro!]
+  myComments(
+    where: IntroCommentWhereInput
+    orderBy: IntroCommentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [IntroComment!]
   myAnswers(
     where: AnswerWhereInput
     orderBy: AnswerOrderByInput
@@ -2913,6 +3967,8 @@ input UserCreateInput {
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
   myQuestions: QuestionCreateManyWithoutAskedByInput
+  myIntro: IntroCreateManyWithoutPostedByInput
+  myComments: IntroCommentCreateManyWithoutCommentByInput
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
@@ -2925,6 +3981,11 @@ input UserCreateInput {
   facebook: String
   shareEmail: Boolean
   shareSocial: Boolean
+}
+
+input UserCreateManyWithoutMyIntroInput {
+  create: [UserCreateWithoutMyIntroInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutMyQuestionsInput {
@@ -2952,6 +4013,11 @@ input UserCreateOneWithoutMyBookMarksInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutMyCommentsInput {
+  create: UserCreateWithoutMyCommentsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreatepermissionsInput {
   set: [Permission!]
 }
@@ -2970,6 +4036,8 @@ input UserCreateWithoutBusinessIdeasInput {
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
   myQuestions: QuestionCreateManyWithoutAskedByInput
+  myIntro: IntroCreateManyWithoutPostedByInput
+  myComments: IntroCommentCreateManyWithoutCommentByInput
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   tags: TagCreateManyInput
@@ -2997,6 +4065,8 @@ input UserCreateWithoutMyAnswersInput {
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
   myQuestions: QuestionCreateManyWithoutAskedByInput
+  myIntro: IntroCreateManyWithoutPostedByInput
+  myComments: IntroCommentCreateManyWithoutCommentByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
@@ -3024,7 +4094,67 @@ input UserCreateWithoutMyBookMarksInput {
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
   myQuestions: QuestionCreateManyWithoutAskedByInput
+  myIntro: IntroCreateManyWithoutPostedByInput
+  myComments: IntroCommentCreateManyWithoutCommentByInput
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
+  businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
+  tags: TagCreateManyInput
+  points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
+}
+
+input UserCreateWithoutMyCommentsInput {
+  id: ID
+  name: String!
+  email: String!
+  display: String!
+  image: String
+  location: String
+  about: String
+  industry: String
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  myQuestions: QuestionCreateManyWithoutAskedByInput
+  myIntro: IntroCreateManyWithoutPostedByInput
+  myAnswers: AnswerCreateManyWithoutAnsweredByInput
+  myBookMarks: BookMarkCreateManyWithoutMarkedByInput
+  businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
+  tags: TagCreateManyInput
+  points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
+}
+
+input UserCreateWithoutMyIntroInput {
+  id: ID
+  name: String!
+  email: String!
+  display: String!
+  image: String
+  location: String
+  about: String
+  industry: String
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  myQuestions: QuestionCreateManyWithoutAskedByInput
+  myComments: IntroCommentCreateManyWithoutCommentByInput
+  myAnswers: AnswerCreateManyWithoutAnsweredByInput
+  myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
   tags: TagCreateManyInput
   points: Int
@@ -3050,6 +4180,8 @@ input UserCreateWithoutMyQuestionsInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
+  myIntro: IntroCreateManyWithoutPostedByInput
+  myComments: IntroCommentCreateManyWithoutCommentByInput
   myAnswers: AnswerCreateManyWithoutAnsweredByInput
   myBookMarks: BookMarkCreateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaCreateManyWithoutCreatedByInput
@@ -3422,6 +4554,8 @@ input UserUpdateDataInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
+  myIntro: IntroUpdateManyWithoutPostedByInput
+  myComments: IntroCommentUpdateManyWithoutCommentByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
@@ -3449,6 +4583,8 @@ input UserUpdateInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
+  myIntro: IntroUpdateManyWithoutPostedByInput
+  myComments: IntroCommentUpdateManyWithoutCommentByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
@@ -3507,6 +4643,18 @@ input UserUpdateManyMutationInput {
   shareSocial: Boolean
 }
 
+input UserUpdateManyWithoutMyIntroInput {
+  create: [UserCreateWithoutMyIntroInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutMyIntroInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutMyIntroInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
 input UserUpdateManyWithoutMyQuestionsInput {
   create: [UserCreateWithoutMyQuestionsInput!]
   delete: [UserWhereUniqueInput!]
@@ -3552,6 +4700,13 @@ input UserUpdateOneRequiredWithoutMyBookMarksInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutMyCommentsInput {
+  create: UserCreateWithoutMyCommentsInput
+  update: UserUpdateWithoutMyCommentsDataInput
+  upsert: UserUpsertWithoutMyCommentsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdatepermissionsInput {
   set: [Permission!]
 }
@@ -3569,6 +4724,8 @@ input UserUpdateWithoutBusinessIdeasDataInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
+  myIntro: IntroUpdateManyWithoutPostedByInput
+  myComments: IntroCommentUpdateManyWithoutCommentByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   tags: TagUpdateManyInput
@@ -3595,6 +4752,8 @@ input UserUpdateWithoutMyAnswersDataInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
+  myIntro: IntroUpdateManyWithoutPostedByInput
+  myComments: IntroCommentUpdateManyWithoutCommentByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
@@ -3621,7 +4780,65 @@ input UserUpdateWithoutMyBookMarksDataInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   myQuestions: QuestionUpdateManyWithoutAskedByInput
+  myIntro: IntroUpdateManyWithoutPostedByInput
+  myComments: IntroCommentUpdateManyWithoutCommentByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
+  businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
+  tags: TagUpdateManyInput
+  points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
+}
+
+input UserUpdateWithoutMyCommentsDataInput {
+  name: String
+  email: String
+  display: String
+  image: String
+  location: String
+  about: String
+  industry: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  myQuestions: QuestionUpdateManyWithoutAskedByInput
+  myIntro: IntroUpdateManyWithoutPostedByInput
+  myAnswers: AnswerUpdateManyWithoutAnsweredByInput
+  myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
+  businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
+  tags: TagUpdateManyInput
+  points: Int
+  website: String
+  instagram: String
+  twitter: String
+  linkedIn: String
+  facebook: String
+  shareEmail: Boolean
+  shareSocial: Boolean
+}
+
+input UserUpdateWithoutMyIntroDataInput {
+  name: String
+  email: String
+  display: String
+  image: String
+  location: String
+  about: String
+  industry: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  myQuestions: QuestionUpdateManyWithoutAskedByInput
+  myComments: IntroCommentUpdateManyWithoutCommentByInput
+  myAnswers: AnswerUpdateManyWithoutAnsweredByInput
+  myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
   tags: TagUpdateManyInput
   points: Int
@@ -3646,6 +4863,8 @@ input UserUpdateWithoutMyQuestionsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
+  myIntro: IntroUpdateManyWithoutPostedByInput
+  myComments: IntroCommentUpdateManyWithoutCommentByInput
   myAnswers: AnswerUpdateManyWithoutAnsweredByInput
   myBookMarks: BookMarkUpdateManyWithoutMarkedByInput
   businessIdeas: BusinessIdeaUpdateManyWithoutCreatedByInput
@@ -3658,6 +4877,11 @@ input UserUpdateWithoutMyQuestionsDataInput {
   facebook: String
   shareEmail: Boolean
   shareSocial: Boolean
+}
+
+input UserUpdateWithWhereUniqueWithoutMyIntroInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutMyIntroDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutMyQuestionsInput {
@@ -3683,6 +4907,17 @@ input UserUpsertWithoutMyAnswersInput {
 input UserUpsertWithoutMyBookMarksInput {
   update: UserUpdateWithoutMyBookMarksDataInput!
   create: UserCreateWithoutMyBookMarksInput!
+}
+
+input UserUpsertWithoutMyCommentsInput {
+  update: UserUpdateWithoutMyCommentsDataInput!
+  create: UserCreateWithoutMyCommentsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutMyIntroInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutMyIntroDataInput!
+  create: UserCreateWithoutMyIntroInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutMyQuestionsInput {
@@ -3859,6 +5094,12 @@ input UserWhereInput {
   myQuestions_every: QuestionWhereInput
   myQuestions_some: QuestionWhereInput
   myQuestions_none: QuestionWhereInput
+  myIntro_every: IntroWhereInput
+  myIntro_some: IntroWhereInput
+  myIntro_none: IntroWhereInput
+  myComments_every: IntroCommentWhereInput
+  myComments_some: IntroCommentWhereInput
+  myComments_none: IntroCommentWhereInput
   myAnswers_every: AnswerWhereInput
   myAnswers_some: AnswerWhereInput
   myAnswers_none: AnswerWhereInput

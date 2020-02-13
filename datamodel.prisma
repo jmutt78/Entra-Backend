@@ -23,6 +23,8 @@ type User {
   resetTokenExpiry: Float
   permissions: [Permission]
   myQuestions: [Question!]! @relation(link: INLINE)
+  myIntro: [Intro!]! @relation(link: INLINE)
+  myComments: [IntroComment!]!
   myAnswers: [Answer!]! @relation(link: INLINE)
   myBookMarks: [BookMark!]
   businessIdeas: [BusinessIdea!]! @relation(link: INLINE)
@@ -115,4 +117,34 @@ type BusinessIdeaVote {
   votedBy: User! @relation(link: INLINE)
   votedBusinessIdea: BusinessIdea! @relation(link: INLINE)
   vote: String
+}
+
+type Intro {
+id: ID! @id @unique
+introduction: String!
+about: String!
+challenges: String!
+createdAt: DateTime! @createdAt
+updatedAt: DateTime! @updatedAt
+postedBy: [User!]!
+approval: Boolean
+comments: [IntroComment!]! @relation(link: INLINE)
+welcome: [IntroWelcome]
+}
+
+type IntroWelcome {
+  id: ID! @id @unique
+  welcomedBy: User! @relation(link: INLINE)
+  welcomedIntro: Intro! @relation(link: INLINE)
+  welcome: String
+}
+
+type IntroComment {
+  id: ID! @id @unique
+  body: String!
+  commentBy: User! @relation(link: INLINE)
+  commentTo: [Intro!]
+  approval: Boolean
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
