@@ -1,9 +1,5 @@
-const { hasPermission, containsProfanity } = require('../../utils.js');
-const {
-  transport,
-  makeANiceEmail,
-  answeredQuestion
-} = require('../../mail.js');
+const { containsProfanity } = require('../../utils.js');
+const { transport, answeredQuestion } = require('../../mail.js');
 const { differenceInDays } = require('date-fns');
 const _ = require('lodash');
 
@@ -226,6 +222,67 @@ const updateAnswer = async function(parent, args, ctx, info) {
   );
 };
 
+const deleteAnswer = async function(parent, args, ctx, info) {
+  const where = { id: args.id };
+
+  const answer = await ctx.db.query.answer(
+    {
+      where: { id: args.id }
+    },
+    `{ id body
+      selected
+      createdAt
+      answerVote { id }
+      answeredBy { id }}`
+  );
+
+  if (!answer) {
+    throw new Error('Answer already deleted');
+  }
+
+  const ownsAnswer = answer.answeredBy.id === ctx.request.userId;
+
+  if (!ownsAnswer) {
+    throw new Error("You don't have permission to do that!");
+  }
+
+  if (answer.selected) {
+    throw new Error("Can't delete selected answer");
+  }
+
+  const days = differenceInDays(new Date(), answer.createdAt);
+  if (days >= 2) {
+    throw new Error("Can't delete answers older than 2 days");
+  }
+
+  // 3. Delete it!
+
+  await ctx.db.mutation.deleteManyAnswerVotes(
+    {
+      where: { votedAnswer: { id: args.id } }
+    },
+    null
+  );
+
+  const currentUser = await ctx.db.query.user(
+    {
+      where: {
+        id: ctx.request.userId
+      }
+    },
+    `{ id
+      points
+  }`
+  );
+
+  const res = await ctx.db.mutation.updateUser({
+    where: { id: currentUser.id },
+    data: { points: currentUser.points - 15 }
+  });
+
+  return ctx.db.mutation.deleteAnswer({ where }, info);
+};
+
 const selectAnswer = async function(parent, args, ctx, info) {
   if (!ctx.request.userId) {
     throw new Error('You must be logged in to do that!');
@@ -291,67 +348,6 @@ const selectAnswer = async function(parent, args, ctx, info) {
     },
     info
   );
-};
-
-const deleteAnswer = async function(parent, args, ctx, info) {
-  const where = { id: args.id };
-
-  const answer = await ctx.db.query.answer(
-    {
-      where: { id: args.id }
-    },
-    `{ id body
-      selected
-      createdAt
-      answerVote { id }
-      answeredBy { id }}`
-  );
-
-  if (!answer) {
-    throw new Error('Answer already deleted');
-  }
-
-  const ownsAnswer = answer.answeredBy.id === ctx.request.userId;
-
-  if (!ownsAnswer) {
-    throw new Error("You don't have permission to do that!");
-  }
-
-  if (answer.selected) {
-    throw new Error("Can't delete selected answer");
-  }
-
-  const days = differenceInDays(new Date(), answer.createdAt);
-  if (days >= 2) {
-    throw new Error("Can't delete answers older than 2 days");
-  }
-
-  // 3. Delete it!
-
-  await ctx.db.mutation.deleteManyAnswerVotes(
-    {
-      where: { votedAnswer: { id: args.id } }
-    },
-    null
-  );
-
-  const currentUser = await ctx.db.query.user(
-    {
-      where: {
-        id: ctx.request.userId
-      }
-    },
-    `{ id
-      points
-  }`
-  );
-
-  const res = await ctx.db.mutation.updateUser({
-    where: { id: currentUser.id },
-    data: { points: currentUser.points - 15 }
-  });
-
-  return ctx.db.mutation.deleteAnswer({ where }, info);
 };
 
 exports.createAnswer = createAnswer;

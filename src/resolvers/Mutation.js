@@ -5,16 +5,25 @@ const { promisify } = require('util');
 const _ = require('lodash');
 const fetch = require('node-fetch');
 const qs = require('qs');
+const crypto = require('crypto');
+const env = process.env.NODE_ENV || 'development';
+const domain = env === 'production' ? 'entra.io' : undefined;
 
-const { createIntro } = require('./mutations/intros');
+const { createIntro, createIntroComment } = require('./mutations/intros');
+const { createBookMark, deleteBookMark } = require('./mutations/bookmark');
 const {
   createAnswerVote,
   createTag,
   createAnswer,
   deleteAnswer,
-  selectAnswer,
   updateAnswer
 } = require('./mutations/answers');
+const {
+  createBusinessIdea,
+  deleteBusinessIdea,
+  updateBusinessIdea,
+  createBusinessIdeaVote
+} = require('./mutations/business-idea');
 const {
   createQuestion,
   createQuestionView,
@@ -23,21 +32,8 @@ const {
   updateQuestion,
   createBounty
 } = require('./mutations/questions');
-
-const {
-  transport,
-  makeANiceEmail,
-  answeredQuestion,
-  welcomeEmail,
-  resetEmail
-} = require('../mail');
-const { hasPermission, containsProfanity } = require('../utils');
-
-const { differenceInDays } = require('date-fns');
-const crypto = require('crypto');
-
-const env = process.env.NODE_ENV || 'development';
-const domain = env === 'production' ? 'entra.io' : undefined;
+const { updatePermissions } = require('./mutations/permissions');
+const { transport, welcomeEmail, resetEmail } = require('../mail');
 
 const Mutations = {
   //--------------------Signup Mutation--------------------//
@@ -471,6 +467,7 @@ const Mutations = {
       info
     );
   },
+
   //--------------------Questions--------------------//
   createQuestion,
   createQuestionView,
@@ -553,219 +550,21 @@ const Mutations = {
   },
 
   //--------------------Permissions--------------------//
-  async updatePermissions(parent, args, ctx, info) {
-    if (!ctx.request.userId) {
-      throw new Error('You must be logged in to do that!');
-    }
-
-    const currentUser = await ctx.db.query.user(
-      {
-        where: {
-          id: ctx.request.userId
-        }
-      },
-      info
-    );
-
-    hasPermission(currentUser, ['ADMIN', 'PERMISSIONUPDATE']);
-
-    return ctx.db.mutation.updateUser(
-      {
-        data: {
-          permissions: {
-            set: args.permissions
-          }
-        },
-        where: {
-          id: args.userId
-        }
-      },
-      info
-    );
-  },
+  updatePermissions,
 
   //-----------------------BusinessIdea-----------------------//
-  async createBusinessIdea(parent, args, ctx, info) {
-    if (!ctx.request.userId) {
-      throw new Error('You must be logged in to do that!');
-    }
-
-    const businessIdea = await ctx.db.mutation.createBusinessIdea(
-      {
-        data: {
-          status: false,
-          createdBy: {
-            connect: {
-              id: ctx.request.userId
-            }
-          },
-
-          ...args
-        }
-      },
-      info
-    );
-
-    const mailRes = await transport.sendMail({
-      from: 'jmcintosh@entra.io',
-      to: 'jmcintosh@entra.io',
-      subject: 'New business Idea!',
-      html: makeANiceEmail(`${ctx.request.userId}`, `${args.idea}`)
-    });
-
-    return businessIdea;
-  },
-
-  async deleteBusinessIdea(parent, args, ctx, info) {
-    if (!ctx.request.userId) {
-      throw new Error('You must be logged in to do that!');
-    }
-
-    const where = { id: args.id };
-
-    const businessIdea = await ctx.db.query.businessIdea(
-      {
-        where: { id: args.id }
-      },
-      `{ id
-        createdAt
-        createdBy { id }}`
-    );
-    if (!businessIdea) {
-      throw new Error('Idea already deleted');
-    }
-    await ctx.db.mutation.deleteManyBusinessIdeaVotes(
-      {
-        where: { votedBusinessIdea: { id: args.id } }
-      },
-      null
-    );
-
-    return ctx.db.mutation.deleteBusinessIdea({ where }, info);
-  },
-
-  async updateBusinessIdea(parent, args, ctx, info) {
-    if (!ctx.request.userId) {
-      throw new Error('You must be logged in to do that!');
-    }
-
-    const idea = await ctx.db.query.businessIdea(
-      {
-        where: { id: args.id }
-      },
-      `{ id
-        createdBy { id }}`
-    );
-
-    const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ['ADMIN', 'MODERATOR'].includes(permission)
-    );
-    const ownsIdea = idea.createdBy.id === ctx.request.userId;
-
-    if (!ownsIdea && !hasPermissions) {
-      throw new Error("You don't have permission to do that!");
-    }
-
-    const updates = {
-      ...args
-    };
-    // remove the ID from the updates
-    delete updates.id;
-    // run the update method
-    return ctx.db.mutation.updateBusinessIdea(
-      {
-        data: updates,
-
-        where: {
-          id: args.id
-        }
-      },
-      info
-    );
-  },
-
-  async createBusinessIdeaVote(parent, args, ctx, info) {
-    let ideaVote;
-    if (!ctx.request.userId) {
-      throw new Error('You must be logged in to do that!');
-    }
-    const votes = await ctx.db.query.businessIdeaVotes({
-      where: {
-        votedBy: { id: ctx.request.userId },
-        votedBusinessIdea: { id: args.ideaId }
-      }
-    });
-
-    if (votes.length === 0) {
-      ideaVote = await ctx.db.mutation.createBusinessIdeaVote({
-        data: {
-          vote: args.vote,
-          // This is how to create a relationship between the Item and the User
-          votedBy: {
-            connect: {
-              id: ctx.request.userId
-            }
-          },
-          votedBusinessIdea: {
-            connect: {
-              id: args.ideaId
-            }
-          }
-        }
-      });
-    } else {
-      ideaVote = await ctx.db.mutation.updateBusinessIdeaVote({
-        where: {
-          id: votes[0].id
-        },
-        data: {
-          vote: args.vote
-        }
-      });
-    }
-
-    return ideaVote;
-  },
+  createBusinessIdea,
+  deleteBusinessIdea,
+  updateBusinessIdea,
+  createBusinessIdeaVote,
 
   //--------------------BookMark--------------------//
-
-  createBookMark: async (parent, args, ctx, info) => {
-    if (!ctx.request.userId) {
-      throw new Error('You must be logged in to do that!');
-    }
-
-    const newBookMark = await ctx.db.mutation.createBookMark({
-      data: {
-        markedBy: { connect: { id: ctx.request.userId } },
-        questions: { connect: { id: args.questionId } }
-      }
-    });
-
-    return newBookMark;
-  },
-
-  async deleteBookMark(parent, args, ctx, info) {
-    const where = { id: args.id };
-
-    const bookmark = await ctx.db.query.bookMark(
-      {
-        where: { id: args.id }
-      },
-      `{ id markedBy { id } }`
-    );
-
-    const ownsBookMark = bookmark.markedBy.id === ctx.request.userId;
-
-    if (!ownsBookMark) {
-      throw new Error("You don't have permission to do that!");
-    }
-
-    // 3. Delete it!
-    return ctx.db.mutation.deleteBookMark({ where }, info);
-  },
+  createBookMark,
+  deleteBookMark,
 
   //--------------------Intros--------------------//
-  createIntro
+  createIntro,
+  createIntroComment
 };
 
 module.exports = Mutations;
