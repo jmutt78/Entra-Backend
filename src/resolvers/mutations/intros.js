@@ -12,7 +12,6 @@ const createIntro = async function(parent, args, ctx, info) {
   const intro = await ctx.db.mutation.createIntro(
     {
       data: {
-        // This is how to create a relationship between the Item and the User
         postedBy: {
           connect: {
             id: ctx.request.userId
@@ -35,6 +34,8 @@ const createIntro = async function(parent, args, ctx, info) {
       points
         }`
   );
+
+  //add a contraint for only one intro through querying the currentUser above.
 
   const res = await ctx.db.mutation.updateUser({
     where: { id: currentUser.id },

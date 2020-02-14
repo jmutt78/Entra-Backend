@@ -176,6 +176,17 @@ type Query {
   answer(id: ID!): Answer
   answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
   businessIdeaVote(where: BusinessIdeaVoteWhereUniqueInput!): BusinessIdeaVote
+  intros(
+    first: Int
+    where: IntroWhereInput
+    orderBy: IntroOrderByInput
+    filter: String
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Intro!]!
   searchQuestions(
     where: QuestionWhereInput
     limit: Int
