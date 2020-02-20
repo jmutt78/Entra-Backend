@@ -9,7 +9,12 @@ const crypto = require('crypto');
 const env = process.env.NODE_ENV || 'development';
 const domain = env === 'production' ? 'entra.io' : undefined;
 
-const { createIntro, createIntroComment } = require('./mutations/intros');
+const {
+  createIntro,
+  createIntroComment,
+  updateIntroComment,
+  deleteIntroComment
+} = require('./mutations/intros');
 const { createBookMark, deleteBookMark } = require('./mutations/bookmark');
 const {
   createAnswerVote,
@@ -564,7 +569,9 @@ const Mutations = {
 
   //--------------------Intros--------------------//
   createIntro,
-  createIntroComment
+  createIntroComment,
+  updateIntroComment,
+  deleteIntroComment
 };
 
 module.exports = Mutations;

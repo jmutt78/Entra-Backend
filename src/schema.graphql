@@ -96,6 +96,8 @@ type Mutation {
     introId: ID!
     approval: Boolean
   ): IntroComment!
+  updateIntroComment(id: ID!, body: String, approval: Boolean): IntroComment!
+  deleteIntroComment(id: ID!): IntroComment
 }
 
 type Query {
@@ -176,7 +178,7 @@ type Query {
   answer(id: ID!): Answer
   answerVote(where: AnswerVoteWhereUniqueInput!): AnswerVote
   businessIdeaVote(where: BusinessIdeaVoteWhereUniqueInput!): BusinessIdeaVote
-  intros(
+  introes(
     first: Int
     where: IntroWhereInput
     orderBy: IntroOrderByInput
@@ -187,6 +189,9 @@ type Query {
     first: Int
     last: Int
   ): [Intro!]!
+  intro(id: ID!): Intro
+  introComment(id: ID!): IntroComment
+
   searchQuestions(
     where: QuestionWhereInput
     limit: Int

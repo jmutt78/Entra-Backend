@@ -52,12 +52,14 @@ const createIntro = async function(parent, args, ctx, info) {
   return intro;
 };
 
+//----------------------Comments--------------------------------------//
+
 const createIntroComment = async function(parent, args, ctx, info) {
   if (!ctx.request.userId) {
     throw new Error('You must be logged in to do that!');
   }
 
-  const newAnswer = await ctx.db.mutation.createAnswer({
+  const newComment = await ctx.db.mutation.createIntroComment({
     data: {
       body: args.body,
       approval: args.approval,
@@ -88,8 +90,120 @@ const createIntroComment = async function(parent, args, ctx, info) {
     subject: 'New Answer!',
     html: answeredQuestion(`${ctx.request.userId}`, `${args.body}`)
   });
-  return newAnswer;
+  return newComment;
+};
+
+const updateIntroComment = async function(parent, args, ctx, info) {
+  if (!ctx.request.userId) {
+    throw new Error('You must be logged in to do that!');
+  }
+
+  const comment = await ctx.db.query.introComment(
+    {
+      where: { id: args.id }
+    },
+    `{ id body
+      createdAt
+      commentBy { id }}`
+  );
+
+  const ownsComment = comment.commentBy.id === ctx.request.userId;
+
+  const hasPermissions = ctx.request.user.permissions.some(permission =>
+    ['ADMIN', 'MODERATOR'].includes(permission)
+  );
+
+  if (hasPermissions) {
+    // first take a copy of the updates
+    const updates = { ...args };
+    // remove the ID from the updates
+    delete updates.id;
+    // run the update method
+    return ctx.db.mutation.updateIntroComment(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  }
+
+  if (!ownsComment && !hasPermissions) {
+    throw new Error("You don't have permission to do that!");
+  }
+
+  // const days = differenceInDays(new Date(), answer.createdAt);
+  // if (days >= 2) {
+  //   throw new Error("Can't edit answers older than 2 days");
+  // }
+
+  // first take a copy of the updates
+  const updates = { ...args };
+  // remove the ID from the updates
+  delete updates.id;
+  // run the update method
+  return ctx.db.mutation.updateIntroComment(
+    {
+      data: updates,
+      where: {
+        id: args.id
+      }
+    },
+    info
+  );
+};
+
+const deleteIntroComment = async function(parent, args, ctx, info) {
+  const where = { id: args.id };
+
+  const comment = await ctx.db.query.introComment(
+    {
+      where: { id: args.id }
+    },
+    `{ id body
+      createdAt
+      commentBy { id }}`
+  );
+
+  if (!comment) {
+    throw new Error('Answer already deleted');
+  }
+
+  const ownsComment = comment.commentBy.id === ctx.request.userId;
+
+  if (!ownsComment) {
+    throw new Error("You don't have permission to do that!");
+  }
+
+  // const days = differenceInDays(new Date(), answer.createdAt);
+  // if (days >= 2) {
+  //   throw new Error("Can't delete answers older than 2 days");
+  // }
+
+  // 3. Delete it!
+
+  const currentUser = await ctx.db.query.user(
+    {
+      where: {
+        id: ctx.request.userId
+      }
+    },
+    `{ id
+      points
+  }`
+  );
+
+  const res = await ctx.db.mutation.updateUser({
+    where: { id: currentUser.id },
+    data: { points: currentUser.points - 15 }
+  });
+
+  return ctx.db.mutation.deleteIntroComment({ where }, info);
 };
 
 exports.createIntro = createIntro;
 exports.createIntroComment = createIntroComment;
+exports.updateIntroComment = updateIntroComment;
+exports.deleteIntroComment = deleteIntroComment;
