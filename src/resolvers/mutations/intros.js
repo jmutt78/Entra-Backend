@@ -3,6 +3,7 @@ const {
   makeANiceEmail,
   answeredQuestion
 } = require('../../mail.js');
+const { differenceInDays } = require('date-fns');
 
 const createIntro = async function(parent, args, ctx, info) {
   if (!ctx.request.userId) {
@@ -84,12 +85,12 @@ const createIntroComment = async function(parent, args, ctx, info) {
     data: { points: currentUser.points + 5 }
   });
 
-  const mailRes = await transport.sendMail({
-    from: 'jmcintosh@entra.io',
-    to: 'jmcintosh@entra.io',
-    subject: 'New Answer!',
-    html: answeredQuestion(`${ctx.request.userId}`, `${args.body}`)
-  });
+  // const mailRes = await transport.sendMail({
+  //   from: 'jmcintosh@entra.io',
+  //   to: 'jmcintosh@entra.io',
+  //   subject: 'New Comment!',
+  //   html: answeredQuestion(`${ctx.request.userId}`, `${args.body}`)
+  // });
   return newComment;
 };
 
@@ -134,10 +135,10 @@ const updateIntroComment = async function(parent, args, ctx, info) {
     throw new Error("You don't have permission to do that!");
   }
 
-  // const days = differenceInDays(new Date(), answer.createdAt);
-  // if (days >= 2) {
-  //   throw new Error("Can't edit answers older than 2 days");
-  // }
+  const days = differenceInDays(new Date(), comment.createdAt);
+  if (days >= 2) {
+    throw new Error("Can't edit answers older than 2 days");
+  }
 
   // first take a copy of the updates
   const updates = { ...args };
@@ -177,10 +178,10 @@ const deleteIntroComment = async function(parent, args, ctx, info) {
     throw new Error("You don't have permission to do that!");
   }
 
-  // const days = differenceInDays(new Date(), answer.createdAt);
-  // if (days >= 2) {
-  //   throw new Error("Can't delete answers older than 2 days");
-  // }
+  const days = differenceInDays(new Date(), comment.createdAt);
+  if (days >= 2) {
+    throw new Error("Can't delete answers older than 2 days");
+  }
 
   // 3. Delete it!
 
@@ -197,7 +198,7 @@ const deleteIntroComment = async function(parent, args, ctx, info) {
 
   const res = await ctx.db.mutation.updateUser({
     where: { id: currentUser.id },
-    data: { points: currentUser.points - 15 }
+    data: { points: currentUser.points - 5 }
   });
 
   return ctx.db.mutation.deleteIntroComment({ where }, info);
