@@ -11,6 +11,8 @@ const domain = env === 'production' ? 'entra.io' : undefined;
 
 const {
   createIntro,
+  deleteIntro,
+  updateIntro,
   createIntroComment,
   updateIntroComment,
   deleteIntroComment
@@ -569,6 +571,8 @@ const Mutations = {
 
   //--------------------Intros--------------------//
   createIntro,
+  deleteIntro,
+  updateIntro,
   createIntroComment,
   updateIntroComment,
   deleteIntroComment

@@ -91,6 +91,14 @@ type Mutation {
     challenges: String!
     approval: Boolean
   ): Intro!
+  updateIntro(
+    id: ID!
+    introduction: String
+    about: String
+    challenges: String
+    approval: Boolean
+  ): IntroComment!
+  deleteIntro(id: ID!): Intro
   createIntroComment(
     body: String!
     introId: ID!
