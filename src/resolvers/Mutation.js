@@ -13,6 +13,7 @@ const {
   createIntro,
   deleteIntro,
   updateIntro,
+  createIntroWelcome,
   createIntroComment,
   updateIntroComment,
   deleteIntroComment
@@ -573,6 +574,7 @@ const Mutations = {
   createIntro,
   deleteIntro,
   updateIntro,
+  createIntroWelcome,
   createIntroComment,
   updateIntroComment,
   deleteIntroComment

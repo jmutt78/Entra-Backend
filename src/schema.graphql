@@ -91,13 +91,14 @@ type Mutation {
     challenges: String!
     approval: Boolean
   ): Intro!
+  createIntroWelcome(id: ID!, welcome: String): IntroWelcome
   updateIntro(
     id: ID!
     introduction: String
     about: String
     challenges: String
     approval: Boolean
-  ): IntroComment!
+  ): Intro!
   deleteIntro(id: ID!): Intro
   createIntroComment(
     body: String!
@@ -199,7 +200,16 @@ type Query {
   ): [Intro!]!
   intro(id: ID!): Intro
   introComment(id: ID!): IntroComment
-
+  introComments(
+    where: IntroCommentWhereInput
+    orderBy: IntroCommentOrderByInput
+    filter: String
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [IntroComment]!
   searchQuestions(
     where: QuestionWhereInput
     limit: Int

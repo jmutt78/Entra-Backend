@@ -6,6 +6,7 @@ const User = require('./User');
 const Badges = require('./Badges');
 const BusinessIdea = require('./BusinessIdea');
 const Mastery = require('./Mastery');
+const Intro = require('./Intro');
 
 const resolvers = {
   Query,
@@ -20,7 +21,8 @@ const resolvers = {
   User,
   Badges,
   BusinessIdea,
-  Mastery
+  Mastery,
+  Intro
 };
 
 module.exports = resolvers;

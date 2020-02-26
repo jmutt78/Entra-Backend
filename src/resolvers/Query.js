@@ -1,7 +1,7 @@
 const { forwardTo } = require('prisma-binding');
 
 const { searchQuestions } = require('./query/search');
-const { intro } = require('./query/intro');
+const { intro, introes, introComments } = require('./query/intro');
 const { me, user, users, bookMark } = require('./query/user');
 const { answers, answersConnection, answer } = require('./query/answer');
 const {
@@ -27,8 +27,9 @@ const Query = {
   tags: forwardTo('db'),
   answerVote: forwardTo('db'),
   businessIdeaVote: forwardTo('db'),
-  introes: forwardTo('db'),
+  introes,
   intro,
+  introComments,
   async businessIdea(parent, args, ctx, info) {
     const businessIdea = await ctx.db.query.businessIdea(
       {

@@ -164,7 +164,7 @@ const updateIntro = async function(parent, args, ctx, info) {
   const commentResult = await ctx.db.query.introCommentsConnection(
     {
       where: {
-        answeredTo_some: { id: args.id }
+        commentTo_some: { id: args.id }
       }
     },
     '{ aggregate { count }}'
@@ -348,9 +348,53 @@ const deleteIntroComment = async function(parent, args, ctx, info) {
   return ctx.db.mutation.deleteIntroComment({ where }, info);
 };
 
+const createIntroWelcome = async function(parent, args, ctx, info) {
+  let introWelcome;
+  if (!ctx.request.userId) {
+    throw new Error('You must be logged in to do that!');
+  }
+  const welcomes = await ctx.db.query.introWelcomes({
+    where: {
+      welcomedBy: { id: ctx.request.userId },
+      welcomedIntro: { id: args.id }
+    }
+  });
+
+  if (welcomes.length === 0) {
+    introWelcome = await ctx.db.mutation.createIntroWelcome({
+      data: {
+        welcome: args.welcome,
+        // This is how to create a relationship between the Item and the User
+        welcomedBy: {
+          connect: {
+            id: ctx.request.userId
+          }
+        },
+        welcomedIntro: {
+          connect: {
+            id: args.id
+          }
+        }
+      }
+    });
+  } else {
+    introWelcome = await ctx.db.mutation.updateIntroWelcome({
+      where: {
+        id: welcomes[0].id
+      },
+      data: {
+        welcome: args.welcome
+      }
+    });
+  }
+
+  return introWelcome;
+};
+
 exports.createIntro = createIntro;
 exports.deleteIntro = deleteIntro;
 exports.updateIntro = updateIntro;
+exports.createIntroWelcome = createIntroWelcome;
 exports.createIntroComment = createIntroComment;
 exports.updateIntroComment = updateIntroComment;
 exports.deleteIntroComment = deleteIntroComment;
