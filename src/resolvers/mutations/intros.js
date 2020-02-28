@@ -10,6 +10,23 @@ const createIntro = async function(parent, args, ctx, info) {
     throw new Error('You must be logged in to do that!');
   }
 
+  const currentUserIntro = await ctx.db.query.user(
+    {
+      where: {
+        id: ctx.request.userId
+      }
+    },
+    `{ id
+      myIntro {
+        id
+      }
+  }`
+  );
+  const hasIntro = currentUserIntro.myIntro[0];
+  if (hasIntro) {
+    throw new Error('You have already created an inroduction');
+  }
+
   const intro = await ctx.db.mutation.createIntro(
     {
       data: {
@@ -18,7 +35,7 @@ const createIntro = async function(parent, args, ctx, info) {
             id: ctx.request.userId
           }
         },
-
+        approval: false,
         ...args
       }
     },
